@@ -41,8 +41,7 @@ export const useUser = () => {
   const checkUsername = async (username) => {
     try {
       const result = await doFetch(
-        baseUrl + usersPath + usernamePath + username,
-      );
+        baseUrl + usersPath + usernamePath + username);
       return result.available;
     } catch (error) {
       throw new Error('checkUsername: ' + error.message);
