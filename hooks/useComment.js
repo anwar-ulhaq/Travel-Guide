@@ -24,7 +24,7 @@ export const useComment = () => {
     try {
       // const comment = await doFetch(`${baseUrl}comments/file/${fileId}`);
       const comment = await doFetch(
-        `${baseUrl + commentsPath + filePath + fileId}`,
+        `${baseUrl + commentsPath + filePath + fileId}`
       );
       comment.reverse();
       return comment;
