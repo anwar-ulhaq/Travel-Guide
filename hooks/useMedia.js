@@ -1,8 +1,10 @@
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
-import {appId, baseUrl} from '../utils/variables';
-import {doFetch} from './doFetch';
-import {useTag} from './ApiHooks';
+// import {appId, baseUrl} from '../utils/variables';
+// import {doFetch} from './doFetch';
+// import {useTag} from './ApiHooks';
+import {appId, baseUrl, doFetch, HTTP_METHOD, mediaPath} from '../utils';
+import {useTag} from '../hooks';
 
 export const useMedia = (myFilesOnly) => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -19,7 +21,7 @@ export const useMedia = (myFilesOnly) => {
       json.reverse();
       const media = await Promise.all(
         json.map(async (file) => {
-          const fileResponse = await fetch(baseUrl + 'media/' + file.file_id);
+          const fileResponse = await fetch(baseUrl + mediaPath + file.file_id);
           return await fileResponse.json();
         })
       );
@@ -34,7 +36,7 @@ export const useMedia = (myFilesOnly) => {
 
   const postMedia = async (fileData, token) => {
     const options = {
-      method: 'post',
+      method: HTTP_METHOD.POST,
       headers: {
         'x-access-token': token,
         'Content-Type': 'multipart/form-data',
@@ -42,7 +44,7 @@ export const useMedia = (myFilesOnly) => {
       body: fileData,
     };
     try {
-      return await doFetch(baseUrl + 'media', options);
+      return await doFetch(baseUrl + mediaPath, options);
     } catch (error) {
       throw new Error('postMedia: ' + error.message);
     }
@@ -50,9 +52,9 @@ export const useMedia = (myFilesOnly) => {
 
   const deleteMedia = async (id, token) => {
     try {
-      return await doFetch(baseUrl + 'media/' + id, {
+      return await doFetch(baseUrl + mediaPath + id, {
         headers: {'x-access-token': token},
-        method: 'delete',
+        method: HTTP_METHOD.DELETE,
       });
     } catch (error) {
       throw new Error('deleteMedia, ' + error.message);
@@ -61,7 +63,7 @@ export const useMedia = (myFilesOnly) => {
 
   const putMedia = async (id, data, token) => {
     const options = {
-      method: 'put',
+      method: HTTP_METHOD.PUT,
       headers: {
         'x-access-token': token,
         'Content-Type': 'application/json',
@@ -69,7 +71,7 @@ export const useMedia = (myFilesOnly) => {
       body: JSON.stringify(data),
     };
     try {
-      return await doFetch(baseUrl + 'media/' + id, options);
+      return await doFetch(baseUrl + mediaPath + id, options);
     } catch (error) {
       throw new Error('putMedia: ' + error.message);
     }
