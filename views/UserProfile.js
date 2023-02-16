@@ -1,92 +1,133 @@
+import {StyleSheet, View, Image} from 'react-native';
+import {Avatar} from '@rneui/themed';
+import PropTypes from 'prop-types';
+import {Text, Divider, Card, Icon, Dialog} from '@rneui/themed';
 import {useContext, useState, useEffect} from 'react';
-import {Card, Icon, ListItem} from '@rneui/themed';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTag} from '../hooks';
 import {uploadsUrl} from '../utils';
-import {SpeedDial} from '@rneui/themed';
-import PropTypes from 'prop-types';
 
 const UserProfile = ({navigation}) => {
-  const {getFilesByTag} = useTag();
-  const {setIsLoggedIn, user, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, user} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const [open, setOpen] = useState(false);
+  const [dialogVisibility, setDialogVisibility] = useState(false);
 
-  const loadAvatar = async () => {
+  const toggleVisibilty = () => {
+    setDialogVisibility(!dialogVisibility);
+  };
+
+  const {getFilesByTag} = useTag();
+
+  const fetchAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag('avatar_' + user.user_id);
-      setAvatar(avatarArray?.pop()?.filename);
-    } catch (e) {
-      console.error('Use avatar fetch failed', e.message);
-    }
-  };
-  useEffect(() => {
-    loadAvatar();
-  }, []);
-  const logout = async () => {
-    console.log('Logging out!');
-    setUser({});
-    setIsLoggedIn(false);
-    try {
-      await AsyncStorage.clear();
+      console.log('Avatar array: ', avatarArray);
+      const avatar = avatarArray.pop().filename;
+      setAvatar(uploadsUrl + avatar);
     } catch (error) {
-      console.error('clearing asyncstorage failed', error);
+      console.log(error.message);
     }
   };
 
+  useEffect(() => {
+    fetchAvatar();
+  }, []);
+
+  const logout = async () => {
+    setIsLoggedIn(false);
+    await AsyncStorage.clear();
+  };
   return (
     <Card>
-      <Card.Title>{user.username}</Card.Title>
-
-      <Card.Image source={{uri: uploadsUrl + avatar}} />
-      <ListItem>
-        <Icon name="email" />
-        <ListItem.Title>{user.email}</ListItem.Title>
-      </ListItem>
-      <ListItem>
-        <Icon name="badge" />
-        <ListItem.Title>{user.full_name}</ListItem.Title>
-      </ListItem>
-      <SpeedDial
-        isOpen={open}
-        iconContainerStyle={{backgroundColor: 'white'}}
-        icon={{
-          name: 'ellipsis-vertical-outline',
-          type: 'ionicon',
-          color: 'black',
-          size: 20,
-        }}
-        openIcon={{name: 'close'}}
-        onOpen={() => setOpen(!open)}
-        onClose={() => setOpen(!open)}
-      >
-        <SpeedDial.Action
-          iconContainerStyle={{backgroundColor: 'white'}}
-          icon={{name: 'edit'}}
-          title="Edit Profile"
-          onPress={() => navigation.navigate('Update user')}
-        />
-        <SpeedDial.Action
-          iconContainerStyle={{backgroundColor: 'white'}}
-          icon={{name: 'log-out-outline', type: 'ionicon'}}
-          title="Logout"
-          onPress={logout}
-        />
-        <SpeedDial.Action
-          iconContainerStyle={{backgroundColor: 'white'}}
-          icon={{name: 'folder-outline', type: 'ionicon'}}
-          title="MyFiles"
+      <View style={styles.container}>
+        <View style={styles.imgIcon}>
+          <Avatar rounded size="medium" source={{uri: avatar}} />
+          <Icon
+            iconStyle={{elevation: 3, marginStart: -10}}
+            name="add"
+            type="iconicon"
+            onPress={() => {
+              navigation.navigate('ModifyAvatar');
+            }}
+          />
+        </View>
+        <Text style={{marginLeft: 5}}>{user.username}</Text>
+        <Icon
+          title="Dialog"
+          name="ellipsis-vertical-outline"
+          type="ionicon"
           onPress={() => {
-            navigation.navigate('MyFiles');
+            setDialogVisibility(!dialogVisibility);
           }}
+          containerStyle={{marginLeft: 135}}
         />
-      </SpeedDial>
+      </View>
+      <Divider />
+      <Image
+        source={{uri: avatar}}
+        style={{width: '100%', height: '40%', borderRadius: 15}}
+        resizeMode="cover"
+      />
+      <Divider />
+      <View style={styles.iconBox}>
+        <Icon name="mail-outline" type="ionicon" />
+        <Text style={{marginLeft: 5}}>{user.email}</Text>
+      </View>
+      <Divider />
+      <View style={styles.iconBox}>
+        <Icon name="person-outline" type="iconicon" />
+        <Text style={{marginLeft: 5}}>{user.full_name}</Text>
+      </View>
+      <Divider />
+      <View style={{width: '40%'}}></View>
+      <Divider />
+      <Dialog isVisible={dialogVisibility} onBackdropPress={toggleVisibilty}>
+        <Dialog.Title title="User Setting" />
+        <Dialog.Actions>
+          <Dialog.Button title={'Logout'} onPress={logout} />
+
+          <Dialog.Button
+            title={'Edit'}
+            onPress={() => {
+              setDialogVisibility(false);
+              navigation.navigate('ModifyUser');
+            }}
+          />
+          <Dialog.Button
+            title={'Myfiles'}
+            onPress={() => {
+              setDialogVisibility(false);
+              navigation.navigate('MyFiles');
+            }}
+          />
+        </Dialog.Actions>
+      </Dialog>
     </Card>
   );
 };
-
 UserProfile.propTypes = {
   navigation: PropTypes.object,
 };
 export default UserProfile;
+const styles = StyleSheet.create({
+  container: {
+    width: 180,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  imgIcon: {
+    flexDirection: 'row',
+    marginHorizontal: 5,
+    alignItems: 'center',
+    alignContent: 'space-between',
+    height: 70,
+    width: 50,
+  },
+  iconBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 50,
+    width: 150,
+  },
+});
