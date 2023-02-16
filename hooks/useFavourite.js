@@ -42,7 +42,7 @@ export const useFavourite = () => {
     try {
       return await doFetch(
         baseUrl + favouritesPath + filePath + fileId,
-        options,
+        options
       );
     } catch (error) {
       throw new Error('Delete favourite:  ' + error.message);

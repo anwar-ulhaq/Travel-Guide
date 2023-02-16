@@ -1,12 +1,32 @@
-import {Text, View} from 'react-native';
-import React from 'react';
+import {FlatList} from 'react-native';
+import {useMedia} from '../hooks';
+import ListItem from './ListItem';
+import PropTypes from 'prop-types';
 
-const List = () => {
+const List = ({navigation, myFilesOnly = false}) => {
+  const {mediaArray} = useMedia(myFilesOnly);
   return (
-    <View>
-      <Text>List</Text>
-    </View>
+    <FlatList
+      style={{padding: 10}}
+      data={mediaArray}
+      keyExtractor={(item, index) => 'key' + index}
+      renderItem={({item}) => {
+        return (
+          <>
+            <ListItem
+              navigation={navigation}
+              singleMedia={item}
+              myFilesOnly={myFilesOnly}
+            />
+          </>
+        );
+      }}
+    />
   );
+};
+List.propTypes = {
+  navigation: PropTypes.object,
+  myFilesOnly: PropTypes.bool,
 };
 
 export default List;
