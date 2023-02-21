@@ -5,9 +5,17 @@ const MainContext = React.createContext({});
 
 const MainProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [user, setUser] = useState({});
+  // TODO empty user state when login functionality is added.
+  const [user, setUser] = useState({
+    user_id: 2693,
+    username: 'anwar.ulhaq',
+    email: 'anwar.ulhaq@metropolia.fi',
+    full_name: 'Anwar Ulhaq',
+  });
   const [update, setUpdate] = useState(true);
   const [commentUpdate, setCommentUpdate] = useState(0);
+  const [isEditProfile, setIsEditProfile] = useState(false);
+
 
   return (
     <MainContext.Provider
@@ -20,6 +28,8 @@ const MainProvider = (props) => {
         setUpdate,
         commentUpdate,
         setCommentUpdate,
+        isEditProfile,
+        setIsEditProfile,
       }}
     >
       {props.children}

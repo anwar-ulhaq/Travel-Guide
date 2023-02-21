@@ -1,5 +1,6 @@
 import {doFetch} from './doFetch';
-import {baseUrl} from '../utils/variables';
+import {baseUrl} from '../constants';
+
 
 export const useAuthentication = () => {
   const postLogin = async (userCredentials) => {

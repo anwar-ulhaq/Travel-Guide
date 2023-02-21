@@ -1,12 +1,11 @@
-import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
+import {ModifyProfile} from '../components';
+import {MainContext} from '../contexts/MainContext';
+import ViewProfile from '../components/ViewProfile';
 
 const UserProfile = () => {
-  return (
-    <View>
-      <Text>Profile</Text>
-    </View>
-  );
+  const {isEditProfile} = useContext(MainContext);
+  return isEditProfile ? <ModifyProfile /> : <ViewProfile />;
 };
 
 export default UserProfile;

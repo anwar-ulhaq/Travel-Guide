@@ -4,7 +4,7 @@ import {MainContext} from '../contexts/MainContext';
 // import {doFetch} from './doFetch';
 // import {useTag} from './ApiHooks';
 import {appId, baseUrl, doFetch, HTTP_METHOD, mediaPath} from '../utils';
-import {useTag} from '../hooks';
+import {useTag} from './useTag';
 
 export const useMedia = (myFilesOnly) => {
   const [mediaArray, setMediaArray] = useState([]);
