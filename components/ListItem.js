@@ -8,12 +8,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Icon} from '@rneui/themed';
 import LikeImage from '../assets/images/like.png';
 import moment from 'moment';
+import {PopupMenu} from './';
 import {useUser, useFavourite, useTag, useMedia} from '../hooks';
 import PropTypes from 'prop-types';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {deleteMedia} = useMedia();
-  const {update, setUpdate, user} = useContext(MainContext);
+  const {update, setUpdate, user, isEditPost, setIsEditPost} =
+    useContext(MainContext);
 
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
   const {getUserById} = useUser();
@@ -23,6 +25,10 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const [likes, setLikes] = useState([]);
   const [userLike, setUserLike] = useState(false);
   const [visibleDialog, setVisibleDialog] = useState(false);
+  const [index, setIndex] = useState('none');
+  const [eventName, setEventName] = useState('none');
+  const [selectedOption, setSelectedOption] = useState('none');
+  const options = ['Edit', 'Delete'];
 
   const toggleDialog = () => {
     setVisibleDialog(!visibleDialog);
@@ -92,6 +98,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   useEffect(() => {
     fetchLikes();
   }, [userLike]);
+
   const doDelete = () => {
     try {
       Alert.alert('Delete', ' this file permanently', [
@@ -112,6 +119,22 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     }
   };
 
+  const goToEditPost = () => {
+    console.log('Edit pressed');
+    navigation.navigate('ModifyPost');
+  };
+  const onPopupEvent = (eventName, index, style) => {
+    if (index >= 0) setSelectedOption(options[index]);
+    setIndex(index);
+    setEventName(eventName);
+    console.log('Index: ' + index);
+
+    if (index === 0) {
+      setIsEditPost(!isEditPost);
+      goToEditPost();
+    } else if (index === 1) doDelete();
+  };
+
   return (
     <View style={styles.post}>
       <Pressable style={styles.header}>
@@ -124,44 +147,44 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
             </Text>
           </View>
         </View>
-        <Icon
-          name="ellipsis-vertical"
-          type="ionicon"
-          size={20}
-          style={styles.icon}
-          onPress={toggleDialog}
-        />
 
-        {
-          // TODO: To workout with the positioning of the popping modal
-        }
-        <Dialog
-          overlayStyle={styles.dialogBox}
-          isVisible={visibleDialog}
-          onBackdropPress={toggleDialog}
-        >
-          <View style={styles.dialogItemEdit}>
-            <Pressable
-              style={{flexDirection: 'row', alignItems: 'center'}}
-              onPress={() => {
-                console.log('Edit pressed');
-                navigation.navigate('ModifyPost');
-              }}
-            >
-              <Icon name="create" type="ionicon" />
-              <Text>Edit</Text>
-            </Pressable>
-          </View>
-          <View style={styles.dialogItemDelete}>
-            <Pressable
-              style={{flexDirection: 'row', alignItems: 'center'}}
-              onPress={doDelete}
-            >
-              <Icon name="trash" type="ionicon" onPress={doDelete} />
-              <Text>Delete</Text>
-            </Pressable>
-          </View>
-        </Dialog>
+        <View>
+          {user.user_id === singleMedia.user_id && (
+            <Icon
+              name="ellipsis-vertical"
+              type="ionicon"
+              raised
+              size={20}
+              style={styles.icon}
+              onPress={toggleDialog}
+            />
+          )}
+
+          <Dialog
+            overlayStyle={styles.dialogBox}
+            isVisible={visibleDialog}
+            onBackdropPress={toggleDialog}
+          >
+            <View style={styles.dialogItemEdit}>
+              <Pressable
+                style={{flexDirection: 'row', alignItems: 'center'}}
+                onPress={goToEditPost}
+              >
+                <Icon name="create" type="ionicon" />
+                <Text>Edit</Text>
+              </Pressable>
+            </View>
+            <View style={styles.dialogItemDelete}>
+              <Pressable
+                style={{flexDirection: 'row', alignItems: 'center'}}
+                onPress={doDelete}
+              >
+                <Icon name="trash" type="ionicon" onPress={doDelete} />
+                <Text>Delete</Text>
+              </Pressable>
+            </View>
+          </Dialog>
+        </View>
       </Pressable>
       {singleMedia.description && (
         <Text style={styles.description}>{singleMedia.description}</Text>
@@ -344,3 +367,58 @@ const styles = StyleSheet.create({
   },
   iconButtonText: {marginLeft: 5, color: 'gray', fontWeight: '500'},
 });
+
+{
+  /**
+   *
+   *
+   *
+   * <PopupMenu options={options} onPress={onPopupEvent}>
+              <Icon
+                size={16}
+                raised
+                name="ellipsis-vertical"
+                type="ionicon"
+                style={styles.icon}
+              />
+            </PopupMenu>
+ <Icon
+          name="ellipsis-vertical"
+          type="ionicon"
+          size={20}
+          style={styles.icon}
+          onPress={onPopupEvent}
+        />
+
+        {
+          // TODO: To workout with the positioning of the popping modal
+        }
+        <Dialog
+          overlayStyle={styles.dialogBox}
+          isVisible={visibleDialog}
+          onBackdropPress={toggleDialog}
+        >
+          <View style={styles.dialogItemEdit}>
+            <Pressable
+              style={{flexDirection: 'row', alignItems: 'center'}}
+              onPress={() => {
+                console.log('Edit pressed');
+                navigation.navigate('ModifyPost');
+              }}
+            >
+              <Icon name="create" type="ionicon" />
+              <Text>Edit</Text>
+            </Pressable>
+          </View>
+          <View style={styles.dialogItemDelete}>
+            <Pressable
+              style={{flexDirection: 'row', alignItems: 'center'}}
+              onPress={doDelete}
+            >
+              <Icon name="trash" type="ionicon" onPress={doDelete} />
+              <Text>Delete</Text>
+            </Pressable>
+          </View>
+        </Dialog>
+*/
+}

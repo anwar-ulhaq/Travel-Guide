@@ -1,4 +1,3 @@
-import {SearchBar} from '@rneui/base';
 import {useContext} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {COLORS, SIZES, FONTS, assets} from '../theme';
@@ -29,17 +28,16 @@ const FeedHeader = () => {
           />
         </View>
       </View>
+      <View>
+        <View style={styles.greetContainer}>
+          <Text style={styles.greetUsername}>Hello {user.username} 👋</Text>
 
-      <View style={styles.greetContainer}>
-        <Text style={styles.greetUsername}>Hello {user.username} 👋</Text>
-
-        <Text style={styles.greet}>Good Morning 😃</Text>
-      </View>
-      <View style={{marginTop: 0, alignItems: 'center'}}>
-        <SearchBar
-          containerStyle={styles.searchContainer}
-          inputContainerStyle={styles.searchInputContainer}
-        />
+          <Text style={styles.greet}>Good Morning 😃</Text>
+        </View>
+        <View style={styles.userChoice}>
+          <Text>Feed</Text>
+          <Text>Recommended</Text>
+        </View>
       </View>
     </View>
   );
@@ -99,5 +97,10 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.bold,
     fontSize: SIZES.large,
     color: COLORS.white,
+  },
+  userChoice: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    margin: SIZES.base,
   },
 });
