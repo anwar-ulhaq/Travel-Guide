@@ -2,7 +2,6 @@ import {useMemo} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 
-
 const ProfileMediaCard = ({item, style, navigation}) => {
   const randomBool = useMemo(() => Math.random() < 0.5, []);
   // const {theme} = useTheme();

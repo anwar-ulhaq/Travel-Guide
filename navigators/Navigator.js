@@ -1,5 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {useContext} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -7,8 +8,11 @@ import Home from '../views/Home';
 import NewPost from '../views/NewPost';
 import Login from '../views/Login';
 import MyFiles from '../views/MyFiles';
+import Search from '../views/Search';
+import Chat from '../views/Chat';
 import SinglePost from '../views/SinglePost';
 import ModifyPost from '../views/ModifyPost';
+import {COLORS, SHADOWS} from '../theme';
 
 import UserProfile from '../views/UserProfile';
 import {Icon} from '@rneui/themed';
@@ -18,26 +22,86 @@ const Stack = createNativeStackNavigator();
 
 const TabScreen = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: styles.tabContainer,
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: ({color}) => <Icon name="home" color={color} />,
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="home"
+              type="ionicon"
+              size={24}
+              color={focused ? COLORS.primary : 'black'}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={Search}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="search"
+              size={32}
+              color={focused ? COLORS.primary : 'black'}
+            />
+          ),
         }}
       />
       <Tab.Screen
         name="Upload"
         component={NewPost}
         options={{
-          tabBarIcon: ({color}) => <Icon name="cloud-upload" color={color} />,
+          tabBarIcon: ({focused}) => (
+            <>
+              <View style={{...styles.uploadDesign, ...styles.left}}></View>
+              <View style={{...styles.uploadDesign, ...styles.right}}></View>
+              <View style={styles.uploadDesign}>
+                <Icon
+                  name="add"
+                  size={30}
+                  color={focused ? COLORS.primary : 'white'}
+                />
+              </View>
+            </>
+          ),
         }}
       />
+      <Tab.Screen
+        name="Chat"
+        component={Chat}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="settings"
+              type="ionicon"
+              size={28}
+              color={focused ? COLORS.primary : 'black'}
+            />
+          ),
+        }}
+      />
+
       <Tab.Screen
         name="Profile"
         component={UserProfile}
         options={{
-          tabBarIcon: ({color}) => <Icon name="person" color={color} />,
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="person"
+              type="ionicon"
+              size={26}
+              color={focused ? COLORS.primary : 'black'}
+            />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -74,3 +138,42 @@ const Navigator = () => {
 };
 
 export default Navigator;
+
+const styles = StyleSheet.create({
+  tabContainer: {
+    backgroundColor: '#b0dbff',
+    bottom: -2,
+    marginHorizontal: 5,
+    height: 60,
+    paddingVertical: 0,
+    borderRadius: 15,
+    ...SHADOWS.dark,
+  },
+  uploadDesign: {
+    backgroundColor: '#354455',
+    width: 60,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    height: 33,
+    zIndex: 1,
+  },
+  left: {
+    position: 'absolute',
+    left: 3,
+    bottom: -3,
+    top: 15,
+    height: 32,
+    backgroundColor: 'pink',
+  },
+  right: {
+    position: 'absolute',
+    right: 3,
+    height: 32,
+    top: 15,
+    backgroundColor: 'blue',
+    bottom: -3,
+  },
+});
