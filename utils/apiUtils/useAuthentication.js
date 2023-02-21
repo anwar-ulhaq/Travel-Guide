@@ -1,7 +1,6 @@
 import {doFetch} from './doFetch';
 import {baseUrl} from '../constants';
 
-
 export const useAuthentication = () => {
   const postLogin = async (userCredentials) => {
     const options = {

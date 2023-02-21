@@ -1,7 +1,7 @@
 // import {doFetch} from '../utils/apiUtils/doFetch';
 // import {baseUrl} from '../utils/variables';
 
-import {baseUrl, commentsPath, doFetch, filePath, HTTP_METHOD} from '../utils';
+import {baseUrl, commentsPath, doFetch, filePath, HTTP_METHOD} from '../utils/';
 
 export const useComment = () => {
   const postComment = async (token, commentId) => {

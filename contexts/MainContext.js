@@ -4,14 +4,8 @@ import PropTypes from 'prop-types';
 const MainContext = React.createContext({});
 
 const MainProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  // TODO empty user state when login functionality is added.
-  const [user, setUser] = useState({
-    user_id: 2693,
-    username: 'anwar.ulhaq',
-    email: 'anwar.ulhaq@metropolia.fi',
-    full_name: 'Anwar Ulhaq',
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
   const [update, setUpdate] = useState(true);
   const [commentUpdate, setCommentUpdate] = useState(0);
   const [isEditProfile, setIsEditProfile] = useState(false);
