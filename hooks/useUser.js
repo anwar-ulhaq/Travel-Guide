@@ -3,6 +3,7 @@ import {
   baseUrl,
   doFetch,
   HTTP_METHOD,
+  tagPath,
   usernamePath,
   userPath,
   usersPath,
@@ -59,5 +60,40 @@ export const useUser = () => {
     }
   };
 
-  return {getUserByToken, postUser, checkUsername, getUserById};
+  const getUserAvatar = async (avatarName) => {
+    try {
+      return await doFetch(baseUrl + tagPath + avatarName);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const updateUser = async (newData, token) => {
+    const options = {
+      method: HTTP_METHOD.PUT,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(newData),
+    };
+
+    try {
+      const response = await doFetch(baseUrl + usersPath, options);
+      console.log('user update response: ' + JSON.stringify(response));
+      return response;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return {
+    getUserByToken,
+    postUser,
+    checkUsername,
+    getUserById,
+    getUserAvatar,
+    updateUser,
+  };
 };

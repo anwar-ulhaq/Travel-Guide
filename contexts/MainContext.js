@@ -8,6 +8,8 @@ const MainProvider = (props) => {
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(true);
   const [commentUpdate, setCommentUpdate] = useState(0);
+  const [isEditProfile, setIsEditProfile] = useState(false);
+
 
   return (
     <MainContext.Provider
@@ -20,6 +22,8 @@ const MainProvider = (props) => {
         setUpdate,
         commentUpdate,
         setCommentUpdate,
+        isEditProfile,
+        setIsEditProfile,
       }}
     >
       {props.children}
