@@ -35,8 +35,8 @@ const FeedHeader = () => {
           <Text style={styles.greet}>Good Morning 😃</Text>
         </View>
         <View style={styles.userChoice}>
-          <Text>Feed</Text>
-          <Text>Recommended</Text>
+          <Text style={styles.feedOption}>Feed</Text>
+          <Text style={styles.RecOption}>Recommended</Text>
         </View>
       </View>
     </View>
@@ -53,6 +53,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#d4e3ed',
   },
+  feedOption: {
+    fontSize: 20,
+  },
+  RecOption: {
+    fontSize: 20,
+    marginLeft: 20,
+  },
+  leftMargin: {marginLeft: 20},
   searchInputContainer: {
     width: 240,
     borderRadius: SIZES.font,
