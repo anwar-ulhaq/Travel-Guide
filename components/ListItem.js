@@ -168,7 +168,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       )}
       <Pressable
         onPress={() => {
-          navigation.navigate('Single', {file: singleMedia});
+          navigation.navigate('SinglePost', {file: singleMedia});
         }}
       >
         <View style={styles.feedImageContainer}>

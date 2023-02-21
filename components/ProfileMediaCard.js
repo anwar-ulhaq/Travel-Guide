@@ -11,6 +11,7 @@ const ProfileMediaCard = ({item, style, navigation}) => {
     <TouchableOpacity
       onPress={() => {
         // navigation.navigate('Single', item);
+        // navigation.navigate('SinglePost', {file: singleMedia});
         console.log('ITEM: ' + JSON.stringify(item));
       }}
       style={{flex: 1}}
@@ -18,8 +19,20 @@ const ProfileMediaCard = ({item, style, navigation}) => {
     >
       <View key={item.key} style={[{marginTop: 12, flex: 1}, style]}>
         <Image
-          // source={{uri: 'https://media.mw.metropolia.fi/wbma/uploads/' + item.thumbnails.w160}}
-          source={{uri: item.thumbnails.w160}}
+          source={
+            item.media_type === 'video'
+              ? {
+                  uri:
+                    'https://media.mw.metropolia.fi/wbma/uploads/' +
+                    item.screenshot,
+                }
+              : {
+                  uri:
+                    'https://media.mw.metropolia.fi/wbma/uploads/' +
+                    item.filename,
+                }
+          }
+          // source={{uri: item.thumbnails.w160}}
           style={{
             height: randomBool ? 150 : 280,
             alignSelf: 'stretch',
