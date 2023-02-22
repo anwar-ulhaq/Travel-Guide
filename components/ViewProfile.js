@@ -2,18 +2,12 @@ import PropTypes from 'prop-types';
 import React, {useEffect, useState} from 'react';
 import {Avatar, Button, Icon} from '@rneui/themed';
 import MasonryList from '@react-native-seoul/masonry-list';
-import {
-  AsyncStorage,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  View,
-} from 'react-native';
+import {Platform, SafeAreaView, StatusBar, Text, View} from 'react-native';
 
 import {MainContext} from '../contexts/MainContext';
 import {useMedia, useUser} from '../hooks';
 import {PopupMenu, ProfileMediaCard} from './';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ViewProfile = ({navigation, myFilesOnly = false}) => {
   const {mediaArray} = useMedia(myFilesOnly);

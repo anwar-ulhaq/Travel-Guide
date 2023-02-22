@@ -12,7 +12,7 @@ const uploadsUrl = 'https://media.mw.metropolia.fi/wbma/uploads/';
 
 // const appId = 'Travel_GuiDe_WBMA_2023_ABR';
 
-const appId = 'this12this';
+const appId = 'Travel_GuiDe_WBMA_2023_ABR';
 
 const HTTP_METHOD = {
   GET: 'GET',

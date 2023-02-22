@@ -14,8 +14,15 @@ import PropTypes from 'prop-types';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {deleteMedia} = useMedia();
-  const {update, setUpdate, user, isEditPost, setIsEditPost} =
-    useContext(MainContext);
+  const {
+    update,
+    setUpdate,
+    postUpdate,
+    setPostUpdate,
+    user,
+    isEditPost,
+    setIsEditPost,
+  } = useContext(MainContext);
 
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
   const {getUserById} = useUser();
@@ -64,13 +71,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const avatarArray = await getFilesByTag('avatar_' + singleMedia.user_id);
 
-      let avatar = avatarArray.pop().filename;
-      if (!avatar) {
-        console.log('No avatar');
-        avatar = '../assets/kittens.jpg';
-      }
-
+      const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
+      setPostUpdate(!postUpdate);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
@@ -110,7 +113,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   useEffect(() => {
     fetchOwner();
     loadAvatar();
-  }, []);
+  }, [postUpdate]);
+
   useEffect(() => {
     fetchLikes();
   }, [userLike]);
@@ -159,7 +163,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           <View>
             <Text style={styles.name}>{owner.username}</Text>
             <Text style={styles.subtitle}>
-              {moment(singleMedia.time_added).format('lll')}
+              {moment(singleMedia.time_added).startOf('hour').fromNow()}
             </Text>
           </View>
         </View>

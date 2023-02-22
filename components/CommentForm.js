@@ -98,7 +98,7 @@ const CommentForm = ({fileId}) => {
 };
 
 CommentForm.propTypes = {
-  fileId: PropTypes.object.isRequired,
+  fileId: PropTypes.number.isRequired,
 };
 export default CommentForm;
 const styles = StyleSheet.create({

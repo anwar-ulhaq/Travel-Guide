@@ -23,7 +23,6 @@ const List = ({navigation, myFilesOnly = false}) => {
                 myFilesOnly={myFilesOnly}
               />
             )}
-            refreshing={true}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<FeedHeader />}
           />
