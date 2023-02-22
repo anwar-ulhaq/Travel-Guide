@@ -8,6 +8,7 @@ const MainProvider = (props) => {
   const [user, setUser] = useState({});
   const [update, setUpdate] = useState(true);
   const [commentUpdate, setCommentUpdate] = useState(0);
+  const [postUpdate, setPostUpdate] = useState(0);
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [isEditPost, setIsEditPost] = useState(false);
 
@@ -26,6 +27,8 @@ const MainProvider = (props) => {
         setIsEditProfile,
         isEditPost,
         setIsEditPost,
+        postUpdate,
+        setPostUpdate,
       }}
     >
       {props.children}
