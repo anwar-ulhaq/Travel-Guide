@@ -9,11 +9,12 @@ import NewPost from '../views/NewPost';
 import Login from '../views/Login';
 import MyFiles from '../views/MyFiles';
 import Search from '../views/Search';
+import LikedBy from '../views/LikedBy';
+import OtherUserProfile from '../views/OtherUserProfile';
 import Chat from '../views/Chat';
 import SinglePost from '../views/SinglePost';
 import ModifyPost from '../views/ModifyPost';
 import {COLORS, SHADOWS} from '../theme';
-
 import UserProfile from '../views/UserProfile';
 import {Icon} from '@rneui/themed';
 
@@ -121,6 +122,8 @@ const StackScreen = () => {
           <Stack.Screen name="SinglePost" component={SinglePost} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
           <Stack.Screen name="ModifyPost" component={ModifyPost} />
+          <Stack.Screen name="LikedBy" component={LikedBy} />
+          <Stack.Screen name="OtherUserProfile" component={OtherUserProfile} />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login}></Stack.Screen>

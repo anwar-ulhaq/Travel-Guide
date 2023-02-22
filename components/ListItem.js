@@ -9,7 +9,7 @@ import {Icon} from '@rneui/themed';
 import LikeImage from '../assets/images/like.png';
 import moment from 'moment';
 import {PopupMenu} from './';
-import {useUser, useFavourite, useTag, useMedia} from '../hooks';
+import {useUser, useFavourite, useTag, useMedia, useComment} from '../hooks';
 import PropTypes from 'prop-types';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
@@ -28,6 +28,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
+  const {getCommentById} = useComment();
+  const [comments, setComments] = useState([]);
+  const {commentUpdate} = useContext(MainContext);
   const options = ['Edit', 'Delete'];
 
   const toggleDialog = () => {
@@ -43,6 +46,19 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       setOwner({username: '[not available]'});
     }
   };
+  const fetchComments = async () => {
+    try {
+      const commentsData = await getCommentById(singleMedia.file_id);
+      // console.log('Data from comment', commentsData);
+      setComments(commentsData);
+    } catch (e) {
+      console.log('Error in fetching comments', e);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [commentUpdate]);
 
   const loadAvatar = async () => {
     try {
@@ -204,8 +220,20 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
 
       <View style={styles.footer}>
         <View style={styles.statsRow}>
-          <Image source={LikeImage} style={styles.likeIcon} />
-          <Text style={styles.likedBy}> {likes.length}</Text>
+          <Pressable
+            style={{flexDirection: 'row'}}
+            onPress={() => navigation.navigate('LikedBy', {file: singleMedia})}
+          >
+            <Image source={LikeImage} style={styles.likeIcon} />
+            <Text style={styles.likedBy}> {likes.length}</Text>
+          </Pressable>
+          <Icon
+            name="chatbox-ellipses-outline"
+            type="ionicon"
+            color={'#3786e8'}
+            style={{marginLeft: 20}}
+          />
+          <Text style={styles.commentInfo}>{comments.length}</Text>
         </View>
         <View style={styles.buttonsRow}>
           <View style={styles.iconButton}>
@@ -304,6 +332,7 @@ const styles = StyleSheet.create({
   name: {fontWeight: '500'},
   subtitle: {color: 'gray'},
   icon: {marginLeft: 'auto'},
+  commentInfo: {color: 'gray', marginLeft: 5},
 
   // Dialog container
   dialogBox: {
