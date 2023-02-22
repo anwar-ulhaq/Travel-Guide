@@ -125,7 +125,7 @@ const SinglePost = ({route, navigation}) => {
           {file.description && (
             <Text style={styles.description}>{file.description}</Text>
           )}
-          <View style={{width: '97%', height: 250}}>
+          <View style={{width: '97%', height: 200}}>
             <Image
               style={styles.image}
               source={{uri: uploadsUrl + file.filename}}
@@ -198,7 +198,8 @@ SinglePost.propTypes = {
 export default SinglePost;
 const styles = StyleSheet.create({
   post: {
-    backgroundColor: COLORS.white,
+    height: 610,
+    backgroundColor: '#E6EEFA',
     borderRadius: SIZES.font,
     marginBottom: SIZES.extraLarge,
     margin: SIZES.base,
@@ -209,8 +210,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-
-    padding: 10,
+    padding: 5,
   },
   profileImage: {
     width: 40,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   buttonsRow: {
-    marginVertical: 10,
+    marginVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },

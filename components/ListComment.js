@@ -44,15 +44,16 @@ const ListComment = ({navigation, fileId}) => {
   return (
     <View
       style={{
-        height: 185,
+        height: 245,
         backgroundColor: 'white',
         marginBottom: SIZES.base,
+        overflow: 'hidden',
       }}
     >
       <Text
         style={{
           textAlign: 'left',
-          marginTop: -10,
+          marginTop: -5,
           padding: 5,
           fontSize: 15,
         }}
@@ -70,6 +71,8 @@ const ListComment = ({navigation, fileId}) => {
               <CommentItem navigation={navigation} singleComment={item} />
             )}
             ListEmptyComponent={ListEmptyComponent}
+            showsVerticalScrollIndicator={false}
+            initialNumToRender={8}
           />
         </SafeAreaView>
       )}
