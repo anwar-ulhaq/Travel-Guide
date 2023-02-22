@@ -1,6 +1,7 @@
 import {useMemo} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
+import {uploadsUrl} from '../utils';
 
 const ProfileMediaCard = ({item, style, navigation}) => {
   const randomBool = useMemo(() => Math.random() < 0.5, []);
@@ -21,14 +22,10 @@ const ProfileMediaCard = ({item, style, navigation}) => {
           source={
             item.media_type === 'video'
               ? {
-                  uri:
-                    'https://media.mw.metropolia.fi/wbma/uploads/' +
-                    item.screenshot,
+                  uri: uploadsUrl + item.screenshot,
                 }
               : {
-                  uri:
-                    'https://media.mw.metropolia.fi/wbma/uploads/' +
-                    item.filename,
+                  uri: uploadsUrl + item.filename,
                 }
           }
           // source={{uri: item.thumbnails.w160}}
@@ -58,4 +55,5 @@ ProfileMediaCard.propTypes = {
   item: PropTypes.object,
   style: PropTypes.object,
   navigation: PropTypes.object,
+  myFilesOnly: PropTypes.bool,
 };

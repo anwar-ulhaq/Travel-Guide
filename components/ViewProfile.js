@@ -5,16 +5,17 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import {Platform, SafeAreaView, StatusBar, Text, View} from 'react-native';
 
 import {MainContext} from '../contexts/MainContext';
-import {useMedia, useUser} from '../hooks';
+import {useMedia, useTag} from '../hooks';
 import {PopupMenu, ProfileMediaCard} from './';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {uploadsUrl} from '../utils';
 
-const ViewProfile = ({navigation, myFilesOnly = false}) => {
+const ViewProfile = ({navigation, myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
+  const {getFilesByTag} = useTag();
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
-  const {getUserAvatar} = useUser();
   const [tag, setTag] = useState({});
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const options = ['Edit', 'Logout'];
@@ -23,11 +24,14 @@ const ViewProfile = ({navigation, myFilesOnly = false}) => {
     React.useContext(MainContext);
 
   const loadAvatar = async () => {
-    const tag = await getUserAvatar('avatar_' + user.user_id).then(
-      (tagArray) => tagArray[0]
-    );
-    setTag(tag);
-    setAvatar('https://media.mw.metropolia.fi/wbma/uploads/' + tag.filename);
+    try {
+      const avatarArray = await getFilesByTag('avatar_' + user.user_id);
+      // console.log(avatarArray);
+      const avatar = avatarArray.pop().filename;
+      setAvatar(uploadsUrl + avatar);
+    } catch (error) {
+      console.error('user avatar fetch failed', error.message);
+    }
   };
 
   const onPopupEvent = (eventName, index) => {
@@ -43,6 +47,7 @@ const ViewProfile = ({navigation, myFilesOnly = false}) => {
       <ProfileMediaCard
         item={item}
         style={{marginLeft: i % 2 === 0 ? 0 : 12}}
+        myFilesOnly={myFilesOnly}
       />
     );
   };
@@ -59,7 +64,7 @@ const ViewProfile = ({navigation, myFilesOnly = false}) => {
 
   useEffect(() => {
     loadAvatar();
-  }, [user.user_id]);
+  }, []);
 
   return (
     <SafeAreaView
@@ -86,7 +91,7 @@ const ViewProfile = ({navigation, myFilesOnly = false}) => {
           <Avatar
             rounded
             source={{
-              uri: 'https://randomuser.me/api/portraits/women/40.jpg',
+              uri: avatar,
             }}
             size="large"
           />
@@ -102,8 +107,8 @@ const ViewProfile = ({navigation, myFilesOnly = false}) => {
               size={16}
               raised
               reverse
-              name="plus"
-              type="font-awesome-5"
+              name="camera"
+              type="ionicon"
               color={'rgba(78, 116, 289, 1)'}
               onPress={() => {}}
               containerStyle={{padding: 0, margin: 0}}
@@ -134,7 +139,7 @@ const ViewProfile = ({navigation, myFilesOnly = false}) => {
           marginBottom: 8,
         }}
       >
-        <Text style={{fontWeight: 'bold'}}>@Catherine007</Text>
+        <Text style={{fontWeight: 'bold'}}>{user.full_name}</Text>
       </View>
       <View
         style={{
