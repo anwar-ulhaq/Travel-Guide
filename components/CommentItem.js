@@ -111,7 +111,7 @@ const CommentItem = ({navigation, singleComment}) => {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.header}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image style={styles.profileImage} source={{uri: avatar}} />
+              <Image style={styles.profileImage2} source={{uri: avatar}} />
               <View>
                 <Text style={styles.name}>{commentOwner.username}</Text>
                 <Text style={styles.subtitle}>
@@ -153,27 +153,18 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginLeft: -5,
   },
+  profileImage2: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    marginRight: 10,
+    marginLeft: 10,
+  },
   name: {fontWeight: '500', fontSize: 12},
   subtitle: {color: 'gray', fontSize: 10},
   icon: {marginLeft: 'auto'},
   // Body
   description: {paddingHorizontal: 10, lineHeight: 20, letterSpacing: 0.3},
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: SIZES.font,
-    margin: 5,
-  },
-  buttonsRow: {
-    marginVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  iconButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconButtonText: {marginLeft: 5, color: 'gray', fontWeight: '500'},
 });
 
 {

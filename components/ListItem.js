@@ -214,7 +214,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           <Image
             style={styles.image}
             source={{uri: uploadsUrl + singleMedia.filename}}
-            resizeMode="cover"
           />
         </View>
       </Pressable>
