@@ -72,7 +72,7 @@ export const useUser = () => {
     const options = {
       method: HTTP_METHOD.PUT,
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
         'x-access-token': token,
       },

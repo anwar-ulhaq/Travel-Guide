@@ -1,4 +1,12 @@
-import {StyleSheet, View, Alert, Text, Image, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  Text,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {uploadsUrl} from '../utils';
 import {SHADOWS, SIZES} from '../theme';
@@ -160,7 +168,17 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     <View style={styles.post}>
       <Pressable style={styles.header}>
         <View style={{flexDirection: 'row'}}>
-          <Image style={styles.profileImage} source={{uri: avatar}} />
+          {user.user_id !== singleMedia.user_id ? (
+            <Pressable
+              onPress={() => {
+                navigation.navigate('OtherUserProfile', {file: singleMedia});
+              }}
+            >
+              <Image style={styles.profileImage} source={{uri: avatar}} />
+            </Pressable>
+          ) : (
+            <Image style={styles.profileImage} source={{uri: avatar}} />
+          )}
           <View>
             <Text style={styles.name}>{owner.username}</Text>
             <Text style={styles.subtitle}>

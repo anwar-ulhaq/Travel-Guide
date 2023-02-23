@@ -3,7 +3,14 @@ import {MainContext} from '../contexts/MainContext';
 // import {appId, baseUrl} from '../utils/variables';
 // import {doFetch} from './doFetch';
 // import {useTag} from './ApiHooks';
-import {appId, baseUrl, doFetch, HTTP_METHOD, mediaPath} from '../utils';
+import {
+  appId,
+  baseUrl,
+  doFetch,
+  HTTP_METHOD,
+  mediaPath,
+  userPath,
+} from '../utils';
 import {useTag} from './useTag';
 
 export const useMedia = (myFilesOnly) => {
@@ -77,5 +84,20 @@ export const useMedia = (myFilesOnly) => {
     }
   };
 
-  return {mediaArray, postMedia, deleteMedia, putMedia};
+  const getAllFilesOfUser = async (userId, token) => {
+    const options = {
+      method: HTTP_METHOD.GET,
+      headers: {
+        'x-access-token': token,
+      },
+    };
+
+    try {
+      return await doFetch(baseUrl + mediaPath + userPath + userId, options);
+    } catch (error) {
+      throw new Error('Error in getting files of a user: ' + error.message);
+    }
+  };
+
+  return {mediaArray, postMedia, deleteMedia, putMedia, getAllFilesOfUser};
 };
