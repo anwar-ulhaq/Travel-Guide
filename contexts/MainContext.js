@@ -9,6 +9,7 @@ const MainProvider = (props) => {
   const [update, setUpdate] = useState(true);
   const [commentUpdate, setCommentUpdate] = useState(0);
   const [postUpdate, setPostUpdate] = useState(0);
+  const [likeUpdate, setLikeUpdate] = useState(0);
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [isEditPost, setIsEditPost] = useState(false);
 
@@ -29,6 +30,8 @@ const MainProvider = (props) => {
         setIsEditPost,
         postUpdate,
         setPostUpdate,
+        likeUpdate,
+        setLikeUpdate,
       }}
     >
       {props.children}

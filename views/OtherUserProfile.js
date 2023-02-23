@@ -14,6 +14,7 @@ import {uploadsUrl} from '../utils';
 import PropTypes from 'prop-types';
 import {ProfileMediaCard} from '../components';
 import MasonryList from '@react-native-seoul/masonry-list';
+import AndroidSafeArea from '../utils';
 
 const OtherUserProfile = ({navigation, route}) => {
   const {file} = route.params;

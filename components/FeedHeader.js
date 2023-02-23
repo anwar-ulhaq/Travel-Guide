@@ -1,10 +1,27 @@
-import {useContext} from 'react';
+import {useContext, useState, useEffect} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {COLORS, SIZES, FONTS, assets} from '../theme';
 import {MainContext} from '../contexts/MainContext';
+import {useTag} from '../hooks';
+import {uploadsUrl} from '../utils';
 
 const FeedHeader = () => {
   const {user} = useContext(MainContext);
+  const {getFilesByTag} = useTag();
+  const [avatar, setAvatar] = useState('https//:placekittens/180');
+  const loadAvatar = async () => {
+    try {
+      const avatarArray = await getFilesByTag('avatar_' + user.user_id);
+
+      const avatar = avatarArray.pop().filename;
+      setAvatar(uploadsUrl + avatar);
+    } catch (error) {
+      console.error('user avatar fetch failed', error.message);
+    }
+  };
+  useEffect(() => {
+    loadAvatar();
+  }, []);
   return (
     <View style={styles.headerContainer}>
       <View style={styles.logoContainer}>
@@ -16,7 +33,7 @@ const FeedHeader = () => {
 
         <View style={styles.userAvatarContainer}>
           <Image
-            source={assets.person}
+            source={{uri: avatar}}
             resizeMode="contain"
             style={styles.userAvatar}
           />
@@ -80,7 +97,7 @@ const styles = StyleSheet.create({
     width: 170,
     height: 60,
   },
-  userAvatarContainer: {width: 45, height: 45},
+  userAvatarContainer: {width: 45, height: 45, marginRight: 20},
   userAvatar: {width: '100%', height: '100%', borderRadius: 25},
   avatarBadge: {
     position: 'absolute',

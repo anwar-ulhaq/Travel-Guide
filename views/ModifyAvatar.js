@@ -6,13 +6,12 @@ import {
   Alert,
   Keyboard,
 } from 'react-native';
-import {useContext, useState, useEffect} from 'react';
+import {useContext, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia, useTag} from '../hooks';
 import PropTypes from 'prop-types';
 import {Card, Button} from '@rneui/themed';
-import {Controller, useForm} from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ModifyAvatar = ({navigation}) => {
@@ -21,10 +20,6 @@ const ModifyAvatar = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
-
-  const [image, setImage] = useState(
-    'https://place-hold.it/300x200&text=Choose'
-  );
 
   const {user} = useContext(MainContext);
 

@@ -29,6 +29,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
 
   const {user, setIsLoggedIn, isEditProfile, setIsEditProfile} =
     React.useContext(MainContext);
+  
 
   const loadAvatar = async () => {
     try {

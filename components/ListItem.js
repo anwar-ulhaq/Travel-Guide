@@ -1,15 +1,7 @@
-import {
-  StyleSheet,
-  View,
-  Alert,
-  Text,
-  Image,
-  Pressable,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, View, Alert, Text, Image, Pressable} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {uploadsUrl} from '../utils';
-import {SHADOWS, SIZES} from '../theme';
+import {SHADOWS, SIZES, assets} from '../theme';
 import {Dialog} from 'react-native-elements';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,6 +22,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     user,
     isEditPost,
     setIsEditPost,
+    likeUpdate,
+    setLikeUpdate,
   } = useContext(MainContext);
 
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
@@ -90,8 +84,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const likesData = await getFavouriteById(singleMedia.file_id);
       setLikes(likesData);
-      setPostUpdate(!postUpdate);
+      // setPostUpdate(!postUpdate);
       // set state userLike accordingly
+      setLikeUpdate(likeUpdate + 1);
       likesData.forEach((like) => {
         like.user_id === user.user_id && setUserLike(true);
       });
@@ -105,6 +100,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const response = await postFavourite(token, singleMedia.file_id);
       console.log('Response from create fav LI', response);
       setUserLike(true);
+      setLikeUpdate(likeUpdate + 1);
     } catch (error) {
       console.error('createFavourite error', error);
     }
@@ -114,6 +110,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await deleteFavourite(token, singleMedia.file_id);
+      setLikeUpdate(likeUpdate + 1);
       response && setUserLike(false);
     } catch (error) {
       console.error('removeFavourite error', error);
@@ -174,10 +171,24 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 navigation.navigate('OtherUserProfile', {file: singleMedia});
               }}
             >
-              <Image style={styles.profileImage} source={{uri: avatar}} />
+              <View style={styles.userAvatarContainer}>
+                <Image style={styles.profileImage} source={{uri: avatar}} />
+                <Image
+                  source={assets.badge}
+                  resizeMode="contain"
+                  style={styles.avatarBadge}
+                />
+              </View>
             </Pressable>
           ) : (
-            <Image style={styles.profileImage} source={{uri: avatar}} />
+            <View style={styles.userAvatarContainer}>
+              <Image style={styles.profileImage} source={{uri: avatar}} />
+              <Image
+                source={assets.badge}
+                resizeMode="contain"
+                style={styles.avatarBadge}
+              />
+            </View>
           )}
           <View>
             <Text style={styles.name}>{owner.username}</Text>
@@ -347,8 +358,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   profileImage: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
     borderRadius: 25,
     marginRight: 10,
   },
@@ -356,6 +367,15 @@ const styles = StyleSheet.create({
   subtitle: {color: 'gray'},
   icon: {marginLeft: 'auto'},
   commentInfo: {color: 'gray', marginLeft: 5},
+  userAvatarContainer: {width: 45, height: 45, marginRight: 10},
+  userAvatar: {width: '100%', height: '100%', borderRadius: 25},
+  avatarBadge: {
+    position: 'absolute',
+    width: SIZES.font,
+    height: SIZES.font,
+    bottom: 0,
+    right: 0,
+  },
 
   // Dialog container
   dialogBox: {
