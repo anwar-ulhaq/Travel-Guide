@@ -2,7 +2,14 @@ import PropTypes from 'prop-types';
 import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Button, Icon} from '@rneui/themed';
 import MasonryList from '@react-native-seoul/masonry-list';
-import {Platform, SafeAreaView, StatusBar, Text, View} from 'react-native';
+import {
+  Alert,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  View,
+} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import {useMedia, useTag} from '../hooks';
 import {ProfileMediaCard} from '../components';
@@ -54,13 +61,20 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
   };
 
   const logout = async () => {
-    console.log('User logout');
-    try {
-      await AsyncStorage.clear();
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.log('Error while logging out: ' + error);
-    }
+    Alert.alert('Are you sure of ', 'logging out?', [
+      {text: 'Cancel'},
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            await AsyncStorage.clear();
+            setIsLoggedIn(false);
+          } catch (error) {
+            console.log('Error while logging out: ' + error);
+          }
+        },
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -126,8 +140,8 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{fontWeight: 'bold', marginBottom: 8}}>101K</Text>
-          <Text>Following</Text>
+          <Text style={{fontWeight: 'bold', marginBottom: 8}}>Total Posts</Text>
+          <Text>{mediaArray.length}</Text>
         </View>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <Text style={{fontWeight: 'bold', marginBottom: 8}}>200M</Text>
@@ -162,13 +176,12 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
             lineHeight: 24,
           }}
         >
-          My name is Catherine. I like dancing in the rain and travelling all
-          around the world.
+          {user.email}
         </Text>
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         <Button
-          title="Follow"
+          title="Edit Profile"
           buttonStyle={{
             height: 48,
             width: 120,
@@ -181,11 +194,11 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
           }}
           containerStyle={{elevation: 20}}
           onPress={() => {
-            // navigation.navigate('Single', singleMedia);
+            navigation.navigate('EditProfile');
           }}
         />
         <Button
-          title="Messages"
+          title="Log out"
           size={'lg'}
           buttonStyle={{
             height: 48,
@@ -199,9 +212,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
             color: 'black',
           }}
           containerStyle={{elevation: 20}}
-          onPress={() => {
-            // navigation.navigate('Single', singleMedia);
-          }}
+          onPress={logout}
         />
       </View>
       <MasonryList

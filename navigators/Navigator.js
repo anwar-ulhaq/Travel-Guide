@@ -15,6 +15,7 @@ import Chat from '../views/Chat';
 import SinglePost from '../views/SinglePost';
 import ModifyPost from '../views/ModifyPost';
 import ModifyAvatar from '../views/ModifyAvatar';
+import EditProfile from '../views/EditProfile';
 import {COLORS, SHADOWS} from '../theme';
 import UserProfile from '../views/UserProfile';
 import ViewProfile from '../views/ViewProfile';
@@ -126,6 +127,7 @@ const StackScreen = () => {
           <Stack.Screen name="ModifyPost" component={ModifyPost} />
           <Stack.Screen name="ModifyAvatar" component={ModifyAvatar} />
           <Stack.Screen name="LikedBy" component={LikedBy} />
+          <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen name="OtherUserProfile" component={OtherUserProfile} />
         </>
       ) : (
