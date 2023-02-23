@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Button, Icon} from '@rneui/themed';
 import MasonryList from '@react-native-seoul/masonry-list';
 import {Platform, SafeAreaView, StatusBar, Text, View} from 'react-native';
-
 import {MainContext} from '../contexts/MainContext';
 import {useMedia, useTag} from '../hooks';
-import {PopupMenu, ProfileMediaCard} from './';
+import {ProfileMediaCard} from '../components';
+import {PopupMenu} from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils';
 
@@ -16,7 +16,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
-  const [tag, setTag] = useState({});
+  const {postUpdate, setPostUpdate} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const options = ['Edit', 'Logout'];
 
@@ -29,6 +29,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
       // console.log(avatarArray);
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
+      setPostUpdate(!postUpdate);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
@@ -110,7 +111,9 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
               name="camera"
               type="ionicon"
               color={'rgba(78, 116, 289, 1)'}
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate('ModifyAvatar');
+              }}
               containerStyle={{padding: 0, margin: 0}}
             />
           </View>

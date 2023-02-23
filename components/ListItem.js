@@ -82,6 +82,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const likesData = await getFavouriteById(singleMedia.file_id);
       setLikes(likesData);
+      setPostUpdate(!postUpdate);
       // set state userLike accordingly
       likesData.forEach((like) => {
         like.user_id === user.user_id && setUserLike(true);
