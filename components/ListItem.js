@@ -122,6 +122,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   }, [postUpdate]);
 
   useEffect(() => {
+    // FIXME: setUserLike cause fetchLikes() which again setUserLike its a continues loop
     fetchLikes();
   }, [userLike]);
 

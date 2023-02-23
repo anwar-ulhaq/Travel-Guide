@@ -9,6 +9,7 @@ import {
   doFetch,
   HTTP_METHOD,
   mediaPath,
+  searchPath,
   userPath,
 } from '../utils';
 import {useTag} from './useTag';
@@ -99,5 +100,22 @@ export const useMedia = (myFilesOnly) => {
     }
   };
 
-  return {mediaArray, postMedia, deleteMedia, putMedia, getAllFilesOfUser};
+  const searchMedia = async (data, token) => {
+    const options = {
+      method: HTTP_METHOD.POST,
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    try {
+      return await doFetch(baseUrl + mediaPath + searchPath, options);
+    } catch (error) {
+      throw new Error('searchMedia: ' + error.message);
+    }
+  };
+
+  return {mediaArray, postMedia, deleteMedia, putMedia, getAllFilesOfUser, searchMedia};
+
 };
