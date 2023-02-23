@@ -48,6 +48,7 @@ const TabScreen = () => {
         name="Search"
         component={Search}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <Icon
               name="search"

@@ -4,6 +4,7 @@ const mediaPath = 'media/';
 const logInPath = 'login/';
 const userPath = 'user/';
 const usersPath = 'users/';
+const searchPath = 'search/';
 const usernamePath = 'username/';
 const commentsPath = 'comments/';
 const favouritesPath = 'favourites/';
@@ -34,5 +35,6 @@ export {
   uploadsUrl,
   baseUrl,
   appId,
+  searchPath,
   HTTP_METHOD,
 };
