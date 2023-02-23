@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Alert} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useUser, useTag} from '../hooks';
 import {useContext} from 'react';
@@ -7,16 +7,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ListItem as RNEListItem, Button} from '@rneui/themed';
 import {ListItemButtonGroup} from '@rneui/base/dist/ListItem/ListItem.ButtonGroup';
 import {uploadsUrl} from '../utils';
+import {useComment} from '../hooks';
 import moment from 'moment';
 import {COLORS, SIZES, SHADOWS} from '../theme';
 import PropTypes from 'prop-types';
 
 const CommentItem = ({navigation, singleComment}) => {
   const {getFilesByTag} = useTag();
+  const {deleteComment} = useComment();
   const [avatar, setAvatar] = useState('https//:placekittens/180');
   const {getUserById} = useUser();
   const [commentOwner, setCommentOwner] = useState({username: 'fetching..'});
-  const {user, commentUpdate, setCommentUpdate} = useContext(MainContext);
+  const {user, commentUpdate, setCommentUpdate, update, setUpdate} =
+    useContext(MainContext);
 
   const loadAvatar = async () => {
     try {
@@ -39,6 +42,30 @@ const CommentItem = ({navigation, singleComment}) => {
       setCommentOwner({username: '[not available]'});
     }
   };
+
+  const doDeleteComment = async () => {
+    console.log('Delete button pressed');
+    try {
+      Alert.alert('Delete', 'this comment', [
+        {text: 'Cancel'},
+        {
+          text: 'OK',
+          onPress: async () => {
+            const token = await AsyncStorage.getItem('userToken');
+            const response = await deleteComment(
+              token,
+              singleComment.comment_id
+            );
+            console.log('Response from delete comment', response);
+            response && setCommentUpdate(commentUpdate + 1);
+          },
+        },
+      ]);
+    } catch (error) {
+      console.log('Error in deleting comment ', error);
+    }
+  };
+
   useEffect(() => {
     fetchCommentOwner();
     loadAvatar();
@@ -53,9 +80,7 @@ const CommentItem = ({navigation, singleComment}) => {
             size: 20,
           }}
           buttonStyle={{backgroundColor: 'red', width: 50, height: 50}}
-          onPress={() => {
-            console.log('Delete comment');
-          }}
+          onPress={doDeleteComment}
         />
       ),
     },

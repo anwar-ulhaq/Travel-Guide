@@ -1,7 +1,7 @@
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
 // import {useRef} from 'react'
-import {COLORS, SHADOWS, SIZES} from '../theme';
+import {SHADOWS, SIZES} from '../theme';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils';
 import {useUser, useFavourite, useTag, useComment} from '../hooks';
@@ -61,7 +61,6 @@ const SinglePost = ({route, navigation}) => {
     try {
       const likesData = await getFavouriteById(file.file_id);
       setLikes(likesData);
-      // set state userLike accordingly
       likesData.forEach((like) => {
         like.user_id === user.user_id && setUserLike(true);
       });

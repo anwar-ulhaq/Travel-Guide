@@ -14,8 +14,11 @@ import OtherUserProfile from '../views/OtherUserProfile';
 import Chat from '../views/Chat';
 import SinglePost from '../views/SinglePost';
 import ModifyPost from '../views/ModifyPost';
+import ModifyAvatar from '../views/ModifyAvatar';
+import EditProfile from '../views/EditProfile';
 import {COLORS, SHADOWS} from '../theme';
 import UserProfile from '../views/UserProfile';
+import ViewProfile from '../views/ViewProfile';
 import {Icon} from '@rneui/themed';
 
 const Tab = createBottomTabNavigator();
@@ -94,7 +97,7 @@ const TabScreen = () => {
 
       <Tab.Screen
         name="Profile"
-        component={UserProfile}
+        component={ViewProfile}
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
@@ -123,7 +126,9 @@ const StackScreen = () => {
           <Stack.Screen name="SinglePost" component={SinglePost} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
           <Stack.Screen name="ModifyPost" component={ModifyPost} />
+          <Stack.Screen name="ModifyAvatar" component={ModifyAvatar} />
           <Stack.Screen name="LikedBy" component={LikedBy} />
+          <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen name="OtherUserProfile" component={OtherUserProfile} />
         </>
       ) : (

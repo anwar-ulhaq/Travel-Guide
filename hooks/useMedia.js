@@ -10,6 +10,7 @@ import {
   HTTP_METHOD,
   mediaPath,
   searchPath,
+  userPath,
 } from '../utils';
 import {useTag} from './useTag';
 
@@ -84,6 +85,21 @@ export const useMedia = (myFilesOnly) => {
     }
   };
 
+  const getAllFilesOfUser = async (userId, token) => {
+    const options = {
+      method: HTTP_METHOD.GET,
+      headers: {
+        'x-access-token': token,
+      },
+    };
+
+    try {
+      return await doFetch(baseUrl + mediaPath + userPath + userId, options);
+    } catch (error) {
+      throw new Error('Error in getting files of a user: ' + error.message);
+    }
+  };
+
   const searchMedia = async (data, token) => {
     const options = {
       method: HTTP_METHOD.POST,
@@ -100,5 +116,6 @@ export const useMedia = (myFilesOnly) => {
     }
   };
 
-  return {mediaArray, postMedia, deleteMedia, putMedia, searchMedia};
+  return {mediaArray, postMedia, deleteMedia, putMedia, getAllFilesOfUser, searchMedia};
+
 };

@@ -11,8 +11,9 @@ const ProfileMediaCard = ({item, style, navigation}) => {
     <TouchableOpacity
       onPress={() => {
         // navigation.navigate('Single', item);
-        // navigation.navigate('SinglePost', {file: singleMedia});
-        console.log('ITEM: ' + JSON.stringify(item));
+        // const stringedItem = JSON.stringify(item);
+        console.log('Item', item);
+        navigation.navigate('SinglePost', {file: item});
       }}
       style={{flex: 1}}
       activeOpacity={1}

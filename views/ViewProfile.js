@@ -1,12 +1,19 @@
 import PropTypes from 'prop-types';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Button, Icon} from '@rneui/themed';
 import MasonryList from '@react-native-seoul/masonry-list';
-import {Platform, SafeAreaView, StatusBar, Text, View} from 'react-native';
-
+import {
+  Alert,
+  Platform,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  View,
+} from 'react-native';
 import {MainContext} from '../contexts/MainContext';
 import {useMedia, useTag} from '../hooks';
-import {PopupMenu, ProfileMediaCard} from './';
+import {ProfileMediaCard} from '../components';
+import {PopupMenu} from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils';
 
@@ -16,12 +23,13 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
-  const [tag, setTag] = useState({});
+  const {postUpdate, setPostUpdate} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const options = ['Edit', 'Logout'];
 
   const {user, setIsLoggedIn, isEditProfile, setIsEditProfile} =
     React.useContext(MainContext);
+  
 
   const loadAvatar = async () => {
     try {
@@ -29,6 +37,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
       // console.log(avatarArray);
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
+      setPostUpdate(!postUpdate);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
@@ -53,13 +62,20 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
   };
 
   const logout = async () => {
-    console.log('User logout');
-    try {
-      await AsyncStorage.clear();
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.log('Error while logging out: ' + error);
-    }
+    Alert.alert('Are you sure of ', 'logging out?', [
+      {text: 'Cancel'},
+      {
+        text: 'OK',
+        onPress: async () => {
+          try {
+            await AsyncStorage.clear();
+            setIsLoggedIn(false);
+          } catch (error) {
+            console.log('Error while logging out: ' + error);
+          }
+        },
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -110,7 +126,9 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
               name="camera"
               type="ionicon"
               color={'rgba(78, 116, 289, 1)'}
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate('ModifyAvatar');
+              }}
               containerStyle={{padding: 0, margin: 0}}
             />
           </View>
@@ -123,8 +141,8 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{fontWeight: 'bold', marginBottom: 8}}>101K</Text>
-          <Text>Following</Text>
+          <Text style={{fontWeight: 'bold', marginBottom: 8}}>Total Posts</Text>
+          <Text>{mediaArray.length}</Text>
         </View>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <Text style={{fontWeight: 'bold', marginBottom: 8}}>200M</Text>
@@ -159,13 +177,12 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
             lineHeight: 24,
           }}
         >
-          My name is Catherine. I like dancing in the rain and travelling all
-          around the world.
+          {user.email}
         </Text>
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         <Button
-          title="Follow"
+          title="Edit Profile"
           buttonStyle={{
             height: 48,
             width: 120,
@@ -178,11 +195,11 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
           }}
           containerStyle={{elevation: 20}}
           onPress={() => {
-            // navigation.navigate('Single', singleMedia);
+            navigation.navigate('EditProfile');
           }}
         />
         <Button
-          title="Messages"
+          title="Log out"
           size={'lg'}
           buttonStyle={{
             height: 48,
@@ -196,9 +213,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
             color: 'black',
           }}
           containerStyle={{elevation: 20}}
-          onPress={() => {
-            // navigation.navigate('Single', singleMedia);
-          }}
+          onPress={logout}
         />
       </View>
       <MasonryList
