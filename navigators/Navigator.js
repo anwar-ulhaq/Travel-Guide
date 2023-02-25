@@ -125,9 +125,17 @@ const StackScreen = () => {
           <Stack.Screen name="SinglePost" component={SinglePost} />
           <Stack.Screen name="MyFiles" component={MyFiles} />
           <Stack.Screen name="ModifyPost" component={ModifyPost} />
-          <Stack.Screen name="ModifyAvatar" component={ModifyAvatar} />
+          <Stack.Screen
+            name="ModifyAvatar"
+            component={ModifyAvatar}
+            options={{headerShown: false}}
+          />
           <Stack.Screen name="LikedBy" component={LikedBy} />
-          <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
+            options={{headerShown: false}}
+          />
           <Stack.Screen name="OtherUserProfile" component={OtherUserProfile} />
         </>
       ) : (

@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Alert,
   Keyboard,
+  SafeAreaView,
 } from 'react-native';
 import {useContext, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
@@ -13,6 +14,7 @@ import {useMedia, useTag} from '../hooks';
 import PropTypes from 'prop-types';
 import {Card, Button} from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppHeader from '../components/AppHeader';
 
 const ModifyAvatar = ({navigation}) => {
   const [mediafile, setMediafile] = useState({});
@@ -73,22 +75,27 @@ const ModifyAvatar = ({navigation}) => {
 
   return (
     <View>
-      <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
-        <Card>
-          <Card.Image
-            source={{uri: mediafile.uri || 'https://placekitten.com/g/200/300'}}
-            onPress={pickFile}
-          />
+      <AppHeader title={'Modify Avatar'} />
+      <View style={{marginTop: 70}}>
+        <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
+          <Card>
+            <Card.Image
+              source={{
+                uri: mediafile.uri || 'https://placekitten.com/g/200/300',
+              }}
+              onPress={pickFile}
+            />
 
-          <Button title="Pick a file" onPress={pickFile} />
-          <Button
-            disabled={!mediafile.uri}
-            title="Upload"
-            onPress={postAvatar}
-          />
-          {loading && <ActivityIndicator size="large" />}
-        </Card>
-      </TouchableOpacity>
+            <Button title="Pick a file" onPress={pickFile} />
+            <Button
+              disabled={!mediafile.uri}
+              title="Upload"
+              onPress={postAvatar}
+            />
+            {loading && <ActivityIndicator size="large" />}
+          </Card>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
