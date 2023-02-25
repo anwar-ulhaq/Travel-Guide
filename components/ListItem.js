@@ -72,7 +72,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const loadAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag('avatar_' + singleMedia.user_id);
-
+      // console.log('Avatar array', avatarArray);
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
       setPostUpdate(!postUpdate);
@@ -84,9 +84,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const likesData = await getFavouriteById(singleMedia.file_id);
       setLikes(likesData);
-      // setPostUpdate(!postUpdate);
-      // set state userLike accordingly
-      setLikeUpdate(likeUpdate + 1);
+
+      // setLikeUpdate(likeUpdate + 1);
       likesData.forEach((like) => {
         like.user_id === user.user_id && setUserLike(true);
       });
@@ -110,8 +109,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await deleteFavourite(token, singleMedia.file_id);
-      setLikeUpdate(likeUpdate + 1);
       response && setUserLike(false);
+      setLikeUpdate(likeUpdate + 1);
     } catch (error) {
       console.error('removeFavourite error', error);
     }
@@ -138,6 +137,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteMedia(singleMedia.file_id, token);
             response && setUpdate(!update);
+            Alert.alert('Post', 'deleted successfully');
           },
         },
       ]);

@@ -21,7 +21,6 @@ const SinglePost = ({route, navigation}) => {
   const {getFilesByTag} = useTag();
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
   const {user, commentUpdate} = useContext(MainContext);
-
   const [owner, setOwner] = useState({username: 'fetching..'});
   const [avatar, setAvatar] = useState('https//:placekittens/180');
   const [likes, setLikes] = useState([]);

@@ -220,7 +220,6 @@ const ModifyProfile = ({navigation}) => {
             value={value}
             onBlur={onBlur}
             onChangeText={onChange}
-
             placeholder="Enter full name"
             containerStyle={styles.containerStyle}
             inputStyle={styles.inputFieldInputStyle}

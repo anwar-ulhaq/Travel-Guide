@@ -58,6 +58,7 @@ const CommentItem = ({navigation, singleComment}) => {
             );
             console.log('Response from delete comment', response);
             response && setCommentUpdate(commentUpdate + 1);
+            Alert.alert('Deleted comment successfully');
           },
         },
       ]);
