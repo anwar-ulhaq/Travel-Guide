@@ -80,6 +80,8 @@ const CommentForm = ({fileId}) => {
           render={({field: {onChange, onBlur, value}}) => (
             <Input
               inputContainerStyle={styles.commentInputContainer}
+              multiline
+              numberOfLines={4}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}

@@ -1,4 +1,12 @@
-import {StyleSheet, View, Alert, Text, Image, Pressable} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  Text,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {uploadsUrl} from '../utils';
 import {SHADOWS, SIZES, assets} from '../theme';
@@ -274,29 +282,38 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           <View style={styles.iconButton}>
             {userLike ? (
               <>
-                <Icon
-                  name="heart"
-                  type="ionicon"
-                  color="red"
-                  size={20}
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  activeOpacity={0.5}
                   onPress={() => {
                     removeFavourite();
                   }}
-                />
-                <Text> Dislike</Text>
+                >
+                  <Icon
+                    name="heart"
+                    type="ionicon"
+                    color="red"
+                    size={20}
+                    onPress={() => {
+                      removeFavourite();
+                    }}
+                  />
+                  <Text> Dislike</Text>
+                </TouchableOpacity>
               </>
             ) : (
               <>
-                <Icon
-                  name="heart-outline"
-                  type="ionicon"
-                  size={20}
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  activeOpacity={1}
                   onPress={() => {
                     createFavourite();
                     fetchLikes();
                   }}
-                />
-                <Text> Like</Text>
+                >
+                  <Icon name="heart-outline" type="ionicon" size={20} />
+                  <Text> Like</Text>
+                </TouchableOpacity>
               </>
             )}
           </View>

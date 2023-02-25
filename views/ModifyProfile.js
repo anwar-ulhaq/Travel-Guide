@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, SafeAreaView} from 'react-native';
 import {Button, Card} from '@rneui/themed';
 import {Input} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
@@ -70,8 +70,7 @@ const ModifyProfile = ({navigation}) => {
   };
 
   return (
-    <View>
-      <AppHeader title={'Modify Profile'} />
+    <SafeAreaView>
       <Card containerStyle={{borderRadius: 8}}>
         <Card.Title
           h4
@@ -261,7 +260,7 @@ const ModifyProfile = ({navigation}) => {
           }}
         />
       </Card>
-    </View>
+    </SafeAreaView>
   );
 };
 

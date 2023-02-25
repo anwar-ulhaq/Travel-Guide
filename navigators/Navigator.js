@@ -146,7 +146,9 @@ const StackScreen = () => {
           <Stack.Screen
             name="ModifyAvatar"
             component={ModifyAvatar}
-            options={{headerShown: false}}
+            options={{
+              header: () => <AppHeader title={'Modify Avatar'} />,
+            }}
           />
           <Stack.Screen
             name="LikedBy"
@@ -158,7 +160,9 @@ const StackScreen = () => {
           <Stack.Screen
             name="ModifyProfile"
             component={ModifyProfile}
-            options={{headerShown: false}}
+            options={{
+              header: () => <AppHeader title={'ModifyProfile'} />,
+            }}
           />
           <Stack.Screen
             name="OtherUserProfile"
