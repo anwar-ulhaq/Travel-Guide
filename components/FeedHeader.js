@@ -63,13 +63,6 @@ const FeedHeader = () => {
 export default FeedHeader;
 
 const styles = StyleSheet.create({
-  searchContainer: {
-    width: 255,
-    borderRadius: 30,
-    height: 45,
-    alignItems: 'center',
-    backgroundColor: '#d4e3ed',
-  },
   feedOption: {
     fontSize: 20,
   },
@@ -78,12 +71,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   leftMargin: {marginLeft: 20},
-  searchInputContainer: {
-    width: 240,
-    borderRadius: SIZES.font,
-    height: SIZES.large,
-    backgroundColor: '#deedf7',
-  },
+
   headerContainer: {
     backgroundColor: COLORS.primary,
     padding: SIZES.font,

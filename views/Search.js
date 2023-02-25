@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 
 import {useMedia} from '../hooks';
 import ListItem from '../components/ListItem';
+import AppHeader from '../components/AppHeader';
 
 const Search = ({navigation}) => {
   const {searchMedia} = useMedia();
@@ -35,6 +36,7 @@ const Search = ({navigation}) => {
             searchMedia(data, userToken).then((result) => {
               setSearchResult(result);
             });
+            console.log('Search Result', searchResult);
           }
         });
       } catch (error) {
@@ -43,17 +45,13 @@ const Search = ({navigation}) => {
     }
   };
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-      }}
-    >
+    <View>
       <View
         style={{
           padding: 8,
           flexDirection: 'row',
           justifyContent: 'center',
+          marginTop: 10,
         }}
       >
         <Input
@@ -146,7 +144,7 @@ const Search = ({navigation}) => {
           <View style={styles.lowerCard} />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

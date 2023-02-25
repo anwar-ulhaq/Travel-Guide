@@ -8,4 +8,4 @@ export CommentForm from './CommentForm';
 export CommentItem from './CommentItem';
 export PopupMenu from './PopupMenu';
 export ProfileMediaCard from './ProfileMediaCard';
-export ModifyProfile from './ModifyProfile';
+// export ModifyProfile from './ModifyProfile';

@@ -15,11 +15,13 @@ import Chat from '../views/Chat';
 import SinglePost from '../views/SinglePost';
 import ModifyPost from '../views/ModifyPost';
 import ModifyAvatar from '../views/ModifyAvatar';
-import EditProfile from '../views/EditProfile';
+// import EditProfile from '../views/EditProfile';
+import ModifyProfile from '../views/ModifyProfile';
 import {COLORS, SHADOWS} from '../theme';
 import UserProfile from '../views/UserProfile';
 import ViewProfile from '../views/ViewProfile';
 import {Icon} from '@rneui/themed';
+import AppHeader from '../components/AppHeader';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -51,7 +53,7 @@ const TabScreen = () => {
         name="Search"
         component={Search}
         options={{
-          headerShown: false,
+          header: () => <AppHeader title={'Search'} />,
           tabBarIcon: ({focused}) => (
             <Icon
               name="search"
@@ -65,6 +67,7 @@ const TabScreen = () => {
         name="Upload"
         component={NewPost}
         options={{
+          header: () => <AppHeader title={'Upload'} />,
           tabBarIcon: ({focused}) => (
             <>
               <View style={{...styles.uploadDesign, ...styles.left}}></View>
@@ -84,6 +87,7 @@ const TabScreen = () => {
         name="Chat"
         component={Chat}
         options={{
+          header: () => <AppHeader title={'Chat'} />,
           tabBarIcon: ({focused}) => (
             <Icon
               name="settings"
@@ -99,6 +103,7 @@ const TabScreen = () => {
         name="Profile"
         component={ViewProfile}
         options={{
+          header: () => <AppHeader title={'Profile'} />,
           tabBarIcon: ({focused}) => (
             <Icon
               name="person"
@@ -123,21 +128,45 @@ const StackScreen = () => {
             component={TabScreen}
             options={{headerShown: false}}
           />
-          <Stack.Screen name="SinglePost" component={SinglePost} />
+          <Stack.Screen
+            name="SinglePost"
+            component={SinglePost}
+            options={{
+              header: () => <AppHeader title={'Single Post'} />,
+            }}
+          />
           <Stack.Screen name="MyFiles" component={MyFiles} />
-          <Stack.Screen name="ModifyPost" component={ModifyPost} />
+          <Stack.Screen
+            name="ModifyPost"
+            component={ModifyPost}
+            options={{
+              header: () => <AppHeader title={'Modify Post'} />,
+            }}
+          />
           <Stack.Screen
             name="ModifyAvatar"
             component={ModifyAvatar}
             options={{headerShown: false}}
           />
-          <Stack.Screen name="LikedBy" component={LikedBy} />
           <Stack.Screen
-            name="EditProfile"
-            component={EditProfile}
+            name="LikedBy"
+            component={LikedBy}
+            options={{
+              header: () => <AppHeader title={'Liked By'} />,
+            }}
+          />
+          <Stack.Screen
+            name="ModifyProfile"
+            component={ModifyProfile}
             options={{headerShown: false}}
           />
-          <Stack.Screen name="OtherUserProfile" component={OtherUserProfile} />
+          <Stack.Screen
+            name="OtherUserProfile"
+            component={OtherUserProfile}
+            options={{
+              header: () => <AppHeader title={'Profile'} />,
+            }}
+          />
         </>
       ) : (
         <Stack.Screen name="Login" component={Login}></Stack.Screen>

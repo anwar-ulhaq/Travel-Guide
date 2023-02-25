@@ -76,7 +76,7 @@ const ModifyAvatar = ({navigation}) => {
   return (
     <View>
       <AppHeader title={'Modify Avatar'} />
-      <View style={{marginTop: 70}}>
+      <View>
         <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
           <Card>
             <Card.Image

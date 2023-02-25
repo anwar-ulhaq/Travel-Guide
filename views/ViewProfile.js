@@ -76,11 +76,9 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
       },
     ]);
   };
-
   useEffect(() => {
     loadAvatar();
   }, []);
-
   return (
     <SafeAreaView
       style={{
@@ -88,21 +86,8 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
       }}
     >
-      <View
-        style={{
-          paddingTop: 16,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Icon
-          size={16}
-          raised
-          name="arrow-left"
-          type="font-awesome-5"
-          onPress={() => {}}
-        />
-        <View>
+      <View style={{flexDirection: 'column'}}>
+        <View style={{alignSelf: 'center'}}>
           <Avatar
             rounded
             source={{
@@ -132,12 +117,8 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
             />
           </View>
         </View>
-        <View>
-          <PopupMenu options={options} onPress={onPopupEvent}>
-            <Icon size={16} raised name="ellipsis-v" type="font-awesome-5" />
-          </PopupMenu>
-        </View>
       </View>
+
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <Text style={{fontWeight: 'bold', marginBottom: 8}}>Total Posts</Text>
@@ -194,7 +175,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
           }}
           containerStyle={{elevation: 20}}
           onPress={() => {
-            navigation.navigate('EditProfile');
+            navigation.navigate('ModifyProfile');
           }}
         />
         <Button

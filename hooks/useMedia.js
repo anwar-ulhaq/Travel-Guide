@@ -1,8 +1,6 @@
 import {useContext, useEffect, useState} from 'react';
 import {MainContext} from '../contexts/MainContext';
-// import {appId, baseUrl} from '../utils/variables';
-// import {doFetch} from './doFetch';
-// import {useTag} from './ApiHooks';
+
 import {
   appId,
   baseUrl,
@@ -16,6 +14,7 @@ import {useTag} from './useTag';
 
 export const useMedia = (myFilesOnly) => {
   const [mediaArray, setMediaArray] = useState([]);
+
   const {update, user} = useContext(MainContext);
 
   const loadMedia = async () => {
@@ -116,6 +115,12 @@ export const useMedia = (myFilesOnly) => {
     }
   };
 
-  return {mediaArray, postMedia, deleteMedia, putMedia, getAllFilesOfUser, searchMedia};
-
+  return {
+    mediaArray,
+    postMedia,
+    deleteMedia,
+    putMedia,
+    getAllFilesOfUser,
+    searchMedia,
+  };
 };

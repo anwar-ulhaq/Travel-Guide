@@ -13,8 +13,10 @@ import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {MainContext} from '../contexts/MainContext';
+import {useNavigation} from '@react-navigation/core';
 
-const AppHeader = ({title, navigation}) => {
+const AppHeader = ({title}) => {
+  const navigation = useNavigation();
   const {setIsLoggedIn} = useContext(MainContext);
   const logout = async () => {
     Alert.alert('Are you sure of ', 'logging out?', [
@@ -32,10 +34,13 @@ const AppHeader = ({title, navigation}) => {
       },
     ]);
   };
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
   return (
     <SafeAreaView style={styles.AndroidSafeArea}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.pop()}>
+        <TouchableOpacity onPress={handleGoBack}>
           <Icon
             name="arrow-back-outline"
             type="ionicon"
@@ -57,20 +62,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    height: 64,
+    paddingHorizontal: 12,
+    paddingBottom: 8,
+    height: 40,
     borderBottomWidth: 1,
     backgroundColor: '#E6EEFA',
     borderBottomColor: '#ccc',
   },
   AndroidSafeArea: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#E6EEFA',
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    marginBottom: 30,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
+    justifyContent: 'center',
   },
 });
 
