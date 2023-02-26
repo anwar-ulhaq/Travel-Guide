@@ -6,37 +6,48 @@ import {
   Alert,
   Keyboard,
   SafeAreaView,
+  Text,
 } from 'react-native';
-import {Controller, useForm} from 'react-hook-form';
-import {useContext, useState, useCallback, useRef} from 'react';
+import {useForm} from 'react-hook-form';
+import {useContext, useEffect, useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {MainContext} from '../contexts/MainContext';
 import * as ImagePicker from 'expo-image-picker';
 import {useMedia, useTag} from '../hooks';
 import PropTypes from 'prop-types';
-import {Card, Button, Icon} from '@rneui/themed';
+import {Card, Button, Icon, Avatar} from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {COLORS} from '../theme';
+import {uploadsUrl} from '../utils';
 
 const ModifyAvatar = ({navigation}) => {
   const [mediafile, setMediafile] = useState({});
-
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const {getFilesByTag} = useTag();
   const [loading, setLoading] = useState(false);
+  const {postUpdate, setPostUpdate, user} = useContext(MainContext);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
 
-  const {user} = useContext(MainContext);
-  const {
-    control,
-    handleSubmit,
-    trigger,
-    reset,
-    formState: {errors},
-  } = useForm({
+  const {reset} = useForm({
     defaultValues: {},
     mode: 'onChange',
   });
-
+  const loadAvatar = async () => {
+    try {
+      const avatarArray = await getFilesByTag('avatar_' + user.user_id);
+      // console.log(avatarArray);
+      const avatar = avatarArray.pop().filename;
+      // setLoading(true);
+      setAvatar(uploadsUrl + avatar);
+      setPostUpdate(!postUpdate);
+    } catch (error) {
+      console.error('user avatar fetch failed', error.message);
+    }
+  };
+  useEffect(() => {
+    loadAvatar();
+  }, []);
   const postAvatar = async () => {
     setLoading(true);
     const formData = new FormData();
@@ -125,7 +136,17 @@ const ModifyAvatar = ({navigation}) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{marginTop: 30}}>
+      <View
+        style={{
+          margin: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar rounded source={{uri: avatar}} size="large" />
+        <Text style={{fontSize: 20, marginLeft: 5}}>{user.username}</Text>
+      </View>
+      <View>
         <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
           <Card>
             <Card.Image
@@ -174,10 +195,6 @@ const ModifyAvatar = ({navigation}) => {
             {loading && <ActivityIndicator size="large" />}
           </Card>
         </TouchableOpacity>
-        <View style={styles.cardContainer}>
-          <View style={styles.upperCard} />
-          <View style={styles.lowerCard} />
-        </View>
       </View>
     </SafeAreaView>
   );

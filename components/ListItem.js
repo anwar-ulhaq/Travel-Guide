@@ -40,7 +40,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const [owner, setOwner] = useState({username: 'fetching..'});
   const [avatar, setAvatar] = useState('https//:placekittens/180');
   const [likes, setLikes] = useState([]);
-  const [userLike, setUserLike] = useState(false);
+  const [userLike, setUserLike] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
@@ -58,6 +59,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const token = await AsyncStorage.getItem('userToken');
       const userData = await getUserById(singleMedia.user_id, token);
       setOwner(userData);
+      setLoading(false);
     } catch (e) {
       console.log('Error in fetching owner', e);
       setOwner({username: '[not available]'});
@@ -84,6 +86,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
       setPostUpdate(!postUpdate);
+      setLoading(false);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }

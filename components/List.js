@@ -5,6 +5,9 @@ import {View} from 'react-native';
 import FeedHeader from './FeedHeader';
 import {COLORS} from '../theme';
 import PropTypes from 'prop-types';
+import {Skeleton} from '@rneui/themed';
+import {useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
 const List = ({navigation, myFilesOnly = false}) => {
   const {mediaArray} = useMedia(myFilesOnly);
