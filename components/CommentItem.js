@@ -107,10 +107,7 @@ const CommentItem = ({navigation, singleComment}) => {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <RNEListItem.Swipeable
             containerStyle={{height: 60}}
-            onPress={() => {
-              // navigation.navigate('Single', item);
-              console.log('Button pressed');
-            }}
+            onPress={doDeleteComment}
             rightContent={() => (
               <ListItemButtonGroup
                 buttons={buttons}
@@ -145,7 +142,9 @@ const CommentItem = ({navigation, singleComment}) => {
                 </Text>
               </View>
             </View>
-            <Text style={{marginLeft: 10}}>{singleComment.comment}</Text>
+            <Text numberOfLines={3} style={{marginLeft: 10}}>
+              {singleComment.comment}
+            </Text>
           </View>
         </View>
       )}

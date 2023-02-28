@@ -1,7 +1,14 @@
-import {Button, Card, Input} from '@rneui/themed';
+import {Button, Card, Input, Icon} from '@rneui/themed';
 import PropTypes from 'prop-types';
 import {Controller, useForm} from 'react-hook-form';
-import {Alert, Keyboard, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {useContext, useState, useCallback, useRef} from 'react';
 import {useMedia, useTag} from '../hooks';
@@ -10,6 +17,7 @@ import {MainContext} from '../contexts/MainContext';
 import {useFocusEffect} from '@react-navigation/native';
 import {appId} from '../utils';
 import {Video} from 'expo-av';
+import {COLORS} from '../theme';
 
 const NewPost = ({navigation}) => {
   const video = useRef(null);
@@ -21,7 +29,6 @@ const NewPost = ({navigation}) => {
   const {
     control,
     handleSubmit,
-
     trigger,
     reset,
     formState: {errors},
@@ -30,6 +37,34 @@ const NewPost = ({navigation}) => {
     mode: 'onChange',
   });
 
+  const getCameraPermission = async () => {
+    const {status} = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Sorry, we need camera permission');
+    }
+  };
+
+  const takePicture = async () => {
+    // No permissions request is necessary for launching the image library
+    try {
+      await getCameraPermission();
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5,
+      });
+
+      console.log('Pick camera result', result);
+
+      if (!result.canceled) {
+        setMediafile(result.assets[0]);
+        trigger();
+      }
+    } catch (error) {
+      console.log('Error in taking picture', error);
+    }
+  };
   const uploadFile = async (data) => {
     // create form data and post it
     setLoading(true);
@@ -141,6 +176,8 @@ const NewPost = ({navigation}) => {
             render={({field: {onChange, onBlur, value}}) => (
               <Input
                 placeholder="Title"
+                multiline
+                numberOfLines={2}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -160,6 +197,8 @@ const NewPost = ({navigation}) => {
             render={({field: {onChange, onBlur, value}}) => (
               <Input
                 placeholder="Description"
+                multiline
+                numberOfLines={4}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -168,14 +207,39 @@ const NewPost = ({navigation}) => {
             )}
             name="description"
           />
-          <Button title="Pick a file" onPress={pickFile} loading={loading} />
+          <View style={styles.btnContainer}>
+            <Button
+              buttonStyle={styles.btnWithIcon}
+              icon={
+                <Icon name="image" type="ionicon" size={25} color="white" />
+              }
+              title=" Gallery"
+              onPress={pickFile}
+              loading={loading}
+            />
+            <Button
+              buttonStyle={styles.btnWithIcon}
+              icon={
+                <Icon name="camera" type="ionicon" size={25} color="white" />
+              }
+              title="Camera"
+              onPress={takePicture}
+              loading={loading}
+            />
+          </View>
           <Button
             disabled={!mediafile.uri || errors.title || errors.description}
             title="Upload"
             onPress={handleSubmit(uploadFile)}
             loading={loading}
+            buttonStyle={{borderRadius: 25, margin: 8}}
           />
-          <Button title="Reset" onPress={resetForm} type="outline" />
+          <Button
+            buttonStyle={styles.btnwithoutIcon}
+            title="Reset"
+            onPress={resetForm}
+            type="outline"
+          />
         </Card>
       </TouchableOpacity>
     </ScrollView>
@@ -187,3 +251,18 @@ NewPost.propTypes = {
 };
 
 export default NewPost;
+
+const styles = StyleSheet.create({
+  btnContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginBottom: 15,
+  },
+  btnwithoutIcon: {borderRadius: 25, margin: 8},
+  btnWithIcon: {
+    borderRadius: 25,
+    width: 105,
+    backgroundColor: COLORS.primary,
+  },
+});

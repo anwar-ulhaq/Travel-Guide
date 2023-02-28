@@ -22,6 +22,25 @@ const FeedHeader = () => {
   useEffect(() => {
     loadAvatar();
   }, []);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    let greeting = '';
+
+    if (hour >= 0 && hour < 5) {
+      greeting = 'Good night';
+    } else if (hour >= 5 && hour < 12) {
+      greeting = 'Good morning';
+    } else if (hour >= 12 && hour < 18) {
+      greeting = 'Good afternoon';
+    } else if (hour >= 18 && hour < 22) {
+      greeting = 'Good evening';
+    } else {
+      greeting = 'Good night';
+    }
+
+    return greeting;
+  };
   return (
     <View style={styles.headerContainer}>
       <View style={styles.logoContainer}>
@@ -49,7 +68,7 @@ const FeedHeader = () => {
         <View style={styles.greetContainer}>
           <Text style={styles.greetUsername}>Hello {user.username} 👋</Text>
 
-          <Text style={styles.greet}>Good Morning 😃</Text>
+          <Text style={styles.greet}>{getGreeting()} 😃</Text>
         </View>
         <View style={styles.userChoice}>
           <Text style={styles.feedOption}>Feed</Text>

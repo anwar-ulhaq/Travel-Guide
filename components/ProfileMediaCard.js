@@ -2,15 +2,17 @@ import {useMemo} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils';
+import {useNavigation} from '@react-navigation/native';
 
-const ProfileMediaCard = ({item, style, navigation}) => {
+const ProfileMediaCard = ({item, style}) => {
+  const navigation = useNavigation();
   const randomBool = useMemo(() => Math.random() < 0.5, []);
   // const {theme} = useTheme();
 
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('SinglePost', {file: item});
+        navigation.navigate('SinglePost', item);
       }}
       style={{flex: 1}}
       activeOpacity={1}
