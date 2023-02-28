@@ -21,6 +21,9 @@ import {COLORS, SHADOWS} from '../theme';
 import UserProfile from '../views/UserProfile';
 import ViewProfile from '../views/ViewProfile';
 import {Icon} from '@rneui/themed';
+import FirstPage from '../components/FirstPage';
+import RegisterForm from '../components/RegisterForm';
+import LoginForm from '../components/LoginForm';
 import AppHeader from '../components/AppHeader';
 
 const Tab = createBottomTabNavigator();
@@ -169,7 +172,11 @@ const StackScreen = () => {
           />
         </>
       ) : (
-        <Stack.Screen name="Login" component={Login}></Stack.Screen>
+        <>
+          <Stack.Screen name="FirstPage" component={FirstPage}></Stack.Screen>
+          <Stack.Screen name="Register" component={RegisterForm}></Stack.Screen>
+          <Stack.Screen name="Login" component={LoginForm}></Stack.Screen>
+        </>
       )}
     </Stack.Navigator>
   );

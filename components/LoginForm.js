@@ -1,11 +1,13 @@
-import {Button, Text, Input, Card} from '@rneui/themed';
+import {Button, Text, Input} from '@rneui/themed';
 import {useForm, Controller} from 'react-hook-form';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
+import {Svg, Path} from 'react-native-svg';
 
 import PropTypes from 'prop-types';
 import {useAuthentication} from '../utils';
+import {View, StyleSheet} from 'react-native';
 
 const LoginForm = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -33,54 +35,87 @@ const LoginForm = ({navigation}) => {
   };
 
   return (
-    <Card>
-      <Card.Title>Login Form</Card.Title>
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-          minLength: 3,
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            placeholder="Username"
-          />
+    <View>
+      <Text style={styles.header}>TRAVEL GUIDE</Text>
+      <View style={styles.form}>
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+            minLength: 3,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              placeholder="Username"
+              style={{marginTop: 100}}
+            />
+          )}
+          name="username"
+        />
+        {errors.username?.type === 'required' && (
+          <Text style={styles.text}>is required</Text>
         )}
-        name="username"
-      />
-      {errors.username?.type === 'required' && <Text>is required</Text>}
-      {errors.username?.type === 'minLength' && (
-        <Text>min length is 3 characters</Text>
-      )}
-
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-          minLength: 5,
-        }}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            autoCapitalize="none"
-            secureTextEntry={true}
-            placeholder="Password"
-          />
+        {errors.username?.type === 'minLength' && (
+          <Text style={styles.text}>min length is 3 characters</Text>
         )}
-        name="password"
-      />
-      {errors.password && <Text>Password (min. 5 chars) is required .</Text>}
 
-      <Button title="Sign in" onPress={handleSubmit(onSubmit)} />
-    </Card>
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+            minLength: 5,
+          }}
+          render={({field: {onChange, onBlur, value}}) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              autoCapitalize="none"
+              secureTextEntry={true}
+              placeholder="Password"
+            />
+          )}
+          name="password"
+        />
+        {errors.password && (
+          <Text style={styles.text}>Password (min. 5 chars) is required .</Text>
+        )}
+        <Button
+          title="Sign in"
+          onPress={handleSubmit(onSubmit)}
+          style={{width: 100, marginLeft: 100, marginTop: 50}}
+        />
+      </View>
+      <Svg style={{bottom: 0}}>
+        <Path
+          fill="#5790DF"
+          d="M0,96L30,117.3C60,139,120,181,180,181.3C240,181,300,139,360,144C420,149,480,203,540,192C600,181,660,107,720,80C780,53,840,75,900,112C960,149,1020,203,1080,202.7C1140,203,1200,149,1260,144C1320,139,1380,181,1410,202.7L1440,224L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"
+        />
+      </Svg>
+    </View>
   );
 };
+const styles = StyleSheet.create({
+  header: {
+    marginTop: 100,
+    marginLeft: 100,
+    fontSize: 25,
+    fontFamily: 'Cochin',
+  },
+  form: {
+    margin: 50,
+    borderColor: 'black',
+  },
+  text: {
+    fontFamily: 'Cochin',
+    color: 'red',
+    marginLeft: 20,
+  },
+});
 LoginForm.propTypes = {
   navigation: PropTypes.object,
 };
