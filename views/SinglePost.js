@@ -1,6 +1,6 @@
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
-// import {useRef} from 'react'
+import {useRef} from 'react';
 import {SHADOWS, SIZES} from '../theme';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils';
@@ -11,12 +11,12 @@ import moment from 'moment';
 import {Divider, Icon} from '@rneui/themed';
 import CommentForm from '../components/CommentForm';
 import ListComment from '../components/ListComment';
-// import {Video} from 'expo-av';
+import {Video} from 'expo-av';
 
 const SinglePost = ({route, navigation}) => {
   const file = route.params;
   // console.log('File', file);
-  // const videoRef = useRef(null);
+  const videoRef = useRef(null);
   const {getUserById} = useUser();
   const {getFilesByTag} = useTag();
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
@@ -109,7 +109,7 @@ const SinglePost = ({route, navigation}) => {
               <View>
                 <Text style={styles.name}>{owner.username}</Text>
                 <Text style={styles.subtitle}>
-                  {moment(file.time_added).format('lll')}
+                  {moment(file.time_added).fromNow()}
                 </Text>
               </View>
             </View>

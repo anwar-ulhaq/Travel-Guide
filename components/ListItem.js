@@ -7,7 +7,7 @@ import {
   Pressable,
   TouchableOpacity,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import {uploadsUrl} from '../utils';
 import {SHADOWS, SIZES, assets} from '../theme';
 import {Dialog} from 'react-native-elements';
@@ -20,6 +20,7 @@ import {PopupMenu} from './';
 import {useUser, useFavourite, useTag, useMedia, useComment} from '../hooks';
 import PropTypes from 'prop-types';
 import Loading from './Loading';
+import {Video} from 'expo-av';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {deleteMedia} = useMedia();
@@ -34,14 +35,16 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     likeUpdate,
     setLikeUpdate,
   } = useContext(MainContext);
+  // console.log('Singlemedia', singleMedia);
 
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
   const {getUserById} = useUser();
   const {getFilesByTag} = useTag();
   const [owner, setOwner] = useState({username: 'fetching..'});
+  const video = useRef(null);
   const [avatar, setAvatar] = useState('https//:placekittens/180');
   const [likes, setLikes] = useState([]);
-  const [userLike, setUserLike] = useState(true);
+  const [userLike, setUserLike] = useState(false);
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
@@ -155,6 +158,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     }
   };
 
+  // console.log('Singlemedia thumbnails', singleMedia.thumbnails);
   const goToEditPost = () => {
     console.log('Edit pressed');
     navigation.navigate('ModifyPost');
@@ -255,10 +259,24 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
         }}
       >
         <View style={styles.feedImageContainer}>
-          <Image
-            style={styles.image}
-            source={{uri: uploadsUrl + singleMedia.filename}}
-          />
+          {singleMedia.media_type === 'image' ? (
+            <Image
+              style={styles.image}
+              source={{uri: uploadsUrl + singleMedia.filename}}
+            />
+          ) : (
+            <Video
+              ref={video}
+              source={{uri: uploadsUrl + singleMedia.filename}}
+              style={{width: '100%', height: 250, marginRight: 0}}
+              resizeMode="cover"
+              useNativeControls
+              onError={(error) => {
+                console.log(error);
+              }}
+              isLooping
+            />
+          )}
         </View>
       </Pressable>
 
@@ -325,7 +343,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               color="gray"
               size={18}
               onPress={() => {
-                navigation.navigate('SinglePost', {file: singleMedia});
+                navigation.navigate('SinglePost', singleMedia);
               }}
             />
             <Text
