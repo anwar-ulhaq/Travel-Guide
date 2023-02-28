@@ -14,7 +14,7 @@ import ListComment from '../components/ListComment';
 // import {Video} from 'expo-av';
 
 const SinglePost = ({route, navigation}) => {
-  const {file} = route.params;
+  const file = route.params;
   // console.log('File', file);
   // const videoRef = useRef(null);
   const {getUserById} = useUser();

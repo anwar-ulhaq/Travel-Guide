@@ -19,6 +19,7 @@ import moment from 'moment';
 import {PopupMenu} from './';
 import {useUser, useFavourite, useTag, useMedia, useComment} from '../hooks';
 import PropTypes from 'prop-types';
+import Loading from './Loading';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {deleteMedia} = useMedia();
@@ -41,7 +42,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const [avatar, setAvatar] = useState('https//:placekittens/180');
   const [likes, setLikes] = useState([]);
   const [userLike, setUserLike] = useState(true);
-  const [loading, setLoading] = useState(false);
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
@@ -59,7 +59,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const token = await AsyncStorage.getItem('userToken');
       const userData = await getUserById(singleMedia.user_id, token);
       setOwner(userData);
-      setLoading(false);
     } catch (e) {
       console.log('Error in fetching owner', e);
       setOwner({username: '[not available]'});
@@ -86,7 +85,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
       setPostUpdate(!postUpdate);
-      setLoading(false);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
@@ -205,7 +203,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           <View>
             <Text style={styles.name}>{owner.username}</Text>
             <Text style={styles.subtitle}>
-              {moment(singleMedia.time_added).startOf('hour').fromNow()}
+              {moment(singleMedia.time_added).fromNow()}
             </Text>
           </View>
         </View>
@@ -253,7 +251,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       )}
       <Pressable
         onPress={() => {
-          navigation.navigate('SinglePost', {file: singleMedia});
+          navigation.navigate('SinglePost', singleMedia);
         }}
       >
         <View style={styles.feedImageContainer}>

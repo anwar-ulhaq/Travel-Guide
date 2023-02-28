@@ -6,7 +6,8 @@ import {
   Keyboard,
   StyleSheet,
 } from 'react-native';
-import {Button, Input, TextInput, Icon} from '@rneui/themed';
+import {TextInput} from 'react-native';
+import {Button, Icon} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useComment} from '../hooks';
@@ -14,6 +15,7 @@ import {useContext, useCallback} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import {useFocusEffect} from '@react-navigation/native';
 import PropTypes from 'prop-types';
+import {Platform} from 'react-native';
 
 const CommentForm = ({fileId}) => {
   const {postComment} = useComment(fileId);
@@ -52,13 +54,11 @@ const CommentForm = ({fileId}) => {
             text: 'OK',
             onPress: () => {
               Keyboard.dismiss();
-              setValue('userComment', '');
+              setValue('');
               setCommentUpdate(commentUpdate + 1);
             },
           },
         ]);
-      Keyboard.dismiss();
-      setValue('userComment', '');
     } catch (e) {
       console.log('Error on uploading comment');
       Alert.alert('Error', 'Uploading comment failed');
@@ -66,7 +66,9 @@ const CommentForm = ({fileId}) => {
   };
 
   return (
-    <KeyboardAvoidingView>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View style={styles.commentFormContainer}>
         <Controller
           control={control}
@@ -78,22 +80,28 @@ const CommentForm = ({fileId}) => {
             },
           }}
           render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              inputContainerStyle={styles.commentInputContainer}
-              multiline
-              numberOfLines={4}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              autoCapitalize="none"
-              placeholder="Leave a comment"
-            />
+            <View style={styles.commentBox}>
+              <TextInput
+                inputContainerStyle={styles.commentInputContainer}
+                multiline
+                numberOfLines={2}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                autoCapitalize="none"
+                placeholder="Leave a comment"
+              />
+            </View>
           )}
           name="comment"
         />
 
         {errors.comment && <Text>Please enter valid comment.</Text>}
-        <Icon name="send" size={30} onPress={handleSubmit(postUserComment)} />
+        <Button
+          buttonStyle={styles.buttonContainer}
+          title={'send'}
+          onPress={handleSubmit(postUserComment)}
+        />
       </View>
     </KeyboardAvoidingView>
   );
@@ -108,15 +116,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     justifyItems: 'center',
+    alignItems: 'center',
     width: 300,
     marginTop: 3,
     marginLeft: 6,
   },
   commentInputContainer: {
     padding: 8,
-    marginTop: 10,
-    marginBottom: -5,
+    margin: 10,
     height: 18,
     width: 250,
+  },
+  commentBox: {
+    borderWidth: 1,
+    borderRadius: 15,
+    borderColor: '#999',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    margin: 10,
+    width: 250,
+    height: 40,
+  },
+  buttonContainer: {
+    borderRadius: 10,
   },
 });
