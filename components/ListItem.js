@@ -9,54 +9,46 @@ import {
 } from 'react-native';
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import {uploadsUrl} from '../utils';
-import {SHADOWS, SIZES, assets} from '../theme';
-import {Dialog} from 'react-native-elements';
+import {SHADOWS, SIZES} from '../theme';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Icon} from '@rneui/themed';
 import LikeImage from '../assets/images/like.png';
 import moment from 'moment';
 import {PopupMenu} from './';
-import {useUser, useFavourite, useTag, useMedia, useComment} from '../hooks';
+import {useUser, useFavourite, useMedia, useComment} from '../hooks';
 import PropTypes from 'prop-types';
-import Loading from './Loading';
 import {Video} from 'expo-av';
+import UserAvatar from './UserAvatar';
 
 const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const {deleteMedia} = useMedia();
   const {
     update,
     setUpdate,
-    postUpdate,
-    setPostUpdate,
     user,
     isEditPost,
     setIsEditPost,
+    commentUpdate,
     likeUpdate,
     setLikeUpdate,
   } = useContext(MainContext);
-  // console.log('Singlemedia', singleMedia);
 
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
   const {getUserById} = useUser();
-  const {getFilesByTag} = useTag();
+
   const [owner, setOwner] = useState({username: 'fetching..'});
   const video = useRef(null);
-  const [avatar, setAvatar] = useState('https//:placekittens/180');
+
   const [likes, setLikes] = useState([]);
   const [userLike, setUserLike] = useState(false);
-  const [visibleDialog, setVisibleDialog] = useState(false);
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
   const {getCommentById} = useComment();
   const [comments, setComments] = useState([]);
-  const {commentUpdate} = useContext(MainContext);
   const options = ['Edit', 'Delete'];
 
-  const toggleDialog = () => {
-    setVisibleDialog(!visibleDialog);
-  };
   const fetchOwner = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -70,7 +62,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   const fetchComments = async () => {
     try {
       const commentsData = await getCommentById(singleMedia.file_id);
-      // console.log('Data from comment', commentsData);
       setComments(commentsData);
     } catch (e) {
       console.log('Error in fetching comments', e);
@@ -81,23 +72,10 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     fetchComments();
   }, [commentUpdate]);
 
-  const loadAvatar = async () => {
-    try {
-      const avatarArray = await getFilesByTag('avatar_' + singleMedia.user_id);
-      // console.log('Avatar array', avatarArray);
-      const avatar = avatarArray.pop().filename;
-      setAvatar(uploadsUrl + avatar);
-      setPostUpdate(!postUpdate);
-    } catch (error) {
-      console.error('user avatar fetch failed', error.message);
-    }
-  };
   const fetchLikes = async () => {
     try {
       const likesData = await getFavouriteById(singleMedia.file_id);
       setLikes(likesData);
-
-      // setLikeUpdate(likeUpdate + 1);
       likesData.forEach((like) => {
         like.user_id === user.user_id && setUserLike(true);
       });
@@ -129,13 +107,11 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   };
   useEffect(() => {
     fetchOwner();
-    loadAvatar();
-  }, [postUpdate]);
+  }, [update]);
 
   useEffect(() => {
-    // FIXME: setUserLike cause fetchLikes() which again setUserLike its a continues loop
     fetchLikes();
-  }, [userLike]);
+  }, [likeUpdate]);
 
   const doDelete = () => {
     try {
@@ -158,7 +134,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     }
   };
 
-  // console.log('Singlemedia thumbnails', singleMedia.thumbnails);
   const goToEditPost = () => {
     console.log('Edit pressed');
     navigation.navigate('ModifyPost');
@@ -185,24 +160,10 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                 navigation.navigate('OtherUserProfile', {file: singleMedia});
               }}
             >
-              <View style={styles.userAvatarContainer}>
-                <Image style={styles.profileImage} source={{uri: avatar}} />
-                <Image
-                  source={assets.badge}
-                  resizeMode="contain"
-                  style={styles.avatarBadge}
-                />
-              </View>
+              <UserAvatar userId={singleMedia.user_id} />
             </Pressable>
           ) : (
-            <View style={styles.userAvatarContainer}>
-              <Image style={styles.profileImage} source={{uri: avatar}} />
-              <Image
-                source={assets.badge}
-                resizeMode="contain"
-                style={styles.avatarBadge}
-              />
-            </View>
+            <UserAvatar userId={singleMedia.user_id} />
           )}
           <View>
             <Text style={styles.name}>{owner.username}</Text>
@@ -214,40 +175,16 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
 
         <View>
           {user.user_id === singleMedia.user_id && (
-            <Icon
-              name="ellipsis-vertical"
-              type="ionicon"
-              raised
-              size={20}
-              style={styles.icon}
-              onPress={toggleDialog}
-            />
+            <PopupMenu options={options} onPress={onPopupEvent}>
+              <Icon
+                name="ellipsis-vertical"
+                type="ionicon"
+                raised
+                size={20}
+                style={styles.icon}
+              />
+            </PopupMenu>
           )}
-
-          <Dialog
-            overlayStyle={styles.dialogBox}
-            isVisible={visibleDialog}
-            onBackdropPress={toggleDialog}
-          >
-            <View style={styles.dialogItemEdit}>
-              <Pressable
-                style={{flexDirection: 'row', alignItems: 'center'}}
-                onPress={goToEditPost}
-              >
-                <Icon name="create" type="ionicon" />
-                <Text>Edit</Text>
-              </Pressable>
-            </View>
-            <View style={styles.dialogItemDelete}>
-              <Pressable
-                style={{flexDirection: 'row', alignItems: 'center'}}
-                onPress={doDelete}
-              >
-                <Icon name="trash" type="ionicon" onPress={doDelete} />
-                <Text>Delete</Text>
-              </Pressable>
-            </View>
-          </Dialog>
         </View>
       </Pressable>
       {singleMedia.description && (
@@ -268,7 +205,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
             <Video
               ref={video}
               source={{uri: uploadsUrl + singleMedia.filename}}
-              style={{width: '100%', height: 250, marginRight: 0}}
+              style={{width: '100%', height: 250}}
               resizeMode="cover"
               useNativeControls
               onError={(error) => {

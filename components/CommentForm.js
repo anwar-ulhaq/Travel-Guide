@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {TextInput} from 'react-native';
-import {Button, Icon} from '@rneui/themed';
+import {Button} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useComment} from '../hooks';
@@ -27,11 +27,11 @@ const CommentForm = ({fileId}) => {
     formState: {errors},
   } = useForm({
     defaultValues: {
-      userComment: '',
+      comment: '',
     },
   });
   const reset = () => {
-    setValue('userComment', '');
+    setValue('comment', '');
   };
   useFocusEffect(
     useCallback(() => {
@@ -54,7 +54,7 @@ const CommentForm = ({fileId}) => {
             text: 'OK',
             onPress: () => {
               Keyboard.dismiss();
-              setValue('');
+              reset();
               setCommentUpdate(commentUpdate + 1);
             },
           },

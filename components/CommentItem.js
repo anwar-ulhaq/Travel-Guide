@@ -4,23 +4,33 @@ import {useUser, useTag} from '../hooks';
 import {useContext} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ListItem as RNEListItem, Button} from '@rneui/themed';
-import {ListItemButtonGroup} from '@rneui/base/dist/ListItem/ListItem.ButtonGroup';
 import {uploadsUrl} from '../utils';
 import {useComment} from '../hooks';
 import moment from 'moment';
-import {COLORS, SIZES, SHADOWS} from '../theme';
+import {SHADOWS} from '../theme';
 import PropTypes from 'prop-types';
+import PopupMenu from './PopupMenu';
 
 const CommentItem = ({navigation, singleComment}) => {
   const {getFilesByTag} = useTag();
   const {deleteComment} = useComment();
   const [avatar, setAvatar] = useState('https//:placekittens/180');
   const {getUserById} = useUser();
-  const [commentOwner, setCommentOwner] = useState({username: 'fetching..'});
-  const {user, commentUpdate, setCommentUpdate, update, setUpdate} =
-    useContext(MainContext);
+  const [commentOwner, setCommentOwner] = useState({username: 'loading..'});
+  const {user, commentUpdate, setCommentUpdate} = useContext(MainContext);
+  const [index, setIndex] = useState('none');
+  const [eventName, setEventName] = useState('none');
+  const [selectedOption, setSelectedOption] = useState('none');
+  const options = ['Edit', 'Delete'];
+  const [isEditComment, setIsEditComment] = useState(false);
 
+  const onPopupEvent = (eventName, index) => {
+    if (index >= 0) setSelectedOption(options[index]);
+    setIndex(index);
+    setEventName(eventName);
+    if (index === 0) setIsEditComment(!isEditComment);
+    else if (index === 1) doDeleteComment();
+  };
   const loadAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag(
@@ -66,88 +76,75 @@ const CommentItem = ({navigation, singleComment}) => {
       console.log('Error in deleting comment ', error);
     }
   };
+  const formatTimeAgo = (dateTime) => {
+    const now = moment();
+    const then = moment(dateTime);
+    const duration = moment.duration(now.diff(then));
+    const days = duration.days();
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+    const seconds = duration.seconds();
+    let unit = '';
+    let value = '';
+
+    if (days > 0) {
+      unit = 'd';
+      value = days;
+    } else if (hours > 0) {
+      unit = 'h';
+      value = hours;
+    } else if (minutes > 0) {
+      unit = 'm';
+      value = minutes;
+    } else {
+      unit = 's';
+      value = seconds;
+    }
+
+    return `${value}${unit} ago`;
+  };
 
   useEffect(() => {
     fetchCommentOwner();
     loadAvatar();
   }, []);
 
-  const buttons = [
-    {
-      element: () => (
-        <Button
-          icon={{
-            name: 'delete',
-            size: 20,
-          }}
-          buttonStyle={{backgroundColor: 'red', width: 50, height: 50}}
-          onPress={doDeleteComment}
-        />
-      ),
-    },
-    {
-      element: () => (
-        <Button
-          icon={{
-            name: 'create',
-            size: 20,
-            type: 'ionicon',
-          }}
-          buttonStyle={{backgroundColor: 'green', width: 50, height: 50}}
-          onPress={() => {
-            console.log('Edit comment');
-          }}
-        />
-      ),
-    },
-  ];
-  return (
-    <View style={styles.post}>
-      {user.user_id === singleComment.user_id ? (
+  const CommentCard = () => {
+    return (
+      <View style={styles.header}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <RNEListItem.Swipeable
-            containerStyle={{height: 60}}
-            onPress={doDeleteComment}
-            rightContent={() => (
-              <ListItemButtonGroup
-                buttons={buttons}
-                containerStyle={{width: 100}}
-                innerBorderStyle={{color: 'gray'}}
-              ></ListItemButtonGroup>
-            )}
-          >
-            <View style={styles.header}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image style={styles.profileImage} source={{uri: avatar}} />
-                <View>
-                  <Text style={styles.name}>{commentOwner.username}</Text>
-                  <Text style={styles.subtitle}>
-                    {moment(singleComment.time_added).startOf('hour').fromNow()}
-                  </Text>
-                </View>
-              </View>
-              <Text style={{marginLeft: 10}}>{singleComment.comment}</Text>
-            </View>
-          </RNEListItem.Swipeable>
-        </View>
-      ) : (
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <View style={styles.header}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image style={styles.profileImage2} source={{uri: avatar}} />
-              <View>
-                <Text style={styles.name}>{commentOwner.username}</Text>
-                <Text style={styles.subtitle}>
-                  {moment(singleComment.time_added).startOf('hour').fromNow()}
-                </Text>
-              </View>
-            </View>
-            <Text numberOfLines={3} style={{marginLeft: 10}}>
-              {singleComment.comment}
+          <Image style={styles.profileImage} source={{uri: avatar}} />
+          <View style={{marginLeft: 0}}>
+            <Text style={styles.name}>{commentOwner.username}</Text>
+            <Text style={styles.subtitle}>
+              {formatTimeAgo(singleComment.time_added)}
             </Text>
           </View>
         </View>
-      )}
+        <View
+          style={{
+            alignContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}
+        >
+          {user.user_id === singleComment.user_id ? (
+            <PopupMenu options={options} onPress={onPopupEvent}>
+              <Text style={{marginLeft: 10}}>{singleComment.comment}</Text>
+            </PopupMenu>
+          ) : (
+            <Text style={{marginLeft: 10}}>{singleComment.comment}</Text>
+          )}
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.post}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <CommentCard />
+      </View>
     </View>
   );
 };
@@ -160,9 +157,9 @@ export default CommentItem;
 const styles = StyleSheet.create({
   cardContainer: {},
   post: {
-    height: 55,
-    backgroundColor: COLORS.white,
-    margin: 5,
+    height: 50,
+    backgroundColor: '#E6EEFA',
+    margin: 1,
     ...SHADOWS.dark,
   },
   header: {
@@ -171,43 +168,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
   },
+
   profileImage: {
     width: 40,
     height: 40,
     borderRadius: 25,
     marginRight: 10,
-    marginLeft: -5,
-  },
-  profileImage2: {
-    width: 40,
-    height: 40,
-    borderRadius: 25,
-    marginRight: 10,
-    marginLeft: 10,
+    marginLeft: 1,
   },
   name: {fontWeight: '500', fontSize: 12},
-  subtitle: {color: 'gray', fontSize: 10},
+  subtitle: {color: 'gray', fontSize: 9},
   icon: {marginLeft: 'auto'},
   // Body
   description: {paddingHorizontal: 10, lineHeight: 20, letterSpacing: 0.3},
 });
-
-{
-  /**
-  <RNEListItem.Swipeable
-          containerStyle={{height: 60}}
-          onPress={() => {
-            navigation.navigate('Single', item);
-          }}
-          rightContent={() => (
-            <ListItemButtonGroup
-              buttons={buttons}
-              containerStyle={{width: 100}}
-              innerBorderStyle={{color: 'gray'}}
-            ></ListItemButtonGroup>
-          )}
-
-
-          </RNEListItem.Swipeable>
-        > */
-}

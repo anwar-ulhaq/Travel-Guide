@@ -1,4 +1,10 @@
-import {View, Text, SafeAreaView, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import {useState, useContext, useEffect} from 'react';
 import {useComment} from '../hooks';
 
@@ -45,9 +51,8 @@ const ListComment = ({navigation, fileId}) => {
     <View
       style={{
         height: 245,
-        backgroundColor: 'white',
+        backgroundColor: '#E6EEFA',
         marginBottom: SIZES.base,
-        overflow: 'hidden',
       }}
     >
       <Text
@@ -63,7 +68,7 @@ const ListComment = ({navigation, fileId}) => {
       {error ? (
         <Text>Error loading comments</Text>
       ) : (
-        <SafeAreaView>
+        <View style={{marginBottom: 25}}>
           <FlatList
             data={comments}
             keyExtractor={(item) => item.comment_id.toString()}
@@ -74,7 +79,7 @@ const ListComment = ({navigation, fileId}) => {
             showsVerticalScrollIndicator={false}
             initialNumToRender={8}
           />
-        </SafeAreaView>
+        </View>
       )}
     </View>
   );
