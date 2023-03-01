@@ -159,7 +159,7 @@ const SinglePost = ({route, navigation}) => {
                   name="ellipsis-vertical"
                   type="ionicon"
                   raised
-                  size={20}
+                  size={16}
                   style={styles.icon}
                   onPress={toggleDialog}
                 />

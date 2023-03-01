@@ -6,6 +6,7 @@ import {useFavourite} from '../hooks';
 import {MainContext} from '../contexts/MainContext';
 import LikeItem from './LikeItem';
 import PropTypes from 'prop-types';
+import AnimatedLottieView from 'lottie-react-native';
 
 const ListLike = ({navigation, fileId}) => {
   // console.log('File id', fileId);
@@ -27,17 +28,24 @@ const ListLike = ({navigation, fileId}) => {
   }, [likeUpdate]);
 
   const LikeListHeader = () => (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 50,
-        marginTop: 30,
-        marginBottom: 20,
-      }}
-    >
-      <Text style={{fontSize: SIZES.extraLarge}}>Likes</Text>
+    <View>
+      <AnimatedLottieView
+        style={styles.animation}
+        source={require('../assets/lottie/like.json')}
+        autoPlay
+        loop
+      />
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: 50,
+          marginBottom: 20,
+        }}
+      >
+        <Text style={{fontSize: SIZES.extraLarge}}>Likes</Text>
+      </View>
     </View>
   );
   const LikeListEmptyComponent = () => (
@@ -104,5 +112,16 @@ const styles = StyleSheet.create({
   upperCard: {
     height: 300,
     backgroundColor: COLORS.primary,
+  },
+  headerContainer: {
+    height: 200,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  animation: {
+    width: 150,
+    height: 150,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

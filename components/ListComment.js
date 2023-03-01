@@ -13,6 +13,7 @@ import {Card} from '@rneui/themed';
 import CommentItem from './CommentItem';
 import {COLORS, SIZES, FONTS, SHADOWS} from '../theme';
 import PropTypes from 'prop-types';
+import AnimatedLottieView from 'lottie-react-native';
 
 const ListComment = ({navigation, fileId}) => {
   const {getCommentById} = useComment();
@@ -41,9 +42,15 @@ const ListComment = ({navigation, fileId}) => {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 50,
+        height: 150,
       }}
     >
+      <AnimatedLottieView
+        style={{width: 150, height: 130}}
+        source={require('../assets/lottie/send-comment.json')}
+        autoPlay
+        loop
+      />
       <Text style={{fontSize: 18}}>No Comments on this post</Text>
     </View>
   );

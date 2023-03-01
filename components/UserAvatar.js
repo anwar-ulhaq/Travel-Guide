@@ -1,11 +1,13 @@
 import {StyleSheet, Image, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useTag} from '../hooks';
 import {uploadsUrl} from '../utils';
 import PropTypes from 'prop-types';
 import {SIZES, assets} from '../theme';
+import {MainContext} from '../contexts/MainContext';
 
 const UserAvatar = ({navigation, userId}) => {
+  const {update} = useContext(MainContext);
   const {getFilesByTag} = useTag();
   const [avatar, setAvatar] = useState('https//:placekittens/180');
 
@@ -21,7 +23,7 @@ const UserAvatar = ({navigation, userId}) => {
 
   useEffect(() => {
     loadAvatar();
-  }, []);
+  }, [update]);
   return (
     <View style={styles.userAvatarContainer}>
       <Image style={styles.profileImage} source={{uri: avatar}} />

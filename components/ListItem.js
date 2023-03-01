@@ -90,6 +90,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       console.log('Response from create fav LI', response);
       setUserLike(true);
       setLikeUpdate(likeUpdate + 1);
+      setUpdate(!update);
     } catch (error) {
       console.error('createFavourite error', error);
     }
@@ -101,6 +102,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const response = await deleteFavourite(token, singleMedia.file_id);
       response && setUserLike(false);
       setLikeUpdate(likeUpdate + 1);
+      setUpdate(!update);
     } catch (error) {
       console.error('removeFavourite error', error);
     }
@@ -113,6 +115,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     fetchLikes();
   }, [likeUpdate]);
 
+  useEffect(() => {
+    fetchComments();
+  }, [commentUpdate]);
   const doDelete = () => {
     try {
       Alert.alert('Delete', ' this file permanently', [

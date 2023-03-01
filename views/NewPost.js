@@ -93,7 +93,6 @@ const NewPost = ({navigation}) => {
           text: 'OK',
           onPress: () => {
             console.log('OK Pressed');
-            // update 'update' state in context
             setUpdate(!update);
             navigation.navigate('Home');
           },
@@ -215,7 +214,6 @@ const NewPost = ({navigation}) => {
               }
               title=" Gallery"
               onPress={pickFile}
-              loading={loading}
             />
             <Button
               buttonStyle={styles.btnWithIcon}
@@ -224,7 +222,6 @@ const NewPost = ({navigation}) => {
               }
               title="Camera"
               onPress={takePicture}
-              loading={loading}
             />
           </View>
           <Button

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, SafeAreaView} from 'react-native';
+import {StyleSheet, SafeAreaView, View} from 'react-native';
 import {Button, Card} from '@rneui/themed';
 import {Input} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks';
 import {MainContext} from '../contexts/MainContext';
 import AppHeader from '../components/AppHeader';
+import UserAvatar from '../components/UserAvatar';
 
 // TODO move styling to style sheet
 const ModifyProfile = ({navigation}) => {
@@ -72,15 +73,25 @@ const ModifyProfile = ({navigation}) => {
   return (
     <SafeAreaView>
       <Card containerStyle={{borderRadius: 8}}>
-        <Card.Title
-          h4
-          h4Style={{
-            fontWeight: '200',
-            textAlign: 'center',
+        <View
+          style={{
+            flexDirection: 'row',
+            alignContent: 'center',
+            justifyContent: 'flex-start',
+            marginBottom: 15,
           }}
         >
-          Edit Profile
-        </Card.Title>
+          <UserAvatar userId={user.user_id} />
+          <Card.Title
+            h4
+            h4Style={{
+              fontWeight: '100',
+              textAlign: 'center',
+            }}
+          >
+            Edit Profile
+          </Card.Title>
+        </View>
 
         <Controller
           control={control}

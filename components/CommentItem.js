@@ -130,10 +130,22 @@ const CommentItem = ({navigation, singleComment}) => {
         >
           {user.user_id === singleComment.user_id ? (
             <PopupMenu options={options} onPress={onPopupEvent}>
-              <Text style={{marginLeft: 10}}>{singleComment.comment}</Text>
+              <Text
+                ellipsizeMode="tail"
+                numberOfLines={2}
+                style={{marginLeft: 10}}
+              >
+                {singleComment.comment}
+              </Text>
             </PopupMenu>
           ) : (
-            <Text style={{marginLeft: 10}}>{singleComment.comment}</Text>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={2}
+              style={{marginLeft: 10}}
+            >
+              {singleComment.comment}
+            </Text>
           )}
         </View>
       </View>

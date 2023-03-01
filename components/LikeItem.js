@@ -7,6 +7,7 @@ import {COLORS, SIZES, SHADOWS} from '../theme';
 import {Card} from '@rneui/themed';
 import {Pressable} from 'react-native';
 import PropTypes from 'prop-types';
+import UserAvatar from './UserAvatar';
 
 const LikeItem = ({navigation, singleLike}) => {
   const {getFilesByTag} = useTag();
@@ -41,7 +42,7 @@ const LikeItem = ({navigation, singleLike}) => {
   }, []);
 
   return (
-    <Card containerStyle={{height: 70, marginTop: 4, borderRadius: 10}}>
+    <Card containerStyle={{height: 65, borderRadius: 10, margin: 2}}>
       <Pressable
         onPress={() => {
           console.log('userid', singleLike.user_id);
@@ -49,10 +50,8 @@ const LikeItem = ({navigation, singleLike}) => {
         }}
       >
         <View style={styles.header}>
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}
-          >
-            <Image style={styles.profileImage} source={{uri: avatar}} />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <UserAvatar userId={singleLike.user_id} />
             <View>
               <Text style={styles.name}>
                 {likeOwner.full_name || likeOwner.username}
@@ -72,51 +71,10 @@ LikeItem.propTypes = {
 export default LikeItem;
 
 const styles = StyleSheet.create({
-  cardContainer: {},
-  post: {
-    height: 35,
-    backgroundColor: COLORS.white,
-    marginBottom: SIZES.extraLarge,
-    margin: SIZES.base,
-    ...SHADOWS.dark,
-  },
   header: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 5,
+    justifyContent: 'flex-start',
   },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  name: {fontWeight: '500', fontSize: 18},
-  subtitle: {color: 'gray', fontSize: 10},
-  icon: {marginLeft: 'auto'},
-  //Body
-  description: {paddingHorizontal: 10, lineHeight: 20, letterSpacing: 0.3},
-  /* image: {
-    width: '100%',
-    aspectRatio: 1,
-    marginTop: 10,
-  }, */
-
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: SIZES.font,
-    margin: 5,
-  },
-  buttonsRow: {
-    marginVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  iconButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconButtonText: {marginLeft: 5, color: 'gray', fontWeight: '500'},
 });
