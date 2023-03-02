@@ -68,10 +68,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     }
   };
 
-  useEffect(() => {
-    fetchComments();
-  }, [commentUpdate]);
-
   const fetchLikes = async () => {
     try {
       const likesData = await getFavouriteById(singleMedia.file_id);
@@ -417,58 +413,3 @@ const styles = StyleSheet.create({
   },
   iconButtonText: {marginLeft: 5, color: 'gray', fontWeight: '500'},
 });
-
-{
-  /**
-   *
-   *
-   *
-   * <PopupMenu options={options} onPress={onPopupEvent}>
-              <Icon
-                size={16}
-                raised
-                name="ellipsis-vertical"
-                type="ionicon"
-                style={styles.icon}
-              />
-            </PopupMenu>
- <Icon
-          name="ellipsis-vertical"
-          type="ionicon"
-          size={20}
-          style={styles.icon}
-          onPress={onPopupEvent}
-        />
-
-        {
-          // TODO: To workout with the positioning of the popping modal
-        }
-        <Dialog
-          overlayStyle={styles.dialogBox}
-          isVisible={visibleDialog}
-          onBackdropPress={toggleDialog}
-        >
-          <View style={styles.dialogItemEdit}>
-            <Pressable
-              style={{flexDirection: 'row', alignItems: 'center'}}
-              onPress={() => {
-                console.log('Edit pressed');
-                navigation.navigate('ModifyPost');
-              }}
-            >
-              <Icon name="create" type="ionicon" />
-              <Text>Edit</Text>
-            </Pressable>
-          </View>
-          <View style={styles.dialogItemDelete}>
-            <Pressable
-              style={{flexDirection: 'row', alignItems: 'center'}}
-              onPress={doDelete}
-            >
-              <Icon name="trash" type="ionicon" onPress={doDelete} />
-              <Text>Delete</Text>
-            </Pressable>
-          </View>
-        </Dialog>
-*/
-}
