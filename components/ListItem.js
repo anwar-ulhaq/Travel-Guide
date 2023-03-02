@@ -383,10 +383,10 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: SIZES.font,
-    margin: 5,
+    // borderRadius: SIZES.font,
+    marginTop: 5,
   },
-  feedImageContainer: {width: '97%', height: 250},
+  feedImageContainer: {width: '100%', height: 250},
   // Footer
   footer: {paddingHorizontal: 10},
   statsRow: {
