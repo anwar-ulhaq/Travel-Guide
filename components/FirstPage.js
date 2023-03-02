@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
     marginLeft: 110,
     fontSize: 25,
-    fontFamily: 'Cochin',
+    fontFamily: 'sans-serif',
   },
 });
 

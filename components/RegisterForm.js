@@ -321,14 +321,14 @@ const styles = StyleSheet.create({
     marginTop: 100,
     marginLeft: 100,
     fontSize: 25,
-    fontFamily: 'Cochin',
+    fontFamily: 'sans-serif',
   },
   form: {
     margin: 50,
     borderColor: 'black',
   },
   text: {
-    fontFamily: 'Cochin',
+    fontFamily: 'sans-serif',
     color: 'red',
     marginLeft: 20,
   },
