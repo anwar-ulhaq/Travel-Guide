@@ -7,7 +7,7 @@ import {Svg, Path} from 'react-native-svg';
 
 import PropTypes from 'prop-types';
 import {useAuthentication} from '../utils';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Platform} from 'react-native';
 
 const LoginForm = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -104,14 +104,14 @@ const styles = StyleSheet.create({
     marginTop: 100,
     marginLeft: 100,
     fontSize: 25,
-    fontFamily: 'Cochin',
+    fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
   },
   form: {
     margin: 50,
     borderColor: 'black',
   },
   text: {
-    fontFamily: 'Cochin',
+    fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
     color: 'red',
     marginLeft: 20,
   },

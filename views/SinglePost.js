@@ -6,6 +6,8 @@ import {
   Platform,
   Alert,
   Pressable,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useContext, useEffect, useState} from 'react';
 import {useRef} from 'react';
@@ -21,6 +23,7 @@ import CommentForm from '../components/CommentForm';
 import ListComment from '../components/ListComment';
 import {Video} from 'expo-av';
 import {Dialog} from 'react-native-elements';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const SinglePost = ({route, navigation}) => {
   const file = route.params;
@@ -140,137 +143,147 @@ const SinglePost = ({route, navigation}) => {
     fetchLikes();
   }, [likeUpdate]);
   return (
-    <>
-      <View>
-        <View style={styles.post}>
-          <View style={styles.header}>
-            <View style={{flexDirection: 'row'}}>
-              <Image style={styles.profileImage} source={{uri: avatar}} />
-              <View>
-                <Text style={styles.name}>{owner.username}</Text>
-                <Text style={styles.subtitle}>
-                  {moment(file.time_added).fromNow()}
-                </Text>
+    <SafeAreaView>
+      <View style={styles.post}>
+        <KeyboardAwareScrollView
+          style={{flex: 1}}
+          keyboardShouldPersistTaps="handled"
+        >
+          <ScrollView>
+            <View style={styles.header}>
+              <View style={{flexDirection: 'row'}}>
+                <Image style={styles.profileImage} source={{uri: avatar}} />
+                <View>
+                  <Text style={styles.name}>{owner.username}</Text>
+                  <Text style={styles.subtitle}>
+                    {moment(file.time_added).fromNow()}
+                  </Text>
+                </View>
               </View>
-            </View>
-            <View>
-              {user.user_id === file.user_id && (
-                <Icon
-                  name="ellipsis-vertical"
-                  type="ionicon"
-                  raised
-                  size={16}
-                  style={styles.icon}
-                  onPress={toggleDialog}
-                />
-              )}
-
-              <Dialog
-                overlayStyle={styles.dialogBox}
-                isVisible={visibleDialog}
-                onBackdropPress={toggleDialog}
-              >
-                <View style={styles.dialogItemEdit}>
-                  <Pressable
-                    style={{flexDirection: 'row', alignItems: 'center'}}
-                    onPress={goToEditPost}
-                  >
-                    <Icon name="create" type="ionicon" />
-                    <Text>Edit</Text>
-                  </Pressable>
-                </View>
-                <View style={styles.dialogItemDelete}>
-                  <Pressable
-                    style={{flexDirection: 'row', alignItems: 'center'}}
-                    onPress={doDelete}
-                  >
-                    <Icon name="trash" type="ionicon" onPress={doDelete} />
-                    <Text>Delete</Text>
-                  </Pressable>
-                </View>
-              </Dialog>
-            </View>
-          </View>
-          {file.description && (
-            <Text style={styles.description}>{file.description}</Text>
-          )}
-          <View style={{width: '97%', height: 200}}>
-            {file.media_type === 'image' ? (
-              <Image
-                style={styles.image}
-                source={{uri: uploadsUrl + file.filename}}
-                resizeMode="cover"
-              />
-            ) : (
-              <Video
-                ref={videoRef}
-                source={{uri: uploadsUrl + file.filename}}
-                style={styles.video}
-                resizeMode="cover"
-                useNativeControls
-                onError={(error) => {
-                  console.log(error);
-                }}
-                isLooping
-              />
-            )}
-          </View>
-          <View style={{flexDirection: 'column'}}>
-            <View style={styles.buttonsRow}>
-              <View style={styles.iconButton}>
-                {userLike ? (
+              <View>
+                {user.user_id === file.user_id && (
                   <Icon
-                    name="heart"
-                    type="material-community"
-                    size={25}
-                    onPress={() => {
-                      removeFavourite();
-                    }}
-                    color="red"
-                  />
-                ) : (
-                  <Icon
-                    name="heart-outline"
+                    name="ellipsis-vertical"
                     type="ionicon"
-                    size={25}
-                    onPress={() => {
-                      createFavourite();
-                      fetchLikes();
-                    }}
+                    raised
+                    size={16}
+                    style={styles.icon}
+                    onPress={toggleDialog}
                   />
                 )}
-                <Text> {likes.length} likes</Text>
-              </View>
-              <View style={styles.iconButton}>
-                <Icon
-                  name="chatbox-ellipses"
-                  type="ionicon"
-                  color="gray"
-                  size={23}
-                />
-                <Text style={styles.iconButtonText}>
-                  {comments.length} comments
-                </Text>
-              </View>
-              <View style={styles.iconButton}>
-                <Icon
-                  name="share-social-outline"
-                  type="ionicon"
-                  color="gray"
-                  size={23}
-                />
-                <Text style={styles.iconButtonText}>Share</Text>
+
+                <Dialog
+                  overlayStyle={styles.dialogBox}
+                  isVisible={visibleDialog}
+                  onBackdropPress={toggleDialog}
+                >
+                  <View style={styles.dialogItemEdit}>
+                    <Pressable
+                      style={{flexDirection: 'row', alignItems: 'center'}}
+                      onPress={goToEditPost}
+                    >
+                      <Icon name="create" type="ionicon" />
+                      <Text>Edit</Text>
+                    </Pressable>
+                  </View>
+                  <View style={styles.dialogItemDelete}>
+                    <Pressable
+                      style={{flexDirection: 'row', alignItems: 'center'}}
+                      onPress={doDelete}
+                    >
+                      <Icon name="trash" type="ionicon" onPress={doDelete} />
+                      <Text>Delete</Text>
+                    </Pressable>
+                  </View>
+                </Dialog>
               </View>
             </View>
-            <Divider />
-            <CommentForm fileId={file.file_id} />
-          </View>
-          <View style={{maxHeight: '40%', padding: 5}}>
-            <ListComment navigation={navigation} fileId={file.file_id} />
-          </View>
+            {file.description && (
+              <Text style={styles.description}>{file.description}</Text>
+            )}
+            <View
+              style={{
+                width: '97%',
+                height: Platform.OS === 'android' ? 200 : 300,
+              }}
+            >
+              {file.media_type === 'image' ? (
+                <Image
+                  style={styles.image}
+                  source={{uri: uploadsUrl + file.filename}}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Video
+                  ref={videoRef}
+                  source={{uri: uploadsUrl + file.filename}}
+                  style={styles.video}
+                  resizeMode="cover"
+                  useNativeControls
+                  onError={(error) => {
+                    console.log(error);
+                  }}
+                  isLooping
+                />
+              )}
+            </View>
+            <View style={{flexDirection: 'column'}}>
+              <View style={styles.buttonsRow}>
+                <View style={styles.iconButton}>
+                  {userLike ? (
+                    <Icon
+                      name="heart"
+                      type="material-community"
+                      size={25}
+                      onPress={() => {
+                        removeFavourite();
+                      }}
+                      color="red"
+                    />
+                  ) : (
+                    <Icon
+                      name="heart-outline"
+                      type="ionicon"
+                      size={25}
+                      onPress={() => {
+                        createFavourite();
+                        fetchLikes();
+                      }}
+                    />
+                  )}
+                  <Text> {likes.length} likes</Text>
+                </View>
+                <View style={styles.iconButton}>
+                  <Icon
+                    name="chatbox-ellipses"
+                    type="ionicon"
+                    color="gray"
+                    size={23}
+                  />
+                  <Text style={styles.iconButtonText}>
+                    {comments.length} comments
+                  </Text>
+                </View>
+                <View style={styles.iconButton}>
+                  <Icon
+                    name="share-social-outline"
+                    type="ionicon"
+                    color="gray"
+                    size={23}
+                  />
+                  <Text style={styles.iconButtonText}>Share</Text>
+                </View>
+              </View>
+              <Divider />
+              <CommentForm fileId={file.file_id} />
+            </View>
+          </ScrollView>
+        </KeyboardAwareScrollView>
+        <View style={{maxHeight: '40%', padding: 5}}>
+          <ListComment navigation={navigation} fileId={file.file_id} />
         </View>
       </View>
-    </>
+    </SafeAreaView>
   );
 };
 SinglePost.propTypes = {
@@ -281,10 +294,11 @@ SinglePost.propTypes = {
 export default SinglePost;
 const styles = StyleSheet.create({
   post: {
-    height: Platform.OS === 'android' ? 610 : 710,
+    height: Platform.OS === 'android' ? 610 : 750,
     backgroundColor: '#E6EEFA',
     borderRadius: SIZES.font,
     marginBottom: SIZES.extraLarge,
+    marginTop: Platform.OS === 'android' ? 15 : -20,
     margin: SIZES.base,
     ...SHADOWS.dark,
   },
@@ -307,28 +321,31 @@ const styles = StyleSheet.create({
 
   // Dialog container
   dialogBox: {
-    width: 110,
-    height: 125,
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 90,
     elevation: SIZES.base,
     position: 'absolute',
-    top: 80,
-    left: 200,
-    borderRadius: SIZES.extraLarge,
+    top: Platform.OS === 'android' ? 80 : 100,
+    left: Platform.OS === 'android' ? 200 : 220,
   },
   dialogItemEdit: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: SIZES.base,
-    backgroundColor: '#07b37f',
-    height: 40,
-    borderRadius: SIZES.font,
+    backgroundColor: '#9acf9b',
+    height: 30,
+    width: 80,
+    padding: 5,
   },
   dialogItemDelete: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f2132d',
-    height: 40,
-    borderRadius: SIZES.font,
+    backgroundColor: '#f96e6e',
+    height: 30,
+    width: 80,
+    padding: 5,
   },
   // Body
   description: {paddingHorizontal: 10, lineHeight: 20, letterSpacing: 0.3},

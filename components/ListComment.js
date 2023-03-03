@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, SafeAreaView, FlatList} from 'react-native';
 import {useState, useContext, useEffect} from 'react';
 import {useComment} from '../hooks';
 
@@ -13,7 +7,7 @@ import {Card} from '@rneui/themed';
 import CommentItem from './CommentItem';
 import {COLORS, SIZES, FONTS, SHADOWS} from '../theme';
 import PropTypes from 'prop-types';
-import AnimatedLottieView from 'lottie-react-native';
+import LottieView from 'lottie-react-native';
 
 const ListComment = ({navigation, fileId}) => {
   const {getCommentById} = useComment();
@@ -45,7 +39,7 @@ const ListComment = ({navigation, fileId}) => {
         height: 150,
       }}
     >
-      <AnimatedLottieView
+      <LottieView
         style={{width: 150, height: 130}}
         source={require('../assets/lottie/send-comment.json')}
         autoPlay
