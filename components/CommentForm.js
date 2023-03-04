@@ -1,11 +1,4 @@
-import {
-  View,
-  Alert,
-  Text,
-  KeyboardAvoidingView,
-  Keyboard,
-  StyleSheet,
-} from 'react-native';
+import {View, Alert, Text, Keyboard, StyleSheet} from 'react-native';
 import {TextInput} from 'react-native';
 import {Button} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';

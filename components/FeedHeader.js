@@ -44,11 +44,7 @@ const FeedHeader = () => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.logoContainer}>
-        <Image
-          source={assets.logo}
-          resizeMode="cover"
-          style={styles.logoImage}
-        />
+        <Text style={{fontSize: 18, fontWeight: 'bold'}}>Travel Guide</Text>
 
         <View style={styles.userAvatarContainer}>
           <Image

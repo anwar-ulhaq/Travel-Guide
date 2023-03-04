@@ -2,17 +2,22 @@ import {Button, Text, Input} from '@rneui/themed';
 import {useForm, Controller} from 'react-hook-form';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
+import {Icon} from '@rneui/themed';
 import {Svg, Path} from 'react-native-svg';
 
 import PropTypes from 'prop-types';
 import {useAuthentication} from '../utils';
-import {View, StyleSheet, Platform} from 'react-native';
+import {View, StyleSheet, Platform, TouchableOpacity} from 'react-native';
 
 const LoginForm = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
   const {postLogin} = useAuthentication();
+  const [showPassword, setShowPassword] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   const {
     control,
     handleSubmit,
@@ -51,7 +56,8 @@ const LoginForm = ({navigation}) => {
               value={value}
               autoCapitalize="none"
               placeholder="Username"
-              style={{marginTop: 100}}
+              style={{margin: 10}}
+              leftIcon={<Icon name="person-outline" type="ionicon" size={22} />}
             />
           )}
           name="username"
@@ -70,14 +76,28 @@ const LoginForm = ({navigation}) => {
             minLength: 5,
           }}
           render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              autoCapitalize="none"
-              secureTextEntry={true}
-              placeholder="Password"
-            />
+            <View>
+              <Input
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                autoCapitalize="none"
+                secureTextEntry={!showPassword}
+                leftIcon={
+                  <Icon name="lock-closed-outline" type="ionicon" size={22} />
+                }
+                rightIcon={
+                  <TouchableOpacity onPress={togglePasswordVisibility}>
+                    <Icon
+                      type="ionicon"
+                      name={showPassword ? 'eye' : 'eye-off'}
+                      size={25}
+                    />
+                  </TouchableOpacity>
+                }
+                placeholder="Password"
+              />
+            </View>
           )}
           name="password"
         />
@@ -87,7 +107,11 @@ const LoginForm = ({navigation}) => {
         <Button
           title="Sign in"
           onPress={handleSubmit(onSubmit)}
-          style={{width: 100, marginLeft: 100, marginTop: 50}}
+          buttonStyle={{
+            width: 250,
+            borderRadius: 36,
+            marginTop: 10,
+          }}
         />
       </View>
       <Svg style={{bottom: 0}}>
