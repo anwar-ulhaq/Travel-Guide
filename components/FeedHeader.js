@@ -4,6 +4,7 @@ import {COLORS, SIZES, FONTS, assets} from '../theme';
 import {MainContext} from '../contexts/MainContext';
 import {useTag} from '../hooks';
 import {uploadsUrl} from '../utils';
+import TopPost from './TopPost';
 
 const FeedHeader = () => {
   const {user} = useContext(MainContext);
@@ -66,11 +67,8 @@ const FeedHeader = () => {
 
           <Text style={styles.greet}>{getGreeting()} 😃</Text>
         </View>
-        <View style={styles.userChoice}>
-          <Text style={styles.feedOption}>Feed</Text>
-          <Text style={styles.RecOption}>Recommended</Text>
-        </View>
       </View>
+      <TopPost />
     </View>
   );
 };

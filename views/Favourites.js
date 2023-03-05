@@ -41,7 +41,7 @@ const Favourites = ({myFilesOnly = false}) => {
     fetchFavoritesByUser();
   }, [update]);
 
-  const Item = ({singleItem}) => {
+  const FavItem = ({singleItem}) => {
     const {getUserById} = useUser();
     const [owner, setOwner] = useState({username: 'fetching..'});
     const fetchOwner = async () => {
@@ -98,7 +98,7 @@ const Favourites = ({myFilesOnly = false}) => {
       </Pressable>
     );
   };
-  const renderUsersItem = ({item}) => <Item singleItem={item} />;
+  const renderUsersItem = ({item}) => <FavItem singleItem={item} />;
   return (
     <View
       style={{flex: 1, backgroundColor: COLORS.primary, paddingVertical: 16}}
