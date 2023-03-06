@@ -1,13 +1,15 @@
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Dimensions, Platform} from 'react-native';
 import React from 'react';
 import {Button} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import {Svg, Path} from 'react-native-svg';
+import LottieIcons from './LottieIcons';
 
 const FirstPage = () => {
   const navigation = useNavigation();
   return (
     <View>
+      <LottieIcons />
       <Text style={styles.header}>TRAVEL GUIDE</Text>
       <View style={styles.buttonsContainer}>
         <Button
@@ -50,7 +52,7 @@ const FirstPage = () => {
       </View>
       <Svg
         style={{
-          bottom: 0,
+          bottom: Platform.OS === 'ios' ? 30 : 150,
         }}
       >
         <Path
@@ -63,8 +65,8 @@ const FirstPage = () => {
 };
 const styles = StyleSheet.create({
   buttonsContainer: {
-    marginTop: 100,
-    marginBottom: 200,
+    marginTop: Platform.OS === 'ios' ? 30 : 30,
+    marginBottom: Platform.OS === 'ios' ? 15 : 30,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
@@ -72,10 +74,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   header: {
-    marginTop: 100,
+    marginTop: Platform.OS === 'ios' ? 150 : 150,
     marginLeft: 110,
     fontSize: 25,
-    fontFamily: 'Cochin',
+    fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
   },
 });
 
