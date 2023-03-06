@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
   lowerCard: {
-    height: 350,
+    height: 700,
     backgroundColor: COLORS.white,
   },
   upperCard: {
