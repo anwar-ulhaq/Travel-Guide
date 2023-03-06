@@ -1,22 +1,13 @@
-import {
-  StyleSheet,
-  View,
-  Alert,
-  Text,
-  Image,
-  Pressable,
-  TouchableOpacity,
-} from 'react-native';
-import React, {useContext, useEffect, useState, useRef} from 'react';
+import {Alert, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {uploadsUrl} from '../utils';
-import {SHADOWS, SIZES} from '../theme';
+import {COLORS, SHADOWS, SIZES} from '../theme';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Icon} from '@rneui/themed';
-import LikeImage from '../assets/images/like.png';
+import {Badge, Icon} from '@rneui/themed';
 import moment from 'moment';
 import {PopupMenu} from './';
-import {useUser, useFavourite, useMedia, useComment} from '../hooks';
+import {useComment, useFavourite, useMedia, useUser} from '../hooks';
 import PropTypes from 'prop-types';
 import {Video} from 'expo-av';
 import UserAvatar from './UserAvatar';
@@ -101,6 +92,14 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       setUpdate(!update);
     } catch (error) {
       console.error('removeFavourite error', error);
+    }
+  };
+
+  const handleFavourites = () => {
+    if (userLike) {
+      removeFavourite();
+    } else {
+      createFavourite();
     }
   };
   useEffect(() => {
@@ -220,87 +219,83 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
 
       <View style={styles.footer}>
         <View style={styles.statsRow}>
-          <Pressable
-            style={{flexDirection: 'row'}}
-            onPress={() => navigation.navigate('LikedBy', {file: singleMedia})}
-          >
-            <Image source={LikeImage} style={styles.likeIcon} />
-            <Text style={styles.likedBy}> {likes.length}</Text>
-          </Pressable>
-          <Icon
-            name="chatbox-ellipses-outline"
-            type="ionicon"
-            color={'#3786e8'}
-            style={{marginLeft: 20}}
-          />
-          <Text style={styles.commentInfo}>{comments.length}</Text>
-        </View>
-        <View style={styles.buttonsRow}>
-          <View style={styles.iconButton}>
-            {userLike ? (
-              <>
-                <TouchableOpacity
-                  style={styles.iconButton}
-                  activeOpacity={0.5}
-                  onPress={() => {
-                    removeFavourite();
-                  }}
-                >
-                  <Icon
-                    name="heart"
-                    type="ionicon"
-                    color="red"
-                    size={20}
-                    onPress={() => {
-                      removeFavourite();
-                    }}
-                  />
-                  <Text> Unlike</Text>
-                </TouchableOpacity>
-              </>
+          <View>
+            <Icon
+              size={16}
+              solid
+              color={COLORS.primary}
+              raised
+              reverse={likes.length === 0}
+              name="heart"
+              type="font-awesome"
+              onPress={() =>
+                navigation.navigate('LikedBy', {file: singleMedia})
+              }
+            />
+            {likes.length === 0 ? (
+              <></>
             ) : (
-              <>
-                <TouchableOpacity
-                  style={styles.iconButton}
-                  activeOpacity={1}
-                  onPress={() => {
-                    createFavourite();
-                    fetchLikes();
-                  }}
-                >
-                  <Icon name="heart-outline" type="ionicon" size={20} />
-                  <Text> Like</Text>
-                </TouchableOpacity>
-              </>
+              <Badge
+                status="error"
+                value={likes.length}
+                containerStyle={{
+                  position: 'absolute',
+                  left: 32,
+                }}
+              />
             )}
           </View>
-          <View style={styles.iconButton}>
+          <View>
             <Icon
+              size={16}
+              solid
+              color={COLORS.primary}
+              raised
+              reverse={comments.length === 0}
+              name="chatbox-ellipses-outline"
+              type="ionicon"
+              // onPress={toggleMediaLike}
+            />
+            {comments.length === 0 ? (
+              <></>
+            ) : (
+              <Badge
+                status="error"
+                value={comments.length}
+                containerStyle={{
+                  position: 'absolute',
+                  left: 32,
+                }}
+              />
+            )}
+          </View>
+          <View>
+            <Icon
+              size={16}
+
+              solid
+              raised
+              name={userLike ? 'dislike' : 'like'}
+              type="simple-line-icon"
+              onPress={() => handleFavourites()}
+            />
+          </View>
+          <View>
+            <Icon
+              size={16}
+
+              solid
+              raised
               name="chatbox-ellipses"
               type="ionicon"
-              color="gray"
-              size={18}
-              onPress={() => {
+              // TODO Ask Binod what is the difference.
+              /* onPress={() => {
                 navigation.navigate('SinglePost', singleMedia);
-              }}
-            />
-            <Text
-              style={styles.iconButtonText}
+              }}*/
               onPress={() => {
                 navigation.navigate('SinglePost', {file: singleMedia});
               }}
-            >
-              Comment
-            </Text>
-          </View>
-          <View style={styles.iconButton}>
-            <Icon
-              name="share-social-outline"
-              type="ionicon"
-              color="gray"
-              size={18}
             />
-            <Text style={styles.iconButtonText}>Share</Text>
           </View>
         </View>
       </View>
@@ -392,6 +387,7 @@ const styles = StyleSheet.create({
   statsRow: {
     paddingVertical: 10,
     flexDirection: 'row',
+    justifyContent: 'space-around',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: 'lightgray',
   },
@@ -409,7 +405,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   iconButtonText: {marginLeft: 5, color: 'gray', fontWeight: '500'},
 });
