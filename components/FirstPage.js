@@ -53,6 +53,7 @@ const FirstPage = () => {
       <Svg
         style={{
           bottom: Platform.OS === 'ios' ? 30 : 150,
+          zIndex: -1,
         }}
       >
         <Path
