@@ -9,7 +9,7 @@ import {MainContext} from '../contexts/MainContext';
 const UserAvatar = ({navigation, userId}) => {
   const {update} = useContext(MainContext);
   const {getFilesByTag} = useTag();
-  const [avatar, setAvatar] = useState('https//:placekittens/180');
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
 
   const loadAvatar = async () => {
     try {

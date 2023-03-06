@@ -9,7 +9,7 @@ import TopPost from './TopPost';
 const FeedHeader = () => {
   const {user} = useContext(MainContext);
   const {getFilesByTag} = useTag();
-  const [avatar, setAvatar] = useState('https//:placekittens/180');
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const loadAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag('avatar_' + user.user_id);

@@ -14,7 +14,7 @@ import PopupMenu from './PopupMenu';
 const CommentItem = ({navigation, singleComment}) => {
   const {getFilesByTag} = useTag();
   const {deleteComment} = useComment();
-  const [avatar, setAvatar] = useState('https//:placekittens/180');
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {getUserById} = useUser();
   const [commentOwner, setCommentOwner] = useState({username: 'loading..'});
   const {user, commentUpdate, setCommentUpdate} = useContext(MainContext);
