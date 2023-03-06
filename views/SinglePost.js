@@ -189,9 +189,10 @@ const SinglePost = ({route, navigation}) => {
                 )}
               </View>
             </View>
-            {file.description && (
+            {/* Fixme: Removed description temporarily to maintain comments styling */}
+            {/* {file.description && (
               <Text style={styles.description}>{file.description}</Text>
-            )}
+            )}*/}
             <View
               style={{
                 width: '97%',
