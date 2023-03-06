@@ -143,7 +143,7 @@ const ModifyProfile = ({navigation}) => {
             <Input
               value={value}
               onBlur={onBlur}
-              placeholder="Password"
+              placeholder="3 characters, 1 number and 1 Uppercase letter."
               secureTextEntry={true}
               onChangeText={onChange}
               autoCapitalize={'none'}
