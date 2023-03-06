@@ -11,7 +11,8 @@ import MyFiles from '../views/MyFiles';
 import Search from '../views/Search';
 import LikedBy from '../views/LikedBy';
 import OtherUserProfile from '../views/OtherUserProfile';
-import Chat from '../views/Chat';
+import Favourites from '../views/Favourites';
+import SingleFeature from '../views/SingleFeature';
 import SinglePost from '../views/SinglePost';
 import ModifyPost from '../views/ModifyPost';
 import ModifyAvatar from '../views/ModifyAvatar';
@@ -86,13 +87,13 @@ const TabScreen = () => {
         }}
       />
       <Tab.Screen
-        name="Chat"
-        component={Chat}
+        name="Favourites"
+        component={Favourites}
         options={{
-          header: () => <AppHeader title={'Chat'} />,
+          header: () => <AppHeader title={'Favourites'} />,
           tabBarIcon: ({focused}) => (
             <Icon
-              name="settings"
+              name="heart"
               type="ionicon"
               size={28}
               color={focused ? COLORS.primary : 'black'}
@@ -177,8 +178,8 @@ const StackScreen = () => {
       ) : (
         <>
           <Stack.Screen name="FirstPage" component={FirstPage}></Stack.Screen>
-          <Stack.Screen name="Register" component={RegisterForm}></Stack.Screen>
           <Stack.Screen name="Login" component={LoginForm}></Stack.Screen>
+          <Stack.Screen name="Register" component={RegisterForm}></Stack.Screen>
         </>
       )}
     </Stack.Navigator>

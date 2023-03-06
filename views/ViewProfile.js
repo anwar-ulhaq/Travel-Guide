@@ -16,6 +16,7 @@ import {ProfileMediaCard} from '../components';
 import {PopupMenu} from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils';
+import EmptyListAnimation from '../components/ListEmptyAnimation';
 
 const ViewProfile = ({navigation, myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
@@ -210,6 +211,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
         numColumns={2}
         data={mediaArray}
         renderItem={renderItem}
+        ListEmptyComponent={<EmptyListAnimation title={'No Posts Yet'} />}
       />
     </SafeAreaView>
   );

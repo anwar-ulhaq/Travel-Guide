@@ -1,6 +1,7 @@
 import {Button, Input} from '@rneui/themed';
 import {useForm, Controller} from 'react-hook-form';
 import {useUser} from '../hooks';
+import {Icon} from '@rneui/themed';
 import {
   Text,
   View,
@@ -13,7 +14,7 @@ import {
 import {Svg, Path} from 'react-native-svg';
 import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 const RegisterForm = () => {
   const {postUser, checkUsername} = useUser();
   const [userAgreesTCs, checkUserAgreesTCs] = useState(true);
@@ -68,7 +69,12 @@ const RegisterForm = () => {
 
   return (
     <>
-      <View visible={!userAgreesTCs}>
+      <View
+        style={{
+          flex: 1,
+        }}
+        visible={!userAgreesTCs}
+      >
         <Text style={styles.header}>Registration Form</Text>
         <View style={styles.form}>
           <Controller
@@ -88,6 +94,9 @@ const RegisterForm = () => {
                 onChangeText={onChange}
                 value={value}
                 autoCapitalize="none"
+                leftIcon={
+                  <Icon name="person-outline" type="ionicon" size={20} />
+                }
                 errorMessage={errors.username && errors.username.message}
               />
             )}
@@ -115,6 +124,9 @@ const RegisterForm = () => {
                 onChangeText={onChange}
                 value={value}
                 secureTextEntry={true}
+                leftIcon={
+                  <Icon name="lock-closed-outline" type="ionicon" size={20} />
+                }
               />
             )}
             name="password"
@@ -137,6 +149,9 @@ const RegisterForm = () => {
                 onChangeText={onChange}
                 value={value}
                 secureTextEntry={true}
+                leftIcon={
+                  <Icon name="lock-closed-outline" type="ionicon" size={20} />
+                }
                 errorMessage={
                   errors.confirmPassword && errors.confirmPassword.message
                 }
@@ -159,6 +174,7 @@ const RegisterForm = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
+                leftIcon={<Icon name="mail-outline" type="ionicon" size={20} />}
                 errorMessage={errors.email && errors.email.message}
               />
             )}
@@ -318,17 +334,18 @@ const RegisterForm = () => {
 };
 const styles = StyleSheet.create({
   header: {
-    marginTop: 100,
-    marginLeft: 100,
-    fontSize: 25,
-    fontFamily: 'sans-serif',
+    marginTop: 20,
+    marginHorizontal: 70,
+    fontSize: 22,
+    fontWeight: 'bold',
+    fontFamily: 'Cochin',
   },
   form: {
     margin: 50,
     borderColor: 'black',
   },
   text: {
-    fontFamily: 'sans-serif',
+    fontFamily: 'Cochin',
     color: 'red',
     marginLeft: 20,
   },

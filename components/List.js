@@ -1,19 +1,50 @@
-import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Animated,
+  Easing,
+} from 'react-native';
 import ListItem from './ListItem';
 import {useMedia} from '../hooks';
-import {View} from 'react-native';
 import FeedHeader from './FeedHeader';
 import {COLORS} from '../theme';
 import PropTypes from 'prop-types';
+import {Icon} from '@rneui/themed';
+import {useRef, useState} from 'react';
 
 const List = ({navigation, myFilesOnly = false}) => {
   const {mediaArray} = useMedia(myFilesOnly);
+  const [fabVisible, setFabVisible] = useState(false);
+  const scrollViewRef = useRef(null);
+  const fabTranslateY = useRef(new Animated.Value(0)).current;
+
+  const handleFabPress = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToOffset({offset: 0, animated: true});
+    }
+  };
+  const handleScroll = (event) => {
+    const offsetY = event.nativeEvent.contentOffset.y;
+    const halfway = event.nativeEvent.contentSize.height / 3;
+    const visible = offsetY > halfway;
+    setFabVisible(visible);
+    Animated.timing(fabTranslateY, {
+      toValue: visible ? 0 : 60,
+      duration: 200,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <View style={styles.flatListContainer}>
           <FlatList
+            ref={scrollViewRef}
             data={mediaArray}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
@@ -25,7 +56,37 @@ const List = ({navigation, myFilesOnly = false}) => {
             )}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={<FeedHeader />}
+            onScroll={handleScroll}
           />
+          {fabVisible && (
+            <Animated.View
+              style={{
+                position: 'absolute',
+                bottom: 30,
+                right: 20,
+                transform: [{translateY: fabTranslateY}],
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  backgroundColor: COLORS.primary,
+                  height: 60,
+                  width: 60,
+                  borderRadius: 30,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={handleFabPress}
+              >
+                <Icon
+                  name="md-arrow-up"
+                  type="ionicon"
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </Animated.View>
+          )}
         </View>
         <View style={styles.cardContainer}>
           <View style={styles.upperCard} />
@@ -38,6 +99,7 @@ const List = ({navigation, myFilesOnly = false}) => {
 List.propTypes = {
   navigation: PropTypes.object,
   myFilesOnly: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 
 export default List;

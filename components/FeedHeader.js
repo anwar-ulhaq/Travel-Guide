@@ -4,11 +4,12 @@ import {COLORS, SIZES, FONTS, assets} from '../theme';
 import {MainContext} from '../contexts/MainContext';
 import {useTag} from '../hooks';
 import {uploadsUrl} from '../utils';
+import TopPost from './TopPost';
 
 const FeedHeader = () => {
   const {user} = useContext(MainContext);
   const {getFilesByTag} = useTag();
-  const [avatar, setAvatar] = useState('https//:placekittens/180');
+  const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const loadAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag('avatar_' + user.user_id);
@@ -44,11 +45,7 @@ const FeedHeader = () => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.logoContainer}>
-        <Image
-          source={assets.logo}
-          resizeMode="cover"
-          style={styles.logoImage}
-        />
+        <Text style={{fontSize: 18, fontWeight: 'bold'}}>Travel Guide</Text>
 
         <View style={styles.userAvatarContainer}>
           <Image
@@ -70,11 +67,8 @@ const FeedHeader = () => {
 
           <Text style={styles.greet}>{getGreeting()} 😃</Text>
         </View>
-        <View style={styles.userChoice}>
-          <Text style={styles.feedOption}>Feed</Text>
-          <Text style={styles.RecOption}>Recommended</Text>
-        </View>
       </View>
+      <TopPost />
     </View>
   );
 };

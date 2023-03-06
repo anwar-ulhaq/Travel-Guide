@@ -48,5 +48,29 @@ export const useFavourite = () => {
       throw new Error('Delete favourite:  ' + error.message);
     }
   };
-  return {postFavourite, getFavouriteById, deleteFavourite};
+  const getAllFavourite = async (token) => {
+    const options = {
+      method: 'GET',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+
+    try {
+      const json = await doFetch(baseUrl + 'favourites', options);
+      const media = await Promise.all(
+        json.map(async (item) => {
+          const response = await fetch(baseUrl + 'media/' + item.file_id);
+          const mediaData = await response.json();
+          return mediaData;
+        })
+      );
+      media.reverse();
+      return media;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return {postFavourite, getFavouriteById, deleteFavourite, getAllFavourite};
 };
