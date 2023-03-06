@@ -1,3 +1,5 @@
+import {Platform} from 'react-native';
+
 export const COLORS = {
   primary: '#5790DF',
   secondary: '#4D626C',
@@ -16,10 +18,10 @@ export const SIZES = {
 };
 
 export const FONTS = {
-  bold: 'sans-serif-medium',
+  bold: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif-medium',
   semiBold: 'monospace',
   medium: 'Roboto',
-  regular: 'sans-serif',
+  regular: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
   light: 'sans-serif-light',
 };
 

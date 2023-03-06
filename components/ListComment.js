@@ -51,7 +51,7 @@ const ListComment = ({navigation, fileId}) => {
   return (
     <View
       style={{
-        height: 245,
+        height: 220,
         backgroundColor: '#E6EEFA',
         marginBottom: SIZES.base,
       }}
@@ -69,7 +69,18 @@ const ListComment = ({navigation, fileId}) => {
       {error ? (
         <Text>Error loading comments</Text>
       ) : (
-        <View style={{marginBottom: 25}}>
+        <View
+          style={{
+            height: 200,
+            width: '100%',
+            paddingTop: 8,
+            paddingBottom: 8,
+            paddingLeft: 8,
+            paddingRight: 8,
+
+            borderBottomLeftRadius: 8,
+            borderBottomRightRadius: 8,
+        }}>
           <FlatList
             data={comments}
             keyExtractor={(item) => item.comment_id.toString()}

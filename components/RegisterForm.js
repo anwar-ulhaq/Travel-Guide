@@ -9,7 +9,7 @@ import {
   Modal,
   SafeAreaView,
   Dimensions,
-  Alert,
+  Alert, Platform,
 } from 'react-native';
 import {Svg, Path} from 'react-native-svg';
 import {useState} from 'react';
@@ -80,7 +80,7 @@ const RegisterForm = () => {
           <Controller
             control={control}
             rules={{
-              required: {value: true, message: 'This is required.'},
+              required: {value: true, message: 'Username is required.'},
               minLength: {
                 value: 3,
                 message: 'Username min length is 3 characters.',
@@ -108,18 +108,17 @@ const RegisterForm = () => {
             rules={{
               required: {
                 value: true,
-                message:
-                  'Minimum 5 characters, needs one number and one uppercase letter',
+                message: 'Password is required',
               },
               pattern: {
                 value: /(?=.*\p{Lu})(?=.*[0-9]).{5,}/u,
                 message:
-                  'min 5 characters, needs one number, one uppercase letter',
+                  'min 5 characters, needs one number and one uppercase letter',
               },
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
-                placeholder="Password"
+                placeholder="3 characters, 1 number and 1 Uppercase letter."
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -162,7 +161,7 @@ const RegisterForm = () => {
           <Controller
             control={control}
             rules={{
-              required: {value: true, message: 'email is required'},
+              required: {value: true, message: 'E-mail is required'},
               pattern: {
                 value: /^[a-z0-9.-]{1,64}@[a-z0-9.-]{3,64}/i,
                 message: 'Must be a valid email',
@@ -338,14 +337,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 70,
     fontSize: 22,
     fontWeight: 'bold',
-    fontFamily: 'Cochin',
+    fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
   },
   form: {
     margin: 50,
     borderColor: 'black',
   },
   text: {
-    fontFamily: 'Cochin',
+    fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
     color: 'red',
     marginLeft: 20,
   },
