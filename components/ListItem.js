@@ -255,7 +255,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
                       removeFavourite();
                     }}
                   />
-                  <Text> Dislike</Text>
+                  <Text> Unlike</Text>
                 </TouchableOpacity>
               </>
             ) : (
