@@ -9,7 +9,7 @@ import {
   Modal,
   SafeAreaView,
   Dimensions,
-  Alert,
+  Alert, Platform,
 } from 'react-native';
 import {Svg, Path} from 'react-native-svg';
 import {useState} from 'react';
@@ -338,14 +338,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 70,
     fontSize: 22,
     fontWeight: 'bold',
-    fontFamily: 'Cochin',
+    fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
   },
   form: {
     margin: 50,
     borderColor: 'black',
   },
   text: {
-    fontFamily: 'Cochin',
+    fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
     color: 'red',
     marginLeft: 20,
   },

@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Platform} from 'react-native';
 import React from 'react';
 import {Button} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
     marginLeft: 110,
     fontSize: 25,
-    fontFamily: 'sans-serif',
+    fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
   },
 });
 
