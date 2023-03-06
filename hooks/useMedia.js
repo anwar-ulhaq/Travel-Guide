@@ -115,6 +115,23 @@ export const useMedia = (myFilesOnly) => {
     }
   };
 
+  const updateMedia = async (fileId, newData, token) => {
+    const options = {
+      method: HTTP_METHOD.PUT,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify(newData),
+    };
+    try {
+      return await doFetch(baseUrl + mediaPath + fileId, options);
+    } catch (error) {
+      throw new Error('updateMedia error, ' + error.message);
+    }
+  };
+
   return {
     mediaArray,
     postMedia,
@@ -122,5 +139,6 @@ export const useMedia = (myFilesOnly) => {
     putMedia,
     getAllFilesOfUser,
     searchMedia,
+    updateMedia,
   };
 };

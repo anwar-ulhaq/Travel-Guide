@@ -136,7 +136,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
 
   const goToEditPost = () => {
     console.log('Edit pressed');
-    navigation.navigate('ModifyPost');
+    navigation.navigate('ModifyPost', singleMedia);
   };
   const onPopupEvent = (eventName, index, style) => {
     if (index >= 0) setSelectedOption(options[index]);
@@ -283,7 +283,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           <View>
             <Icon
               size={16}
-
               solid
               raised
               name="chatbox-ellipses"

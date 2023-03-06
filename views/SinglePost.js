@@ -44,6 +44,7 @@ const SinglePost = ({route, navigation}) => {
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
+  const [selectedOption, setSelectedOption] = useState('none');
   const options = ['Edit', 'Delete'];
 
   const toggleDialog = () => {
@@ -132,7 +133,7 @@ const SinglePost = ({route, navigation}) => {
   };
   const goToEditPost = () => {
     console.log('Edit pressed');
-    navigation.navigate('ModifyPost');
+    navigation.navigate('ModifyPost', file);
   };
   const onPopupEvent = (eventName, index, style) => {
     if (index >= 0) setSelectedOption(options[index]);
@@ -141,7 +142,7 @@ const SinglePost = ({route, navigation}) => {
     console.log('Index: ' + index);
 
     if (index === 0) {
-      setIsEditPost(!isEditPost);
+      // setIsEditPost(!isEditPost);
       goToEditPost();
     } else if (index === 1) doDelete();
   };
