@@ -9,7 +9,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useRef} from 'react';
 import {SHADOWS, SIZES} from '../theme';
 import PropTypes from 'prop-types';
@@ -24,6 +24,7 @@ import ListComment from '../components/ListComment';
 import {Video} from 'expo-av';
 import {Dialog} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {PopupMenu} from '../components';
 
 const SinglePost = ({route, navigation}) => {
   const file = route.params;
@@ -41,6 +42,9 @@ const SinglePost = ({route, navigation}) => {
   const {getCommentById} = useComment();
   const [comments, setComments] = useState([]);
   const [visibleDialog, setVisibleDialog] = useState(false);
+  const [index, setIndex] = useState('none');
+  const [eventName, setEventName] = useState('none');
+  const options = ['Edit', 'Delete'];
 
   const toggleDialog = () => {
     setVisibleDialog(!visibleDialog);
@@ -130,6 +134,17 @@ const SinglePost = ({route, navigation}) => {
     console.log('Edit pressed');
     navigation.navigate('ModifyPost');
   };
+  const onPopupEvent = (eventName, index, style) => {
+    if (index >= 0) setSelectedOption(options[index]);
+    setIndex(index);
+    setEventName(eventName);
+    console.log('Index: ' + index);
+
+    if (index === 0) {
+      setIsEditPost(!isEditPost);
+      goToEditPost();
+    } else if (index === 1) doDelete();
+  };
 
   useEffect(() => {
     fetchComments();
@@ -162,40 +177,16 @@ const SinglePost = ({route, navigation}) => {
               </View>
               <View>
                 {user.user_id === file.user_id && (
-                  <Icon
-                    name="ellipsis-vertical"
-                    type="ionicon"
-                    raised
-                    size={16}
-                    style={styles.icon}
-                    onPress={toggleDialog}
-                  />
+                  <PopupMenu options={options} onPress={onPopupEvent}>
+                    <Icon
+                      name="ellipsis-vertical"
+                      type="ionicon"
+                      raised
+                      size={20}
+                      style={styles.icon}
+                    />
+                  </PopupMenu>
                 )}
-
-                <Dialog
-                  overlayStyle={styles.dialogBox}
-                  isVisible={visibleDialog}
-                  onBackdropPress={toggleDialog}
-                >
-                  <View style={styles.dialogItemEdit}>
-                    <Pressable
-                      style={{flexDirection: 'row', alignItems: 'center'}}
-                      onPress={goToEditPost}
-                    >
-                      <Icon name="create" type="ionicon" />
-                      <Text>Edit</Text>
-                    </Pressable>
-                  </View>
-                  <View style={styles.dialogItemDelete}>
-                    <Pressable
-                      style={{flexDirection: 'row', alignItems: 'center'}}
-                      onPress={doDelete}
-                    >
-                      <Icon name="trash" type="ionicon" onPress={doDelete} />
-                      <Text>Delete</Text>
-                    </Pressable>
-                  </View>
-                </Dialog>
               </View>
             </View>
             {file.description && (
@@ -247,7 +238,7 @@ const SinglePost = ({route, navigation}) => {
                       size={25}
                       onPress={() => {
                         createFavourite();
-                        fetchLikes();
+                        // fetchLikes();
                       }}
                     />
                   )}
