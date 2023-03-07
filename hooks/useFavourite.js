@@ -1,12 +1,14 @@
 // import {doFetch} from './doFetch';
 // import {baseUrl} from '../utils/variables';
 import {
+  appId,
   baseUrl,
   doFetch,
   favouritesPath,
   filePath,
   HTTP_METHOD,
 } from '../utils';
+import {useTag} from './useTag';
 
 export const useFavourite = () => {
   const postFavourite = async (token, fileId) => {
@@ -74,7 +76,6 @@ export const useFavourite = () => {
 
   // Backend returns user's favorites only because of token
   const getUserFavorites = async (token) => {
-    console.log('TOKEN_FAVORITES: ' + token);
     const options = {
       method: 'GET',
       headers: {
@@ -84,11 +85,33 @@ export const useFavourite = () => {
     return await doFetch(baseUrl + 'favourites', options);
   };
 
+  const getOtherUserFavorites = async (otherUserId) => {
+    let otherUserFavoriteCount = 0;
+    try {
+      const json = await useTag().getFilesByTag(appId);
+      await Promise.all(
+        json.map(async (item) => {
+          await getFavouriteById(item.file_id).then((fileFavorities) => {
+            fileFavorities.forEach((singleFavorite) => {
+              if (singleFavorite.user_id === otherUserId) {
+                otherUserFavoriteCount++;
+              }
+            });
+          });
+        })
+      );
+      return otherUserFavoriteCount;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     postFavourite,
     getFavouriteById,
     deleteFavourite,
     getAllFavourite,
     getUserFavorites,
+    getOtherUserFavorites,
   };
 };
