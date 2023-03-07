@@ -72,5 +72,23 @@ export const useFavourite = () => {
     }
   };
 
-  return {postFavourite, getFavouriteById, deleteFavourite, getAllFavourite};
+  // Backend returns user's favorites only because of token
+  const getUserFavorites = async (token) => {
+    console.log('TOKEN_FAVORITES: ' + token);
+    const options = {
+      method: 'GET',
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    return await doFetch(baseUrl + 'favourites', options);
+  };
+
+  return {
+    postFavourite,
+    getFavouriteById,
+    deleteFavourite,
+    getAllFavourite,
+    getUserFavorites,
+  };
 };
