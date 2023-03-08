@@ -9,7 +9,7 @@ import {Avatar} from '@rneui/themed';
 import {Text, Divider} from '@rneui/themed';
 import {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useTag, useUser, useMedia} from '../hooks';
+import {useTag, useUser, useMedia, useFavourite} from '../hooks';
 import {uploadsUrl} from '../utils';
 import PropTypes from 'prop-types';
 import {ProfileMediaCard} from '../components';
@@ -23,7 +23,9 @@ const OtherUserProfile = ({navigation, route}) => {
   const {getFilesByTag} = useTag();
   const {getUserById} = useUser();
   const {getAllFilesOfUser} = useMedia();
+  const {getOtherUserFavorites} = useFavourite();
   const [profileOwner, setProfileOwner] = useState({username: 'fetching...'});
+  const [noOfFavorites, setNoOfFavorites] = useState(0);
 
   const fetchAvatar = async () => {
     try {
@@ -58,10 +60,19 @@ const OtherUserProfile = ({navigation, route}) => {
     }
   };
 
+  const getOtherUserFavoritesCount = async () => {
+    try {
+      setNoOfFavorites(await getOtherUserFavorites(file.user_id))
+    } catch (error) {
+      console.log('Error in fetching other user favorites count', error);
+    }
+  };
+
   useEffect(() => {
     fetchAvatar();
     fetchProfileOwner();
     fetchUserFiles();
+    getOtherUserFavoritesCount();
   }, []);
 
   const renderItem = ({item, i}) => {
@@ -112,8 +123,8 @@ const OtherUserProfile = ({navigation, route}) => {
           <Text style={{fontSize: 16}}>{userFiles.length}</Text>
         </View>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{fontWeight: 'bold', marginBottom: 8}}>200M</Text>
-          <Text>Followers </Text>
+          <Text style={{fontWeight: 'bold', marginBottom: 8}}>Liked Posts</Text>
+          <Text>{noOfFavorites}</Text>
         </View>
       </View>
       <View
