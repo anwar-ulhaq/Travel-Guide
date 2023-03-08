@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import ListLike from '../components/ListLike';
 import PropTypes from 'prop-types';
@@ -17,4 +17,3 @@ LikedBy.propTypes = {
   route: PropTypes.object.isRequired,
   navigation: PropTypes.object,
 };
-const styles = StyleSheet.create({});

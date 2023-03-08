@@ -5,7 +5,6 @@ import {
   Image,
   Platform,
   Alert,
-  Pressable,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
@@ -22,7 +21,6 @@ import {Divider, Icon} from '@rneui/themed';
 import CommentForm from '../components/CommentForm';
 import ListComment from '../components/ListComment';
 import {Video} from 'expo-av';
-import {Dialog} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {PopupMenu} from '../components';
 
@@ -41,15 +39,12 @@ const SinglePost = ({route, navigation}) => {
   const [userLike, setUserLike] = useState(false);
   const {getCommentById} = useComment();
   const [comments, setComments] = useState([]);
-  const [visibleDialog, setVisibleDialog] = useState(false);
+
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
   const options = ['Edit', 'Delete'];
 
-  const toggleDialog = () => {
-    setVisibleDialog(!visibleDialog);
-  };
   const fetchComments = async () => {
     try {
       const commentsData = await getCommentById(file.file_id);
@@ -183,7 +178,7 @@ const SinglePost = ({route, navigation}) => {
                       name="ellipsis-vertical"
                       type="ionicon"
                       raised
-                      size={20}
+                      size={SIZES.large}
                       style={styles.icon}
                     />
                   </PopupMenu>
@@ -227,7 +222,7 @@ const SinglePost = ({route, navigation}) => {
                     <Icon
                       name="heart"
                       type="material-community"
-                      size={25}
+                      size={SIZES.extraLarge}
                       onPress={() => {
                         removeFavourite();
                       }}
@@ -237,10 +232,10 @@ const SinglePost = ({route, navigation}) => {
                     <Icon
                       name="heart-outline"
                       type="ionicon"
-                      size={25}
+                      size={SIZES.extraLarge}
                       onPress={() => {
                         createFavourite();
-                        // fetchLikes();
+                        //fetchLikes();
                       }}
                     />
                   )}
@@ -251,7 +246,7 @@ const SinglePost = ({route, navigation}) => {
                     name="chatbox-ellipses"
                     type="ionicon"
                     color="gray"
-                    size={23}
+                    size={SIZES.extraLarge}
                   />
                   <Text style={styles.iconButtonText}>
                     {comments.length} comments
@@ -262,7 +257,7 @@ const SinglePost = ({route, navigation}) => {
                     name="share-social-outline"
                     type="ionicon"
                     color="gray"
-                    size={23}
+                    size={SIZES.extraLarge}
                   />
                   <Text style={styles.iconButtonText}>Share</Text>
                 </View>
@@ -291,7 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E6EEFA',
     borderRadius: SIZES.font,
     marginBottom: SIZES.extraLarge,
-    marginTop: Platform.OS === 'android' ? 15 : -20,
+    marginTop: Platform.OS === 'android' ? SIZES.medium : -20,
     margin: SIZES.base,
     ...SHADOWS.dark,
   },
@@ -301,12 +296,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 5,
+    marginTop: Platform.OS === 'android' ? 0 : 34,
   },
   profileImage: {
     width: 40,
     height: 40,
-    borderRadius: 25,
-    marginRight: 10,
+    borderRadius: SIZES.extraLarge,
+    marginRight: SIZES.small,
   },
   name: {fontWeight: '500'},
   subtitle: {color: 'gray'},
@@ -341,7 +337,11 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   // Body
-  description: {paddingHorizontal: 10, lineHeight: 20, letterSpacing: 0.3},
+  description: {
+    paddingHorizontal: 10,
+    lineHeight: SIZES.large,
+    letterSpacing: 0.3,
+  },
 
   image: {
     width: '100%',
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   buttonsRow: {
-    marginVertical: 8,
+    marginVertical: SIZES.base,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },

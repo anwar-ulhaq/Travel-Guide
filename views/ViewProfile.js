@@ -16,11 +16,14 @@ import {ProfileMediaCard} from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils';
 import EmptyListAnimation from '../components/ListEmptyAnimation';
+import UserAvatar from '../components/UserAvatar';
 
 const ViewProfile = ({navigation, myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
   const {getFilesByTag} = useTag();
+
   const {postUpdate, setPostUpdate} = useContext(MainContext);
+
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const [noOfFavorites, setNoOfFavorites] = useState(0);
   const {getUserFavorites} = useFavourite();
@@ -34,11 +37,11 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
       // console.log(avatarArray);
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
-      setPostUpdate(!postUpdate);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
   };
+
 
   const loadUserFavourites = async () => {
     try {
@@ -87,7 +90,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
       }}
     >
-      <View style={{flexDirection: 'column'}}>
+      <View style={{flexDirection: 'column', marginTop: 20}}>
         <View style={{alignSelf: 'center'}}>
           <Avatar
             rounded
@@ -96,6 +99,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
             }}
             size="large"
           />
+
           <View
             style={{
               top: 45,

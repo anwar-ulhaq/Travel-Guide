@@ -17,7 +17,7 @@ import {useMedia, useTag} from '../hooks';
 import PropTypes from 'prop-types';
 import {Card, Button, Icon, Avatar} from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {COLORS} from '../theme';
+import {COLORS, SIZES} from '../theme';
 import {uploadsUrl} from '../utils';
 
 const ModifyAvatar = ({navigation}) => {
@@ -25,7 +25,7 @@ const ModifyAvatar = ({navigation}) => {
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {getFilesByTag} = useTag();
   const [loading, setLoading] = useState(false);
-  const {postUpdate, setPostUpdate, user} = useContext(MainContext);
+  const {update, setUpdate, user} = useContext(MainContext);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
 
@@ -40,7 +40,6 @@ const ModifyAvatar = ({navigation}) => {
       const avatar = avatarArray.pop().filename;
       // setLoading(true);
       setAvatar(uploadsUrl + avatar);
-      setPostUpdate(!postUpdate);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
@@ -71,6 +70,7 @@ const ModifyAvatar = ({navigation}) => {
       const tagResult = await postTag(appTag, token);
       console.log('Tag result', tagResult);
       Alert.alert('Uploaded file successfully');
+      setUpdate(!update)
       navigation.navigate('Profile');
     } catch (error) {
       console.error('file upload failed', error);
@@ -115,13 +115,11 @@ const ModifyAvatar = ({navigation}) => {
       quality: 0.5,
     });
 
-    // console.log(result);
-
     if (!result.canceled) {
       setMediafile(result.assets[0]);
     }
   };
-  // console.log('Media file', mediafile);
+
   const resetForm = () => {
     setMediafile({});
     reset();
@@ -138,19 +136,21 @@ const ModifyAvatar = ({navigation}) => {
     <SafeAreaView style={{flex: 1}}>
       <View
         style={{
-          margin: 20,
+          margin: SIZES.large,
           flexDirection: 'row',
           alignItems: 'center',
         }}
       >
         <Avatar rounded source={{uri: avatar}} size="large" />
-        <Text style={{fontSize: 20, marginLeft: 5}}>{user.username}</Text>
+        <Text style={{fontSize: SIZES.large, marginLeft: 5}}>
+          {user.username}
+        </Text>
       </View>
       <View>
         <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
           <Card>
             <Card.Image
-              containerStyle={{borderRadius: 25}}
+              containerStyle={{borderRadius: SIZES.extraLarge}}
               source={{
                 uri:
                   mediafile.uri ||
@@ -163,20 +163,28 @@ const ModifyAvatar = ({navigation}) => {
               <Button
                 buttonStyle={styles.btnWithIcon}
                 icon={
-                  <Icon name="image" type="ionicon" size={25} color="white" />
+                  <Icon
+                    name="image"
+                    type="ionicon"
+                    size={SIZES.extraLarge}
+                    color="white"
+                  />
                 }
                 title=" Gallery"
                 onPress={pickFile}
-                loading={loading}
               />
               <Button
                 buttonStyle={styles.btnWithIcon}
                 icon={
-                  <Icon name="camera" type="ionicon" size={25} color="white" />
+                  <Icon
+                    name="camera"
+                    type="ionicon"
+                    size={SIZES.extraLarge}
+                    color="white"
+                  />
                 }
                 title="Camera"
                 onPress={takePicture}
-                loading={loading}
               />
             </View>
             <Button
@@ -184,7 +192,7 @@ const ModifyAvatar = ({navigation}) => {
               title="Upload Avatar"
               onPress={postAvatar}
               loading={loading}
-              buttonStyle={{borderRadius: 25, margin: 8}}
+              buttonStyle={styles.btnwithoutIcon}
             />
             <Button
               buttonStyle={styles.btnwithoutIcon}
@@ -210,11 +218,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    marginVertical: 15,
+    marginVertical: SIZES.font,
   },
-  btnwithoutIcon: {borderRadius: 25, margin: 8},
+  btnwithoutIcon: {borderRadius: SIZES.extraLarge, margin: SIZES.base},
   btnWithIcon: {
-    borderRadius: 25,
+    borderRadius: SIZES.extraLarge,
     width: 105,
     backgroundColor: 'rgba(78, 116, 289, 1)',
   },
