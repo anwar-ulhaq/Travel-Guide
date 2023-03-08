@@ -18,6 +18,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {appId} from '../utils';
 import {Video} from 'expo-av';
 import {COLORS, SIZES} from '../theme';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const NewPost = ({navigation}) => {
   const video = useRef(null);
@@ -139,9 +140,9 @@ const NewPost = ({navigation}) => {
   );
 
   return (
-    <ScrollView>
+    <KeyboardAwareScrollView>
       <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
-        <Card>
+        <Card containerStyle={{marginTop: SIZES.large}}>
           {mediafile.type === 'video' ? (
             <Video
               ref={video}
@@ -250,7 +251,7 @@ const NewPost = ({navigation}) => {
           />
         </Card>
       </TouchableOpacity>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 

@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     height: 48,
+    marginTop: SIZES.font,
   },
   searchContainer: {
     padding: SIZES.base,
