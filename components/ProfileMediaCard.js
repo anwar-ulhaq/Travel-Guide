@@ -1,12 +1,14 @@
-import {useMemo} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils';
 import {useNavigation} from '@react-navigation/native';
+import {Video} from 'expo-av';
 
 const ProfileMediaCard = ({item, style}) => {
   const navigation = useNavigation();
   const randomBool = useMemo(() => Math.random() < 0.5, []);
+  const videoRef = useRef(null);
   // const {theme} = useTheme();
 
   return (
@@ -18,23 +20,31 @@ const ProfileMediaCard = ({item, style}) => {
       activeOpacity={1}
     >
       <View key={item.key} style={[{marginTop: 12, flex: 1}, style]}>
-        <Image
-          source={
-            item.media_type === 'video'
-              ? {
-                  uri: uploadsUrl + item.screenshot,
-                }
-              : {
-                  uri: uploadsUrl + item.filename,
-                }
-          }
-          // source={{uri: item.thumbnails.w160}}
-          style={{
-            height: randomBool ? 150 : 280,
-            alignSelf: 'stretch',
-          }}
-          resizeMode="cover"
-        />
+        {item.media_type === 'image' ? (
+          <Image
+            style={{
+              height: randomBool ? 150 : 280,
+              alignSelf: 'stretch',
+            }}
+            source={{uri: uploadsUrl + item.filename}}
+            resizeMode="cover"
+          />
+        ) : (
+          <Video
+            ref={videoRef}
+            source={{uri: uploadsUrl + item.filename}}
+            style={{
+              height: randomBool ? 150 : 280,
+              alignSelf: 'stretch',
+            }}
+            resizeMode="cover"
+            useNativeControls
+            onError={(error) => {
+              console.log(error);
+            }}
+            isLooping
+          />
+        )}
         <Text
           style={{
             marginTop: 8,

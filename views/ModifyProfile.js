@@ -14,9 +14,9 @@ import {SIZES} from '../theme';
 // TODO move styling to style sheet
 const ModifyProfile = ({navigation}) => {
   const {checkUsername, updateUser} = useUser();
-  const {user, isEditProfile, setIsEditProfile} = React.useContext(MainContext);
-  // eslint-disable-next-line camelcase
-  const {username, email, full_name} = user;
+  const {user, isEditProfile, setIsEditProfile, setUser} =
+    React.useContext(MainContext);
+  const {username, email} = user;
   const {
     control,
     getValues,
@@ -27,8 +27,6 @@ const ModifyProfile = ({navigation}) => {
       username: username || '',
       password: '',
       email: email || '',
-      // eslint-disable-next-line camelcase
-      full_name: full_name || '',
     },
     mode: 'onBlur',
   });
@@ -54,19 +52,23 @@ const ModifyProfile = ({navigation}) => {
   };
 
   const onSubmit = async (data) => {
+    const {getUserByToken} = useUser();
     try {
       await AsyncStorage.getItem('userToken').then(async (userToken) => {
         Object.keys(data).forEach(
           (key) => data[key] === '' && delete data[key]
         );
+        delete data.confirm_password;
         if (userToken) {
-          await updateUser(data, userToken).then(() => {
+          await updateUser(data, userToken).then(async () => {
+            const userData = await getUserByToken(userToken);
+            setUser(userData);
             setIsEditProfile(!isEditProfile);
           });
         }
       });
     } catch (error) {
-      console.log('Error AsyncStorage userToken');
+      console.log('Error on submit: ' + error);
     }
   };
 
@@ -216,34 +218,6 @@ const ModifyProfile = ({navigation}) => {
               />
             )}
             name="email"
-          />
-
-          <Controller
-            control={control}
-            rules={{
-              required: {
-                value: true,
-                message: 'This field is required',
-              },
-              minLength: {
-                value: 3,
-                message: 'Must be at least 3 characters.',
-              },
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                placeholder="Enter full name"
-                containerStyle={styles.containerStyle}
-                inputStyle={styles.inputFieldInputStyle}
-                errorStyle={styles.inputFieldErrorStyle}
-                inputContainerStyle={styles.inputContainerStyle}
-                errorMessage={errors.full_name && errors.full_name.message}
-              />
-            )}
-            name="full_name"
           />
 
           <Button

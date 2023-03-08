@@ -1,4 +1,4 @@
-import {View, StyleSheet, Text, Dimensions, Platform} from 'react-native';
+import {View, StyleSheet, Text, Platform} from 'react-native';
 import React from 'react';
 import {Button} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
@@ -52,7 +52,7 @@ const FirstPage = () => {
       </View>
       <Svg
         style={{
-          bottom: Platform.OS === 'ios' ? 30 : 150,
+          bottom: Platform.OS === 'ios' ? -25 : 150,
           zIndex: -1,
         }}
       >
@@ -66,7 +66,7 @@ const FirstPage = () => {
 };
 const styles = StyleSheet.create({
   buttonsContainer: {
-    marginTop: Platform.OS === 'ios' ? 30 : 30,
+    marginTop: Platform.OS === 'ios' ? 10 : 30,
     marginBottom: Platform.OS === 'ios' ? 15 : 30,
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -75,8 +75,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   header: {
-    marginTop: Platform.OS === 'ios' ? 150 : 150,
-    marginLeft: 110,
+    marginTop: Platform.OS === 'ios' ? 100 : 0,
+    marginBottom: Platform.OS === 'ios' ? 0 : 100,
+    marginLeft: Platform.OS === 'ios' ? 120 : 110,
     fontSize: 25,
     fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
   },

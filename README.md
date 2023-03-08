@@ -118,6 +118,10 @@ Now download the expo app from [android play store](https://play.google.com/stor
 ## Backend documentation
 - [WBMA](https://media.mw.metropolia.fi/wbma/docs)
 
+## Known Bugs
+
+* App not responsive on small screen devices.
+
 ## Screenshots
 
 <img src="screens/first-page.png" width="400"> <img src="screens/term-condition.png" width="400">

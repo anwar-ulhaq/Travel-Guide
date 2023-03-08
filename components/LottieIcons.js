@@ -10,7 +10,7 @@ const LottieIcons = () => {
           width: Platform.OS === 'ios' ? 200 : 150,
           height: Platform.OS === 'ios' ? 200 : 200,
           marginLeft: Platform.OS === 'ios' ? 40 : 50,
-          marginTop: Platform.OS === 'ios' ? 10 : 20,
+          marginTop: Platform.OS === 'ios' ? 0 : 0,
         }}
         source={require('../assets/lottie/travel.json')}
         autoPlay

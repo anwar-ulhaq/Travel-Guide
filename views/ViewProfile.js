@@ -11,9 +11,8 @@ import {
   View,
 } from 'react-native';
 import {MainContext} from '../contexts/MainContext';
-import {useMedia, useTag} from '../hooks';
+import {useFavourite, useMedia, useTag} from '../hooks';
 import {ProfileMediaCard} from '../components';
-import {PopupMenu} from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils';
 import EmptyListAnimation from '../components/ListEmptyAnimation';
@@ -22,12 +21,12 @@ import UserAvatar from '../components/UserAvatar';
 const ViewProfile = ({navigation, myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
   const {getFilesByTag} = useTag();
-  const [index, setIndex] = useState('none');
-  const [eventName, setEventName] = useState('none');
-  const [selectedOption, setSelectedOption] = useState('none');
-  const {update} = useContext(MainContext);
+
+  const {postUpdate, setPostUpdate} = useContext(MainContext);
+
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const options = ['Edit', 'Logout'];
+  const [noOfFavorites, setNoOfFavorites] = useState(0);
+  const {getUserFavorites} = useFavourite();
 
   const {user, setIsLoggedIn, isEditProfile, setIsEditProfile} =
     React.useContext(MainContext);
@@ -40,6 +39,17 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
       setAvatar(uploadsUrl + avatar);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
+    }
+  };
+
+
+  const loadUserFavourites = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const userFavorites = await getUserFavorites(token);
+      setNoOfFavorites(userFavorites.length)
+    } catch (error) {
+      console.error('user favorites fetch failed', error.message);
     }
   };
 
@@ -71,7 +81,8 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
   };
   useEffect(() => {
     loadAvatar();
-  }, [update]);
+    loadUserFavourites();
+  }, []);
   return (
     <SafeAreaView
       style={{
@@ -119,8 +130,8 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
           <Text>{mediaArray.length}</Text>
         </View>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{fontWeight: 'bold', marginBottom: 8}}>200M</Text>
-          <Text>Followers </Text>
+          <Text style={{fontWeight: 'bold', marginBottom: 8}}>Liked Posts</Text>
+          <Text>{noOfFavorites}</Text>
         </View>
       </View>
       <View
@@ -169,7 +180,8 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
           }}
           containerStyle={{elevation: 20}}
           onPress={() => {
-            navigation.navigate('ModifyProfile');
+            // navigation.navigate('ModifyProfile');
+            setIsEditProfile(!isEditProfile);
           }}
         />
         <Button

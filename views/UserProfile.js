@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ModifyProfile} from '../components';
+import ModifyProfile from './ModifyProfile';
 import {MainContext} from '../contexts/MainContext';
 import ViewProfile from './ViewProfile';
 

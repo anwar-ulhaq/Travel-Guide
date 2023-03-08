@@ -9,12 +9,15 @@ import {
   Modal,
   SafeAreaView,
   Dimensions,
-  Alert, Platform,
+  Alert,
+  Platform,
 } from 'react-native';
 import {Svg, Path} from 'react-native-svg';
 import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
+import LottieIcons from '../components/LottieIcons';
+
 const RegisterForm = () => {
   const {postUser, checkUsername} = useUser();
   const [userAgreesTCs, checkUserAgreesTCs] = useState(true);
@@ -75,6 +78,7 @@ const RegisterForm = () => {
         }}
         visible={!userAgreesTCs}
       >
+        <LottieIcons />
         <Text style={styles.header}>Registration Form</Text>
         <View style={styles.form}>
           <Controller
@@ -198,7 +202,11 @@ const RegisterForm = () => {
             title="Sign up!"
             value={userAgreesTCs}
             onPress={handleSubmit(register)}
-            style={{width: 100, marginLeft: 100, marginTop: 50}}
+            style={{
+              width: Platform.OS === 'ios' ? 150 : -100,
+              marginLeft: Platform.OS === 'ios' ? 100 : 0,
+              marginTop: Platform.OS === 'ios' ? 20 : 0,
+            }}
           />
         </View>
         <View>
@@ -321,7 +329,7 @@ const RegisterForm = () => {
             </SafeAreaView>
           </Modal>
         </View>
-        <Svg style={{bottom: 100, zIndex: -1}}>
+        <Svg style={{bottom: Platform.OS === 'ios' ? 100 : 110}}>
           <Path
             fill="#5790DF"
             d="M0,96L30,117.3C60,139,120,181,180,181.3C240,181,300,139,360,144C420,149,480,203,540,192C600,181,660,107,720,80C780,53,840,75,900,112C960,149,1020,203,1080,202.7C1140,203,1200,149,1260,144C1320,139,1380,181,1410,202.7L1440,224L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"
@@ -333,14 +341,15 @@ const RegisterForm = () => {
 };
 const styles = StyleSheet.create({
   header: {
-    marginTop: 20,
+    marginTop: Platform.OS === 'ios' ? 0 : 0,
+    marginLeft: Platform.OS === 'ios' ? 120 : 100,
     marginHorizontal: 70,
     fontSize: 22,
     fontWeight: 'bold',
     fontFamily: Platform.OS === 'ios' ? 'Cochin' : 'sans-serif',
   },
   form: {
-    margin: 50,
+    margin: Platform.OS === 'ios' ? 20 : 10,
     borderColor: 'black',
   },
   text: {

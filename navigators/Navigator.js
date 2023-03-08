@@ -16,15 +16,14 @@ import SingleFeature from '../views/SingleFeature';
 import SinglePost from '../views/SinglePost';
 import ModifyPost from '../views/ModifyPost';
 import ModifyAvatar from '../views/ModifyAvatar';
-import ModifyProfile from '../views/ModifyProfile';
 import {COLORS, SHADOWS} from '../theme';
 
-import ViewProfile from '../views/ViewProfile';
 import {Icon} from '@rneui/themed';
 import FirstPage from '../components/FirstPage';
 import RegisterForm from '../components/RegisterForm';
 import LoginForm from '../components/LoginForm';
 import AppHeader from '../components/AppHeader';
+import UserProfile from '../views/UserProfile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -104,7 +103,7 @@ const TabScreen = () => {
 
       <Tab.Screen
         name="Profile"
-        component={ViewProfile}
+        component={UserProfile}
         options={{
           header: () => <AppHeader title={'Profile'} />,
           tabBarIcon: ({focused}) => (
@@ -158,13 +157,6 @@ const StackScreen = () => {
             component={LikedBy}
             options={{
               header: () => <AppHeader title={'Liked By'} />,
-            }}
-          />
-          <Stack.Screen
-            name="ModifyProfile"
-            component={ModifyProfile}
-            options={{
-              header: () => <AppHeader title={'ModifyProfile'} />,
             }}
           />
           <Stack.Screen
