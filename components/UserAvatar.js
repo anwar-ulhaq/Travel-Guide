@@ -7,7 +7,7 @@ import {SIZES, assets} from '../theme';
 import {MainContext} from '../contexts/MainContext';
 
 const UserAvatar = ({navigation, userId}) => {
-  const {update} = useContext(MainContext);
+  const {isAvatarUpdated} = useContext(MainContext);
   const {getFilesByTag} = useTag();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
 
@@ -23,7 +23,7 @@ const UserAvatar = ({navigation, userId}) => {
 
   useEffect(() => {
     loadAvatar();
-  }, [update]);
+  }, [isAvatarUpdated]);
   return (
     <View style={styles.userAvatarContainer}>
       <Image style={styles.profileImage} source={{uri: avatar}} />
