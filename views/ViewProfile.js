@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils';
 import EmptyListAnimation from '../components/ListEmptyAnimation';
 import {useNavigation} from '@react-navigation/native';
+import UserAvatar from '../components/UserAvatar';
 
 const ViewProfile = ({myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
@@ -35,7 +36,6 @@ const ViewProfile = ({myFilesOnly = true}) => {
       // console.log(avatarArray);
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
-      setPostUpdate(!postUpdate);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
@@ -88,7 +88,7 @@ const ViewProfile = ({myFilesOnly = true}) => {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
       }}
     >
-      <View style={{flexDirection: 'column'}}>
+      <View style={{flexDirection: 'column', marginTop: 20}}>
         <View style={{alignSelf: 'center'}}>
           <Avatar
             rounded

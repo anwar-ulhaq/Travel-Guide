@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {SIZES, assets} from '../theme';
 import {MainContext} from '../contexts/MainContext';
 
-const UserAvatar = ({navigation, userId}) => {
+const UserAvatar = ({userId}) => {
   const {isAvatarUpdated} = useContext(MainContext);
   const {getFilesByTag} = useTag();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
@@ -14,7 +14,7 @@ const UserAvatar = ({navigation, userId}) => {
   const loadAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag('avatar_' + userId);
-      const avatar = avatarArray.pop().filename;
+      const avatar = avatarArray ? avatarArray.pop().filename : undefined;
       setAvatar(uploadsUrl + avatar);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
@@ -36,7 +36,6 @@ const UserAvatar = ({navigation, userId}) => {
   );
 };
 UserAvatar.propTypes = {
-  navigation: PropTypes.object,
   userId: PropTypes.number,
 };
 export default UserAvatar;

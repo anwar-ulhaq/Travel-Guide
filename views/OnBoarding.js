@@ -2,6 +2,7 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
+import {SIZES} from '../theme';
 
 const OnBoarding = ({navigation}) => {
   const Dots = ({selected}) => {
@@ -15,17 +16,17 @@ const OnBoarding = ({navigation}) => {
   };
 
   const Skip = ({...props}) => (
-    <TouchableOpacity style={{marginHorizontal: 10}} {...props}>
+    <TouchableOpacity style={{marginHorizontal: SIZES.small}} {...props}>
       <Text style={styles.fontSize}>Skip</Text>
     </TouchableOpacity>
   );
   const Next = ({...props}) => (
-    <TouchableOpacity style={{marginHorizontal: 10}} {...props}>
+    <TouchableOpacity style={{marginHorizontal: SIZES.small}} {...props}>
       <Text style={styles.fontSize}>Next</Text>
     </TouchableOpacity>
   );
   const Done = ({...props}) => (
-    <TouchableOpacity style={{marginHorizontal: 10}} {...props}>
+    <TouchableOpacity style={{marginHorizontal: SIZES.small}} {...props}>
       <Text style={styles.fontSize}>Done</Text>
     </TouchableOpacity>
   );
@@ -48,7 +49,7 @@ const OnBoarding = ({navigation}) => {
           image: (
             <Image
               source={require('../assets/images/onboard-img4.png')}
-              style={{height: 250, width: 320}}
+              style={styles.image1}
             />
           ),
           title: 'Welcome to Travel Media app',
@@ -59,7 +60,7 @@ const OnBoarding = ({navigation}) => {
           image: (
             <Image
               source={require('../assets/images/onboard-img3.png')}
-              style={{height: 300, width: 300}}
+              style={styles.image2}
             />
           ),
           title: 'Post, Share, Comment and Engage',
@@ -70,7 +71,7 @@ const OnBoarding = ({navigation}) => {
           image: (
             <Image
               source={require('../assets/images/onboard-img2.png')}
-              style={{height: 200, width: 400}}
+              style={styles.image3}
             />
           ),
           title: 'Go through the recommended place',
@@ -89,6 +90,9 @@ export default OnBoarding;
 
 const styles = StyleSheet.create({
   fontSize: {
-    fontSize: 16,
+    fontSize: SIZES.medium,
   },
+  image1: {height: 250, width: 320},
+  image2: {height: 300, width: 300},
+  image3: {height: 200, width: 400},
 });

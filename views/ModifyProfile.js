@@ -5,11 +5,11 @@ import {Button, Card} from '@rneui/themed';
 import {Input} from '@rneui/base';
 import {Controller, useForm} from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useUser} from '../hooks';
 import {MainContext} from '../contexts/MainContext';
-import AppHeader from '../components/AppHeader';
 import UserAvatar from '../components/UserAvatar';
+import {SIZES} from '../theme';
 
 // TODO move styling to style sheet
 const ModifyProfile = ({navigation}) => {
@@ -74,190 +74,191 @@ const ModifyProfile = ({navigation}) => {
 
   return (
     <SafeAreaView>
-      <Card containerStyle={{borderRadius: 8}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignContent: 'center',
-            justifyContent: 'flex-start',
-            marginBottom: 15,
-          }}
-        >
-          <UserAvatar userId={user.user_id} />
-          <Card.Title
-            h4
-            h4Style={{
-              fontWeight: '100',
-              textAlign: 'center',
+      <KeyboardAwareScrollView>
+        <Card containerStyle={{borderRadius: SIZES.base}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignContent: 'center',
+              justifyContent: 'flex-start',
+              marginBottom: SIZES.font,
             }}
           >
-            Edit Profile
-          </Card.Title>
-        </View>
+            <UserAvatar userId={user.user_id} />
+            <Card.Title
+              h4
+              h4Style={{
+                fontWeight: '100',
+                textAlign: 'center',
+              }}
+            >
+              Edit Profile
+            </Card.Title>
+          </View>
 
-        <Controller
-          control={control}
-          rules={{
-            required: {
-              value: true,
-              message: 'This field is required',
-            },
-            minLength: {
-              value: 3,
-              message: 'Must be at least 3 characters.',
-            },
-            validate: userNameValidation,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              value={value}
-              onBlur={onBlur}
-              placeholder="username"
-              onChangeText={onChange}
-              autoCapitalize={'none'}
-              containerStyle={styles.containerStyle}
-              inputStyle={styles.inputFieldInputStyle}
-              errorStyle={styles.inputFieldErrorStyle}
-              inputContainerStyle={styles.inputContainerStyle}
-              errorMessage={errors.username && errors.username.message}
-            />
-          )}
-          name="username"
-        />
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: 'This field is required',
+              },
+              minLength: {
+                value: 3,
+                message: 'Must be at least 3 characters.',
+              },
+              validate: userNameValidation,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                value={value}
+                onBlur={onBlur}
+                placeholder="username"
+                onChangeText={onChange}
+                autoCapitalize={'none'}
+                containerStyle={styles.containerStyle}
+                inputStyle={styles.inputFieldInputStyle}
+                errorStyle={styles.inputFieldErrorStyle}
+                inputContainerStyle={styles.inputContainerStyle}
+                errorMessage={errors.username && errors.username.message}
+              />
+            )}
+            name="username"
+          />
 
-        <Controller
-          control={control}
-          rules={{
-            required: {
-              value: true,
-              message: 'This field is required',
-            },
-            minLength: {
-              value: 5,
-              message: 'Must be at least 5 characters.',
-            },
-            pattern: {
-              value: /(?=.*\p{Lu})(?=.*[0-9]).{5,}/u,
-              message: 'Min 3 Characters, 1 number and 1 uppercase letter',
-            },
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              value={value}
-              onBlur={onBlur}
-              placeholder="3 characters, 1 number and 1 Uppercase letter."
-              secureTextEntry={true}
-              onChangeText={onChange}
-              autoCapitalize={'none'}
-              autoComplete={'password'}
-              containerStyle={styles.containerStyle}
-              inputStyle={styles.inputFieldInputStyle}
-              errorStyle={styles.inputFieldErrorStyle}
-              inputContainerStyle={styles.inputContainerStyle}
-              errorMessage={errors.password && errors.password.message}
-            />
-          )}
-          name="password"
-        />
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: 'This field is required',
+              },
+              minLength: {
+                value: 5,
+                message: 'Must be at least 5 characters.',
+              },
+              pattern: {
+                value: /(?=.*\p{Lu})(?=.*[0-9]).{5,}/u,
+                message: 'Min 3 Characters, 1 number and 1 uppercase letter',
+              },
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                value={value}
+                onBlur={onBlur}
+                placeholder="3 characters, 1 number and 1 Uppercase letter."
+                secureTextEntry={true}
+                onChangeText={onChange}
+                autoCapitalize={'none'}
+                autoComplete={'password'}
+                containerStyle={styles.containerStyle}
+                inputStyle={styles.inputFieldInputStyle}
+                errorStyle={styles.inputFieldErrorStyle}
+                inputContainerStyle={styles.inputContainerStyle}
+                errorMessage={errors.password && errors.password.message}
+              />
+            )}
+            name="password"
+          />
 
-        <Controller
-          control={control}
-          rules={{
-            required: {
-              value: true,
-              message: 'This field is required',
-            },
-            validate: comparePassword,
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              value={value}
-              onBlur={onBlur}
-              secureTextEntry={true}
-              onChangeText={onChange}
-              autoCapitalize={'none'}
-              autoComplete={'password'}
-              placeholder="Confirm password"
-              containerStyle={styles.containerStyle}
-              inputStyle={styles.inputFieldInputStyle}
-              errorStyle={styles.inputFieldErrorStyle}
-              inputContainerStyle={styles.inputContainerStyle}
-              errorMessage={
-                errors.confirm_password && errors.confirm_password.message
-              }
-            />
-          )}
-          name="confirm_password"
-        />
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: 'This field is required',
+              },
+              validate: comparePassword,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                value={value}
+                onBlur={onBlur}
+                secureTextEntry={true}
+                onChangeText={onChange}
+                autoCapitalize={'none'}
+                autoComplete={'password'}
+                placeholder="Confirm password"
+                containerStyle={styles.containerStyle}
+                inputStyle={styles.inputFieldInputStyle}
+                errorStyle={styles.inputFieldErrorStyle}
+                inputContainerStyle={styles.inputContainerStyle}
+                errorMessage={
+                  errors.confirm_password && errors.confirm_password.message
+                }
+              />
+            )}
+            name="confirm_password"
+          />
 
-        <Controller
-          control={control}
-          rules={{
-            required: {
-              value: true,
-              message: 'This field is required',
-            },
-            pattern: {
-              value: emailRegex,
-              message: 'Must be a valid email',
-            },
-          }}
-          render={({field: {onChange, onBlur, value}}) => (
-            <Input
-              value={value}
-              onBlur={onBlur}
-              placeholder="email"
-              onChangeText={onChange}
-              autoCapitalize={'none'}
-              containerStyle={styles.containerStyle}
-              inputStyle={styles.inputFieldInputStyle}
-              errorStyle={styles.inputFieldErrorStyle}
-              inputContainerStyle={styles.inputContainerStyle}
-              errorMessage={errors.email && errors.email.message}
-            />
-          )}
-          name="email"
-        />
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                value: true,
+                message: 'This field is required',
+              },
+              pattern: {
+                value: emailRegex,
+                message: 'Must be a valid email',
+              },
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                value={value}
+                onBlur={onBlur}
+                placeholder="email"
+                onChangeText={onChange}
+                autoCapitalize={'none'}
+                containerStyle={styles.containerStyle}
+                inputStyle={styles.inputFieldInputStyle}
+                errorStyle={styles.inputFieldErrorStyle}
+                inputContainerStyle={styles.inputContainerStyle}
+                errorMessage={errors.email && errors.email.message}
+              />
+            )}
+            name="email"
+          />
 
-        <Button
-          title="Save Changes"
-          buttonStyle={{
-            ...styles.buttonStyle,
-            backgroundColor: 'rgba(78, 116, 289, 1)',
-          }}
-          containerStyle={{elevation: 20, marginBottom: 16}}
-          titleStyle={styles.buttonTitleStyle}
-          onPress={handleSubmit(onSubmit)}
-        />
-        <Button
-          title="Cancel"
-          buttonStyle={{
-            ...styles.buttonStyle,
-            backgroundColor: 'white',
-          }}
-          containerStyle={{elevation: 20, marginBottom: 16}}
-          titleStyle={{
-            ...styles.buttonTitleStyle,
-            color: 'black',
-          }}
-          onPress={() => {
-            setIsEditProfile(!isEditProfile);
-          }}
-        />
-      </Card>
+          <Button
+            title="Save Changes"
+            buttonStyle={{
+              ...styles.buttonStyle,
+              backgroundColor: 'rgba(78, 116, 289, 1)',
+            }}
+            containerStyle={styles.btnContainer}
+            titleStyle={styles.buttonTitleStyle}
+            onPress={handleSubmit(onSubmit)}
+          />
+          <Button
+            title="Cancel"
+            buttonStyle={{
+              ...styles.buttonStyle,
+              backgroundColor: 'white',
+            }}
+            containerStyle={styles.btnContainer}
+            titleStyle={{
+              ...styles.buttonTitleStyle,
+              color: 'black',
+            }}
+            onPress={() => {
+              setIsEditProfile(!isEditProfile);
+            }}
+          />
+        </Card>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   containerStyle: {
-    marginBottom: 16,
-    // backgroundColor: 'rgba(78, 116, 289, 1)',
-    borderRadius: 36,
+    marginBottom: SIZES.medium,
+    borderRadius: SIZES.xxl,
     borderColor: 'gray',
     borderWidth: 1,
-    paddingRight: 16,
-    paddingLeft: 16,
+    paddingRight: SIZES.medium,
+    paddingLeft: SIZES.medium,
     height: 48,
   },
   inputFieldErrorStyle: {
@@ -265,17 +266,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputFieldInputStyle: {
-    fontSize: 16,
+    fontSize: SIZES.medium,
   },
   inputContainerStyle: {
     borderBottomWidth: 0,
   },
   buttonStyle: {
     height: 48,
-    borderRadius: 36,
+    borderRadius: SIZES.xxl,
   },
   buttonTitleStyle: {
-    fontSize: 13,
+    fontSize: SIZES.small,
+  },
+  btnContainer: {
+    elevation: SIZES.large,
+    marginBottom: SIZES.medium,
   },
 });
 

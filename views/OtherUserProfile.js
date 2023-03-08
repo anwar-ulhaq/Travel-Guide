@@ -14,7 +14,7 @@ import {uploadsUrl} from '../utils';
 import PropTypes from 'prop-types';
 import {ProfileMediaCard} from '../components';
 import MasonryList from '@react-native-seoul/masonry-list';
-import AppHeader from '../components/AppHeader';
+import {SIZES, COLORS} from '../theme';
 
 const OtherUserProfile = ({navigation, route}) => {
   const {file} = route.params;
@@ -86,15 +86,10 @@ const OtherUserProfile = ({navigation, route}) => {
 
   // console.log('Profile owner', profileOwner);
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-      }}
-    >
+    <SafeAreaView style={styles.AndroidSafeArea}>
       <View
         style={{
-          paddingTop: 16,
+          paddingTop: SIZES.medium,
           flexDirection: 'row',
           justifyContent: 'center',
         }}
@@ -102,6 +97,7 @@ const OtherUserProfile = ({navigation, route}) => {
         <View>
           <Avatar
             rounded
+            placeholderStyle={{backgroundColor: COLORS.gray}}
             source={{
               uri: avatar,
             }}
@@ -112,64 +108,38 @@ const OtherUserProfile = ({navigation, route}) => {
               top: 45,
               left: 45,
               position: 'absolute',
-              boarderRadius: 16,
+              boarderRadius: SIZES.medium,
             }}
           ></View>
         </View>
       </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-        <View style={{alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{fontWeight: 'bold', marginBottom: 8}}>Total Posts</Text>
-          <Text style={{fontSize: 16}}>{userFiles.length}</Text>
+        <View style={styles.postContainer}>
+          <Text style={styles.postTitle}>Total Posts</Text>
+          <Text style={styles.postText}>{userFiles.length}</Text>
         </View>
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
           <Text style={{fontWeight: 'bold', marginBottom: 8}}>Liked Posts</Text>
           <Text>{noOfFavorites}</Text>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginTop: 8,
-          marginBottom: 8,
-        }}
-      >
-        <Text style={{fontWeight: 'bold'}}>
+      <View style={styles.usernameContainer}>
+        <Text style={styles.usernameText}>
           {profileOwner.full_name || profileOwner.username}
         </Text>
       </View>
-      <View
-        style={{
-          marginTop: 8,
-          marginBottom: 8,
-          marginLeft: '10%',
-          width: '80%',
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-        }}
-      >
-        <Text
-          style={{
-            textAlignVertical: 'center',
-            textAlign: 'center',
-            lineHeight: 24,
-          }}
-        >
-          {profileOwner.email}
-        </Text>
+      <View style={styles.emailContainer}>
+        <Text style={styles.emailText}>{profileOwner.email}</Text>
       </View>
       <Divider />
       <MasonryList
         keyExtractor={(item) => item.id}
         ListHeaderComponent={<View />}
         contentContainerStyle={{
-          paddingHorizontal: 18,
+          paddingHorizontal: SIZES.large,
           alignSelf: 'stretch',
         }}
-        containerStyle={{
-          marginTop: 16,
-        }}
+        containerStyle={styles.masonryListContainer}
         onEndReached={() => console.log('onEndReached')}
         numColumns={2}
         data={userFiles}
@@ -186,23 +156,34 @@ OtherUserProfile.propTypes = {
 
 export default OtherUserProfile;
 const styles = StyleSheet.create({
-  container: {
-    width: 180,
-    flexDirection: 'row',
-    alignItems: 'center',
+  AndroidSafeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
-  imgIcon: {
-    flexDirection: 'row',
-    marginHorizontal: 5,
-    alignItems: 'center',
-    alignContent: 'space-between',
-    height: 70,
-    width: 50,
+  masonryListContainer: {
+    marginTop: SIZES.medium,
   },
-  iconBox: {
+  emailContainer: {
+    marginTop: SIZES.base,
+    marginBottom: SIZES.base,
+    marginLeft: '10%',
+    width: '80%',
     flexDirection: 'row',
-    alignItems: 'center',
-    height: 50,
-    width: 150,
+    justifyContent: 'space-around',
   },
+  emailText: {
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    lineHeight: SIZES.extraLarge,
+  },
+  usernameText: {fontWeight: 'bold'},
+  usernameContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: SIZES.base,
+    marginBottom: SIZES.base,
+  },
+  postTitle: {fontWeight: 'bold', marginBottom: SIZES.base},
+  postText: {fontSize: SIZES.medium},
+  postContainer: {alignItems: 'center', justifyContent: 'center'},
 });

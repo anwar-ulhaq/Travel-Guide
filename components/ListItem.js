@@ -272,7 +272,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
           <View>
             <Icon
               size={16}
-
               solid
               raised
               name={userLike ? 'dislike' : 'like'}
@@ -287,12 +286,8 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               raised
               name="chatbox-ellipses"
               type="ionicon"
-              // TODO Ask Binod what is the difference.
-              /* onPress={() => {
-                navigation.navigate('SinglePost', singleMedia);
-              }}*/
               onPress={() => {
-                navigation.navigate('SinglePost', {file: singleMedia});
+                navigation.navigate('SinglePost', singleMedia);
               }}
             />
           </View>
