@@ -1,5 +1,4 @@
 import {View, StyleSheet, Text, Platform} from 'react-native';
-import React from 'react';
 import React, {useContext, useEffect} from 'react';
 import {Button} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
