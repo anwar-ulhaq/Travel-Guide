@@ -17,6 +17,7 @@ import {PopupMenu} from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils';
 import EmptyListAnimation from '../components/ListEmptyAnimation';
+import UserAvatar from '../components/UserAvatar';
 
 const ViewProfile = ({navigation, myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
@@ -24,7 +25,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
-  const {postUpdate, setPostUpdate} = useContext(MainContext);
+  const {update} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const options = ['Edit', 'Logout'];
 
@@ -37,18 +38,9 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
       // console.log(avatarArray);
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
-      setPostUpdate(!postUpdate);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
-  };
-
-  const onPopupEvent = (eventName, index) => {
-    if (index >= 0) setSelectedOption(options[index]);
-    setIndex(index);
-    setEventName(eventName);
-    if (index === 0) setIsEditProfile(!isEditProfile);
-    else if (index === 1) logout();
   };
 
   const renderItem = ({item, i}) => {
@@ -79,7 +71,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
   };
   useEffect(() => {
     loadAvatar();
-  }, []);
+  }, [update]);
   return (
     <SafeAreaView
       style={{
@@ -87,7 +79,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
       }}
     >
-      <View style={{flexDirection: 'column'}}>
+      <View style={{flexDirection: 'column', marginTop: 20}}>
         <View style={{alignSelf: 'center'}}>
           <Avatar
             rounded
@@ -96,6 +88,7 @@ const ViewProfile = ({navigation, myFilesOnly = true}) => {
             }}
             size="large"
           />
+
           <View
             style={{
               top: 45,

@@ -8,8 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useUser} from '../hooks';
 import {MainContext} from '../contexts/MainContext';
-import AppHeader from '../components/AppHeader';
 import UserAvatar from '../components/UserAvatar';
+import {SIZES} from '../theme';
 
 // TODO move styling to style sheet
 const ModifyProfile = ({navigation}) => {
@@ -72,13 +72,13 @@ const ModifyProfile = ({navigation}) => {
 
   return (
     <SafeAreaView>
-      <Card containerStyle={{borderRadius: 8}}>
+      <Card containerStyle={{borderRadius: SIZES.base}}>
         <View
           style={{
             flexDirection: 'row',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            marginBottom: 15,
+            marginBottom: SIZES.font,
           }}
         >
           <UserAvatar userId={user.user_id} />
@@ -251,7 +251,7 @@ const ModifyProfile = ({navigation}) => {
             ...styles.buttonStyle,
             backgroundColor: 'rgba(78, 116, 289, 1)',
           }}
-          containerStyle={{elevation: 20, marginBottom: 16}}
+          containerStyle={styles.btnContainer}
           titleStyle={styles.buttonTitleStyle}
           onPress={handleSubmit(onSubmit)}
         />
@@ -261,7 +261,7 @@ const ModifyProfile = ({navigation}) => {
             ...styles.buttonStyle,
             backgroundColor: 'white',
           }}
-          containerStyle={{elevation: 20, marginBottom: 16}}
+          containerStyle={styles.btnContainer}
           titleStyle={{
             ...styles.buttonTitleStyle,
             color: 'black',
@@ -277,13 +277,12 @@ const ModifyProfile = ({navigation}) => {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    marginBottom: 16,
-    // backgroundColor: 'rgba(78, 116, 289, 1)',
-    borderRadius: 36,
+    marginBottom: SIZES.medium,
+    borderRadius: SIZES.xxl,
     borderColor: 'gray',
     borderWidth: 1,
-    paddingRight: 16,
-    paddingLeft: 16,
+    paddingRight: SIZES.medium,
+    paddingLeft: SIZES.medium,
     height: 48,
   },
   inputFieldErrorStyle: {
@@ -291,17 +290,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputFieldInputStyle: {
-    fontSize: 16,
+    fontSize: SIZES.medium,
   },
   inputContainerStyle: {
     borderBottomWidth: 0,
   },
   buttonStyle: {
     height: 48,
-    borderRadius: 36,
+    borderRadius: SIZES.xxl,
   },
   buttonTitleStyle: {
-    fontSize: 13,
+    fontSize: SIZES.small,
+  },
+  btnContainer: {
+    elevation: SIZES.large,
+    marginBottom: SIZES.medium,
   },
 });
 

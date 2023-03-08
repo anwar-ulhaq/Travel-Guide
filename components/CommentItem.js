@@ -123,9 +123,11 @@ const CommentItem = ({navigation, singleComment}) => {
         </View>
         <View
           style={{
+            flex: 1,
             alignContent: 'space-between',
             alignItems: 'center',
             flexDirection: 'row',
+            marginRight: 5,
           }}
         >
           {user.user_id === singleComment.user_id ? (

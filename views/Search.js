@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 
 import {useMedia} from '../hooks';
 import ListItem from '../components/ListItem';
-import AppHeader from '../components/AppHeader';
+import {SIZES} from '../theme';
 
 const Search = ({navigation}) => {
   const {searchMedia} = useMedia();
@@ -46,14 +46,7 @@ const Search = ({navigation}) => {
   };
   return (
     <View>
-      <View
-        style={{
-          padding: 8,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginTop: 10,
-        }}
-      >
+      <View style={styles.searchContainer}>
         <Input
           value={searchString}
           placeholder="Search"
@@ -66,7 +59,7 @@ const Search = ({navigation}) => {
           rightIcon={
             <Icon
               name="search"
-              size={24}
+              size={SIZES.extraLarge}
               color="black"
               onPress={() => search()}
             />
@@ -82,7 +75,7 @@ const Search = ({navigation}) => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-around',
-          paddingBottom: 8,
+          paddingBottom: SIZES.base,
         }}
       >
         <Chip
@@ -92,12 +85,12 @@ const Search = ({navigation}) => {
               ? {
                   name: 'check',
                   type: 'antdesign',
-                  size: 16,
+                  size: SIZES.medium,
                 }
               : {
                   name: 'close',
                   type: 'antdesign',
-                  size: 16,
+                  size: SIZES.medium,
                 }
           }
           onPress={() => setTitleSelect(!titleSelect)}
@@ -111,12 +104,12 @@ const Search = ({navigation}) => {
               ? {
                   name: 'check',
                   type: 'antdesign',
-                  size: 16,
+                  size: SIZES.medium,
                 }
               : {
                   name: 'close',
                   type: 'antdesign',
-                  size: 16,
+                  size: SIZES.medium,
                 }
           }
           onPress={() => setDescriptionSelect(!descriptionSelect)}
@@ -150,19 +143,25 @@ const Search = ({navigation}) => {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    marginBottom: 16,
-    borderRadius: 36,
+    marginBottom: SIZES.medium,
+    borderRadius: SIZES.xxl,
     borderColor: 'gray',
     borderWidth: 1,
     height: 48,
+  },
+  searchContainer: {
+    padding: SIZES.base,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: SIZES.small,
   },
   inputFieldErrorStyle: {
     color: 'red',
     textAlign: 'center',
   },
   inputFieldInputStyle: {
-    fontSize: 16,
-    paddingLeft: 8,
+    fontSize: SIZES.medium,
+    paddingLeft: SIZES.base,
   },
   inputContainerStyle: {
     borderBottomWidth: 0,

@@ -17,7 +17,7 @@ import {MainContext} from '../contexts/MainContext';
 import {useFocusEffect} from '@react-navigation/native';
 import {appId} from '../utils';
 import {Video} from 'expo-av';
-import {COLORS} from '../theme';
+import {COLORS, SIZES} from '../theme';
 
 const NewPost = ({navigation}) => {
   const video = useRef(null);
@@ -93,6 +93,7 @@ const NewPost = ({navigation}) => {
           text: 'OK',
           onPress: () => {
             console.log('OK Pressed');
+            resetForm();
             setUpdate(!update);
             navigation.navigate('Home');
           },
@@ -145,7 +146,7 @@ const NewPost = ({navigation}) => {
             <Video
               ref={video}
               source={{uri: mediafile.uri}}
-              style={{width: '100%', height: 200}}
+              style={styles.videoContainer}
               resizeMode="contain"
               useNativeControls
               isLooping
@@ -210,7 +211,12 @@ const NewPost = ({navigation}) => {
             <Button
               buttonStyle={styles.btnWithIcon}
               icon={
-                <Icon name="image" type="ionicon" size={25} color="white" />
+                <Icon
+                  name="image"
+                  type="ionicon"
+                  size={SIZES.extraLarge}
+                  color="white"
+                />
               }
               title=" Gallery"
               onPress={pickFile}
@@ -218,7 +224,12 @@ const NewPost = ({navigation}) => {
             <Button
               buttonStyle={styles.btnWithIcon}
               icon={
-                <Icon name="camera" type="ionicon" size={25} color="white" />
+                <Icon
+                  name="camera"
+                  type="ionicon"
+                  size={SIZES.extraLarge}
+                  color="white"
+                />
               }
               title="Camera"
               onPress={takePicture}
@@ -229,7 +240,7 @@ const NewPost = ({navigation}) => {
             title="Upload"
             onPress={handleSubmit(uploadFile)}
             loading={loading}
-            buttonStyle={{borderRadius: 25, margin: 8}}
+            buttonStyle={styles.btnwithoutIcon}
           />
           <Button
             buttonStyle={styles.btnwithoutIcon}
@@ -254,12 +265,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    marginBottom: 15,
+    marginBottom: SIZES.font,
   },
-  btnwithoutIcon: {borderRadius: 25, margin: 8},
+  btnwithoutIcon: {borderRadius: SIZES.extraLarge, margin: SIZES.base},
   btnWithIcon: {
-    borderRadius: 25,
+    borderRadius: SIZES.extraLarge,
     width: 105,
     backgroundColor: COLORS.primary,
   },
+  videoContainer: {width: '100%', height: 200},
 });

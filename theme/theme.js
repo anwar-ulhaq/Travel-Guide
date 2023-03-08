@@ -2,7 +2,7 @@ import {Platform} from 'react-native';
 
 export const COLORS = {
   primary: '#5790DF',
-  secondary: '#4D626C',
+  secondary: '#E6EEFA',
 
   white: '#FFF',
   gray: '#74858C',
@@ -15,6 +15,7 @@ export const SIZES = {
   medium: 16,
   large: 18,
   extraLarge: 24,
+  xxl: 36,
 };
 
 export const FONTS = {

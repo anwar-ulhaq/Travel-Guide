@@ -74,7 +74,7 @@ const CommentForm = ({fileId}) => {
             <TextInput
               inputContainerStyle={styles.commentInputContainer}
               multiline
-              numberOfLines={2}
+              numberOfLines={3}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, View, StyleSheet} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {Button, Card, Input} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';
@@ -7,13 +7,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useMedia} from '../hooks';
 import {MainContext} from '../contexts/MainContext';
+import {uploadsUrl} from '../utils';
+import {SIZES} from '../theme';
 
 const ModifyPost = ({route, navigation}) => {
   const {updateMedia} = useMedia();
   const {update, setUpdate} = useContext(MainContext);
   const [mediaObject, setMediaObject] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const {title, filename, description, file_id} = route.params;;
+  const {title, filename, description, file_id} = route.params;
 
   const {
     control,
@@ -42,7 +44,7 @@ const ModifyPost = ({route, navigation}) => {
     }
   };
   return (
-    <Card containerStyle={{borderRadius: 8}}>
+    <Card containerStyle={{borderRadius: SIZES.base}}>
       <Card.Title
         h4
         h4Style={{
@@ -55,11 +57,11 @@ const ModifyPost = ({route, navigation}) => {
 
       <Card.Image
         source={{
-          uri: 'https://media.mw.metropolia.fi/wbma/uploads/' + filename,
+          uri: uploadsUrl + filename,
         }}
         containerStyle={{
-          borderRadius: 8,
-          margin: 8,
+          borderRadius: SIZES.base,
+          margin: SIZES.base,
         }}
       >
         <ActivityIndicator
@@ -131,7 +133,7 @@ const ModifyPost = ({route, navigation}) => {
         buttonStyle={{
           backgroundColor: 'rgba(78, 116, 289, 1)',
           borderRadius: 3,
-          margin: 8,
+          margin: SIZES.base,
         }}
         onPress={handleSubmit(onSubmit)}
       />
