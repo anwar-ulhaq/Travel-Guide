@@ -14,6 +14,8 @@ const MainProvider = (props) => {
   const [isEditPost, setIsEditPost] = useState(false);
   const [isAvatarUpdated, setIsAvatarUpdated] = useState(false);
   const [isUserUpdate, setIsUserUpdate] = useState(false);
+  const [isNotification, setIsNotification] = useState(false);
+  const [notification, setNotification] = useState({});
   const [isFavouriteUpdated, setIsFavouriteUpdated] = useState(false);
 
   return (
@@ -39,6 +41,10 @@ const MainProvider = (props) => {
         setIsAvatarUpdated,
         isUserUpdate,
         setIsUserUpdate,
+        isNotification,
+        setIsNotification,
+        notification,
+        setNotification,
         isFavouriteUpdated,
         setIsFavouriteUpdated,
       }}

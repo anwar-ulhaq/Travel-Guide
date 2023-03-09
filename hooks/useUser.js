@@ -8,10 +8,14 @@ import {
   userPath,
   usersPath,
 } from '../utils';
+import {useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
 // import {baseUrl} from '../utils/variables';
 
 export const useUser = () => {
+  const {isNotification, setIsNotification, setNotification} =
+    useContext(MainContext);
   const getUserByToken = async (token) => {
     // call https://media.mw.metropolia.fi/wbma/docs/#api-User-CheckUserName
     const options = {
@@ -21,7 +25,14 @@ export const useUser = () => {
     try {
       return await doFetch(baseUrl + usersPath + userPath, options);
     } catch (error) {
-      throw new Error('checkUser: ' + error.message);
+      // First make a notification and then change isNotification
+      setNotification({
+        type: 'error',
+        title: 'Token missing or wrong',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      // throw new Error('checkUser: ' + error.message);
     }
   };
   const postUser = async (userData) => {
@@ -35,8 +46,14 @@ export const useUser = () => {
     try {
       return await doFetch(baseUrl + usersPath, options);
     } catch (error) {
-      alert('User not registered');
-      throw new Error('postUser: ' + error.message);
+      // alert('User not registered');
+      // throw new Error('postUser: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Post user error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     }
   };
 
@@ -47,7 +64,13 @@ export const useUser = () => {
       );
       return result.available;
     } catch (error) {
-      throw new Error('checkUsername: ' + error.message);
+      //throw new Error('checkUsername: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Username error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     }
   };
 
@@ -57,7 +80,13 @@ export const useUser = () => {
         headers: {'x-access-token': token},
       });
     } catch (error) {
-      throw new Error('getUserById, ' + error.message);
+      // throw new Error('getUserById, ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'User error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     }
   };
 
@@ -65,7 +94,13 @@ export const useUser = () => {
     try {
       return await doFetch(baseUrl + tagPath + avatarName);
     } catch (error) {
-      throw new Error(error.message);
+      // throw new Error(error.message);
+      setNotification({
+        type: 'error',
+        title: 'User avatar error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     }
   };
 
@@ -85,7 +120,13 @@ export const useUser = () => {
       console.log('user update response: ' + JSON.stringify(response));
       return response;
     } catch (error) {
-      throw new Error(error.message);
+      // throw new Error(error.message);
+      setNotification({
+        type: 'error',
+        title: 'User update error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     }
   };
 
