@@ -10,7 +10,8 @@ import EmptyListAnimation from '../components/ListEmptyAnimation';
 const Favourites = ({myFilesOnly = false}) => {
   const {getUserFavorites} = useFavourite();
   const [favArray, setFavArray] = useState([]);
-  const {isFavouriteUpdated, user} = useContext(MainContext);
+  const {isFavouriteUpdated, user, isUserUpdate, isAvatarUpdated, likeUpdate} =
+    useContext(MainContext);
 
   const fetchFavoritesByUser = async () => {
     try {
@@ -24,7 +25,7 @@ const Favourites = ({myFilesOnly = false}) => {
 
   useEffect(() => {
     fetchFavoritesByUser();
-  }, [isFavouriteUpdated]);
+  }, [isFavouriteUpdated, isUserUpdate, isAvatarUpdated, likeUpdate]);
 
   const renderUsersItem = ({item}) => <FavItem singleItem={item} />;
   return (
