@@ -109,7 +109,15 @@ export const useMedia = (myFilesOnly) => {
       body: JSON.stringify(data),
     };
     try {
-      return await doFetch(baseUrl + mediaPath + searchPath, options);
+      const allAppMedia = await useTag().getFilesByTag(appId);
+      const filteredMedia = allAppMedia.filter(
+        (media) =>
+          media.title?.toLowerCase().includes(data.title?.toLowerCase()) ||
+          media.description
+            ?.toLowerCase()
+            .includes(data.description?.toLowerCase())
+      );
+      return filteredMedia;
     } catch (error) {
       throw new Error('searchMedia: ' + error.message);
     }
