@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import {useMedia} from '../hooks';
 import ListItem from '../components/ListItem';
 import {SIZES} from '../theme';
+import EmptyListAnimation from '../components/ListEmptyAnimation';
 
 const Search = ({navigation}) => {
   const {searchMedia} = useMedia();
@@ -122,6 +123,9 @@ const Search = ({navigation}) => {
               />
             )}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <EmptyListAnimation title={'No search result '} />
+            }
           />
         </View>
         <View style={styles.cardContainer}>
