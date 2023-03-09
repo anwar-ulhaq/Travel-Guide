@@ -23,6 +23,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     commentUpdate,
     likeUpdate,
     setLikeUpdate,
+    isUserUpdate,
   } = useContext(MainContext);
 
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
@@ -59,25 +60,33 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     }
   };
 
-  const fetchLikes = async () => {
+  const getMediaLikes = async () => {
+    console.log('getMediaLikes called');
+    setUserLike(false);
     try {
-      const likesData = await getFavouriteById(singleMedia.file_id);
-      setLikes(likesData);
-      likesData.forEach((like) => {
-        like.user_id === user.user_id && setUserLike(true);
+      await getFavouriteById(singleMedia.file_id).then(likes => {
+        setLikes(likes);
+        for (const like of likes) {
+          if (like.user_id === user.user_id) {
+            setUserLike(true);
+            break;
+          }
+        }
       });
     } catch (error) {
       console.error('fetchLikes() error', error);
     }
   };
+
   const createFavourite = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await postFavourite(token, singleMedia.file_id);
-      console.log('Response from create fav LI', response);
-      setUserLike(true);
-      setLikeUpdate(likeUpdate + 1);
-      setUpdate(!update);
+      // console.log('Response from create fav LI', response);
+      response && setLikeUpdate(!likeUpdate);
+      // setUserLikesIt(true);
+      // setLikeUpdate(likeUpdate + 1);
+      // setUpdate(!update);
     } catch (error) {
       console.error('createFavourite error', error);
     }
@@ -87,9 +96,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await deleteFavourite(token, singleMedia.file_id);
-      response && setUserLike(false);
-      setLikeUpdate(likeUpdate + 1);
-      setUpdate(!update);
+      response && setLikeUpdate(!likeUpdate);
+      // setLikeUpdate(likeUpdate - 1);
+      // setUpdate(!update);
     } catch (error) {
       console.error('removeFavourite error', error);
     }
@@ -102,16 +111,24 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       createFavourite();
     }
   };
+
+  // Use Effect - 01
   useEffect(() => {
     fetchOwner();
-  }, [update]);
+    console.log('Use Effect - 01: Fetch Owner');
+  }, [isUserUpdate]);
+  // Use Effect - 02
 
   useEffect(() => {
-    fetchLikes();
+    console.log('Use Effect - 02: Fetch Media Item Likes');
+    getMediaLikes();
   }, [likeUpdate]);
 
+  // Use Effect - 03
   useEffect(() => {
+    console.log('Use Effect - 03: Fetch Media Item Comments');
     fetchComments();
+
   }, [commentUpdate]);
   const doDelete = () => {
     try {

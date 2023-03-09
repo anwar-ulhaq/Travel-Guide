@@ -46,7 +46,7 @@ const List = ({navigation, myFilesOnly = false}) => {
           <FlatList
             ref={scrollViewRef}
             data={mediaArray}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item) => item.file_id}
             renderItem={({item}) => (
               <ListItem
                 navigation={navigation}
@@ -55,6 +55,8 @@ const List = ({navigation, myFilesOnly = false}) => {
               />
             )}
             showsVerticalScrollIndicator={false}
+            // TODO restructure FEEDHEADER
+            // FeedHeader should not be and Arrow Function component
             ListHeaderComponent={<FeedHeader />}
             onScroll={handleScroll}
           />

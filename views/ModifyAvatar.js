@@ -25,7 +25,7 @@ const ModifyAvatar = ({navigation}) => {
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {getFilesByTag} = useTag();
   const [loading, setLoading] = useState(false);
-  const {update, setUpdate, user} = useContext(MainContext);
+  const {update, setUpdate, user, isAvatarUpdated, setIsAvatarUpdated} = useContext(MainContext);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
 
@@ -40,6 +40,7 @@ const ModifyAvatar = ({navigation}) => {
       const avatar = avatarArray.pop().filename;
       // setLoading(true);
       setAvatar(uploadsUrl + avatar);
+      setIsAvatarUpdated(!isAvatarUpdated);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }

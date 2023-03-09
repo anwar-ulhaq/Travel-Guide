@@ -14,7 +14,7 @@ import UserAvatar from '../components/UserAvatar';
 const FavItem = ({singleItem}) => {
   const navigation = useNavigation();
   const {getUserById} = useUser();
-  const {update, setUpdate} = useContext(MainContext);
+  const {update, setUpdate, isUserUpdate} = useContext(MainContext);
   const [owner, setOwner] = useState({username: 'fetching..'});
   const [userLike, setUserLike] = useState(false);
   const {deleteFavourite} = useFavourite();
@@ -49,7 +49,7 @@ const FavItem = ({singleItem}) => {
   };
   useEffect(() => {
     fetchOwner();
-  }, [update]);
+  }, [isUserUpdate]);
   return (
     <Pressable onPress={() => navigation.navigate('SinglePost', singleItem)}>
       <View>

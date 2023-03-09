@@ -17,7 +17,7 @@ const CommentItem = ({navigation, singleComment}) => {
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const {getUserById} = useUser();
   const [commentOwner, setCommentOwner] = useState({username: 'loading..'});
-  const {user, commentUpdate, setCommentUpdate} = useContext(MainContext);
+  const {user, commentUpdate, setCommentUpdate, isAvatarUpdated} = useContext(MainContext);
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
@@ -106,8 +106,10 @@ const CommentItem = ({navigation, singleComment}) => {
 
   useEffect(() => {
     fetchCommentOwner();
-    loadAvatar();
   }, []);
+  useEffect(() => {
+    loadAvatar();
+  }, [isAvatarUpdated]);
 
   const CommentCard = () => {
     return (

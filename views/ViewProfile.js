@@ -22,7 +22,7 @@ import UserAvatar from '../components/UserAvatar';
 const ViewProfile = ({myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
   const {getFilesByTag} = useTag();
-  const {postUpdate, setPostUpdate} = useContext(MainContext);
+  const {isAvatarUpdated, likeUpdate} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const [noOfFavorites, setNoOfFavorites] = useState(0);
   const {getUserFavorites} = useFavourite();
@@ -79,8 +79,10 @@ const ViewProfile = ({myFilesOnly = true}) => {
   };
   useEffect(() => {
     loadAvatar();
+  }, [isAvatarUpdated]);
+  useEffect(() => {
     loadUserFavourites();
-  }, []);
+  }, [likeUpdate]);
   return (
     <SafeAreaView
       style={{
