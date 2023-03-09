@@ -9,18 +9,23 @@ import {MainContext} from '../contexts/MainContext';
 const UserAvatar = ({userId}) => {
   const {isAvatarUpdated} = useContext(MainContext);
   const {getFilesByTag} = useTag();
+  const [tag, setTag] = useState({});
   const [avatar, setAvatar] = useState(
     'https://via.placeholder.com/180&text=loading'
   );
 
   const loadAvatar = async () => {
     try {
-      const avatarArray = await getFilesByTag('avatar_' + userId);
-      if (avatarArray.length === 0) {
-        return;
-      }
-      const avatar = avatarArray.pop().filename;
-      setAvatar(uploadsUrl + avatar);
+      await getFilesByTag('avatar_' + userId).then((tagArray) => {
+        if (tagArray.length === 0) {
+          setAvatar(
+            'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
+          );
+        } else {
+          setTag(tagArray[0]);
+          setAvatar(uploadsUrl + tagArray[0].filename);
+        }
+      });
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
