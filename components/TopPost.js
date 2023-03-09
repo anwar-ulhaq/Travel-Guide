@@ -35,7 +35,7 @@ const TopPost = ({myFilesOnly = false}) => {
         showsHorizontalScrollIndicator={false}
         data={mediaArray}
         renderItem={renderUsersItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.file_id}
       />
       <View style={styles.feedView}>
         <Text style={styles.feedText}>Feed</Text>

@@ -113,7 +113,7 @@ const Search = ({navigation}) => {
         <View style={styles.flatListContainer}>
           <FlatList
             data={searchResult}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item) => item.file_id}
             renderItem={({item}) => (
               <ListItem
                 navigation={navigation}

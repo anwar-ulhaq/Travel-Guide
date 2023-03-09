@@ -135,7 +135,7 @@ const OtherUserProfile = ({navigation, route}) => {
       </View>
       <Divider />
       <MasonryList
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.file_id}
         ListHeaderComponent={<View />}
         contentContainerStyle={{
           paddingHorizontal: SIZES.large,

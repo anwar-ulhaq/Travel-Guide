@@ -17,20 +17,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {uploadsUrl} from '../utils';
 import EmptyListAnimation from '../components/ListEmptyAnimation';
 import {useNavigation} from '@react-navigation/native';
-import UserAvatar from '../components/UserAvatar';
 
 const ViewProfile = ({myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
   const {getFilesByTag} = useTag();
-  const {isAvatarUpdated, likeUpdate} = useContext(MainContext);
   const [avatar, setAvatar] = useState(
     'https://via.placeholder.com/180&text=loading'
   );
   const [noOfFavorites, setNoOfFavorites] = useState(0);
   const {getUserFavorites} = useFavourite();
   const navigation = useNavigation();
-  const {user, setIsLoggedIn, isEditProfile, setIsEditProfile} =
-    React.useContext(MainContext);
+  const {
+    user,
+    setIsLoggedIn,
+    isAvatarUpdated,
+    likeUpdate,
+    isEditProfile,
+    setIsEditProfile,
+  } = React.useContext(MainContext);
 
   const loadAvatar = async () => {
     try {
@@ -45,8 +49,7 @@ const ViewProfile = ({myFilesOnly = true}) => {
 
   const loadUserFavourites = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
-      const userFavorites = await getUserFavorites(token);
+      const userFavorites = await getUserFavorites(user.user_id);
       setNoOfFavorites(userFavorites.length);
     } catch (error) {
       console.error('user favorites fetch failed', error.message);
@@ -204,7 +207,7 @@ const ViewProfile = ({myFilesOnly = true}) => {
         />
       </View>
       <MasonryList
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.file_id}
         ListHeaderComponent={<View />}
         contentContainerStyle={{
           paddingHorizontal: 18,
