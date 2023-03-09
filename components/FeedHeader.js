@@ -1,28 +1,12 @@
-import {useContext, useState, useEffect} from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
-import {COLORS, SIZES, FONTS, assets} from '../theme';
+import {useContext} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {COLORS, SIZES, FONTS} from '../theme';
 import {MainContext} from '../contexts/MainContext';
-import {useTag} from '../hooks';
-import {uploadsUrl} from '../utils';
 import TopPost from './TopPost';
+import UserAvatar from './UserAvatar';
 
 const FeedHeader = () => {
-  const {user, isAvatarUpdated} = useContext(MainContext);
-  const {getFilesByTag} = useTag();
-  const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const loadAvatar = async () => {
-    try {
-      const avatarArray = await getFilesByTag('avatar_' + user.user_id);
-
-      const avatar = avatarArray.pop().filename;
-      setAvatar(uploadsUrl + avatar);
-    } catch (error) {
-      console.error('user avatar fetch failed', error.message);
-    }
-  };
-  useEffect(() => {
-    loadAvatar();
-  }, [isAvatarUpdated]);
+  const {user} = useContext(MainContext);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -45,20 +29,12 @@ const FeedHeader = () => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.logoContainer}>
-        <Text style={{fontSize: 18, fontWeight: 'bold'}}>Travel Guide</Text>
+        <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>
+          Travel Guide
+        </Text>
 
         <View style={styles.userAvatarContainer}>
-          <Image
-            source={{uri: avatar}}
-            resizeMode="contain"
-            style={styles.userAvatar}
-          />
-
-          <Image
-            source={assets.badge}
-            resizeMode="contain"
-            style={styles.avatarBadge}
-          />
+          <UserAvatar userId={user.user_id} />
         </View>
       </View>
       <View>

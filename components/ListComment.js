@@ -83,7 +83,7 @@ const ListComment = ({navigation, fileId}) => {
         }}>
           <FlatList
             data={comments}
-            keyExtractor={(item) => item.comment_id.toString()}
+            keyExtractor={(item) => item.comment_id}
             renderItem={({item}) => (
               <CommentItem navigation={navigation} singleComment={item} />
             )}

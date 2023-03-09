@@ -1,23 +1,14 @@
-import {
-  FlatList,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import {Chip, Icon, Input} from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PropTypes from 'prop-types';
-
 import {useMedia} from '../hooks';
 import ListItem from '../components/ListItem';
 import {SIZES} from '../theme';
 
 const Search = ({navigation}) => {
   const {searchMedia} = useMedia();
-
   const [titleSelect, setTitleSelect] = useState(true);
   const [searchString, setSearchString] = useState('');
   const [searchResult, setSearchResult] = useState([]);
@@ -36,7 +27,6 @@ const Search = ({navigation}) => {
             searchMedia(data, userToken).then((result) => {
               setSearchResult(result);
             });
-            console.log('Search Result', searchResult);
           }
         });
       } catch (error) {
@@ -44,6 +34,8 @@ const Search = ({navigation}) => {
       }
     }
   };
+  console.log('search result', searchResult);
+
   return (
     <View>
       <View style={styles.searchContainer}>
@@ -121,7 +113,7 @@ const Search = ({navigation}) => {
         <View style={styles.flatListContainer}>
           <FlatList
             data={searchResult}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item) => item.file_id}
             renderItem={({item}) => (
               <ListItem
                 navigation={navigation}
@@ -141,6 +133,7 @@ const Search = ({navigation}) => {
   );
 };
 
+export default Search;
 const styles = StyleSheet.create({
   containerStyle: {
     marginBottom: SIZES.medium,
@@ -172,5 +165,3 @@ const styles = StyleSheet.create({
 Search.propTypes = {
   navigation: PropTypes.object,
 };
-
-export default Search;

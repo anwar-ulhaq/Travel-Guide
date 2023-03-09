@@ -66,7 +66,7 @@ const ListLike = ({navigation, fileId}) => {
         <View style={styles.flatListContainer}>
           <FlatList
             data={likes}
-            keyExtractor={(item) => item.favourite_id.toString()}
+            keyExtractor={(item) => item.favourite_id}
             renderItem={({item}) => (
               <LikeItem navigation={navigation} singleLike={item} />
             )}

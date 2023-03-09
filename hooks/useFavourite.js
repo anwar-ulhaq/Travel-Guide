@@ -7,6 +7,7 @@ import {
   favouritesPath,
   filePath,
   HTTP_METHOD,
+  mediaPath,
 } from '../utils';
 import {useTag} from './useTag';
 
@@ -74,17 +75,42 @@ export const useFavourite = () => {
     }
   };
 
-  // Backend returns user's favorites only because of token
-  const getUserFavorites = async (token) => {
-    const options = {
-      method: 'GET',
-      headers: {
-        'x-access-token': token,
-      },
-    };
-    return await doFetch(baseUrl + 'favourites', options);
-  };
+  const getUserFavorites = async (userId) => {
+    try {
+      const json = await useTag().getFilesByTag(appId);
+      const listOfUserFavorites = [];
+      const listOfUserFavoriteFiles = [];
+      await Promise.all(
+        json.map(async (item) => {
+          await getFavouriteById(item.file_id).then((fileFavorites) => {
+            fileFavorites
+              .filter((singleFavorite) => singleFavorite.user_id === userId)
+              .forEach((item) => listOfUserFavorites.push(item));
+          });
+        })
+      );
 
+      await Promise.all(
+        listOfUserFavorites.map(async (item) => {
+          try {
+            await doFetch(baseUrl + mediaPath + item.file_id).then(
+              (mediaFile) => listOfUserFavoriteFiles.push(mediaFile)
+            );
+          } catch (error) {
+            console.error('getMediaById', error);
+          }
+        })
+      );
+
+      return listOfUserFavoriteFiles;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  /**
+   * This function returns number of favorites, no actual favorites.
+   *
+   **/
   const getOtherUserFavorites = async (otherUserId) => {
     let otherUserFavoriteCount = 0;
     try {

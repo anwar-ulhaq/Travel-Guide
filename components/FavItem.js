@@ -14,9 +14,14 @@ import UserAvatar from '../components/UserAvatar';
 const FavItem = ({singleItem}) => {
   const navigation = useNavigation();
   const {getUserById} = useUser();
-  const {update, setUpdate, isUserUpdate} = useContext(MainContext);
+  const {
+    isUserUpdate,
+    likeUpdate,
+    setLikeUpdate,
+    isFavouriteUpdated,
+    setIsFavouriteUpdated,
+  } = useContext(MainContext);
   const [owner, setOwner] = useState({username: 'fetching..'});
-  const [userLike, setUserLike] = useState(false);
   const {deleteFavourite} = useFavourite();
 
   const removeFavourite = async () => {
@@ -28,8 +33,10 @@ const FavItem = ({singleItem}) => {
           try {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteFavourite(token, singleItem.file_id);
-            response && setUserLike(false);
-            setUpdate(!update);
+            response && setLikeUpdate(!likeUpdate);
+            response && setIsFavouriteUpdated(!isFavouriteUpdated);
+            // setLikeUpdate(!likeUpdate);
+            // setUpdate(!update);
           } catch (error) {
             console.error('removeFavourite error', error);
           }
@@ -37,6 +44,7 @@ const FavItem = ({singleItem}) => {
       },
     ]);
   };
+
   const fetchOwner = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
@@ -78,10 +86,11 @@ const FavItem = ({singleItem}) => {
                 <Icon
                   name="heart-circle-outline"
                   type="ionicon"
-                  size={40}
+                  size={SIZES.xxl}
                   color="red"
                   containerStyle={styles.iconImage}
                   onPress={() => {
+                    console.log('Remove fav called');
                     removeFavourite();
                     console.log('Removed form favourite');
                   }}
@@ -96,7 +105,7 @@ const FavItem = ({singleItem}) => {
                 <Icon
                   name="heart-circle-outline"
                   type="ionicon"
-                  size={40}
+                  size={SIZES.xxl}
                   color="red"
                   containerStyle={styles.iconImage}
                   onPress={() => {
@@ -106,9 +115,6 @@ const FavItem = ({singleItem}) => {
                 />
               </Image>
             )}
-          </View>
-          <View style={styles.footer}>
-            <View style={styles.statsRow}></View>
           </View>
         </View>
       </View>
@@ -127,7 +133,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: SIZES.font,
     marginBottom: SIZES.extraLarge,
-    height: 350,
     margin: SIZES.base,
     ...SHADOWS.dark,
   },
@@ -145,11 +150,11 @@ const styles = StyleSheet.create({
   icon: {marginLeft: 'auto'},
   // Body
   description: {paddingHorizontal: 10, lineHeight: 20, letterSpacing: 0.3},
-
+  footer: {paddingHorizontal: 10},
   iconImage: {
     position: 'absolute',
-    top: 15,
-    right: 15,
+    top: SIZES.medium,
+    right: SIZES.medium,
   },
 
   image: {

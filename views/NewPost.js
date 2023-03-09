@@ -4,7 +4,6 @@ import {Controller, useForm} from 'react-hook-form';
 import {
   Alert,
   Keyboard,
-  ScrollView,
   TouchableOpacity,
   View,
   StyleSheet,
@@ -180,7 +179,7 @@ const NewPost = ({navigation}) => {
   return (
     <KeyboardAwareScrollView>
       <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
-        <Card containerStyle={{marginTop: SIZES.large}}>
+        <Card containerStyle={{marginTop: SIZES.xxl}}>
           {mediafile.type === 'video' ? (
             <Video
               ref={video}
