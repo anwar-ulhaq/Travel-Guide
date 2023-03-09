@@ -61,7 +61,7 @@ const RegisterForm = () => {
     Alert.alert('Terms&Conditions', 'Are you Sure?', [
       {
         text: 'No',
-        onPress: () => navigation.navigate('FirstPage'),
+        onPress: () => navigation.navigate('Welcome'),
         style: 'cancel',
       },
       {
@@ -323,6 +323,14 @@ const RegisterForm = () => {
                 <Button
                   title={'I agree to T&Cs'}
                   onPress={createButtonAlert}
+                ></Button>
+                <Button
+                  type="outline"
+                  style={{marginTop: 5}}
+                  title={'Cancel'}
+                  onPress={() => {
+                    navigation.navigate('Welcome');
+                  }}
                 ></Button>
                 <Text style={{marginBottom: 100}}></Text>
               </ScrollView>

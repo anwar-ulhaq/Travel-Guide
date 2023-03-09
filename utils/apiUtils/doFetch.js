@@ -1,5 +1,4 @@
 export const doFetch = async (url, options) => {
-  console.log(url);
   const response = await fetch(url, options);
   const json = await response.json();
   if (!response.ok) {

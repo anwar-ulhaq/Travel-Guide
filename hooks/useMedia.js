@@ -41,6 +41,13 @@ export const useMedia = (myFilesOnly) => {
     loadMedia();
   }, [update]);
 
+  const getMediaById = async (fileId) => {
+    try {
+      await doFetch(baseUrl + mediaPath + fileId);
+    } catch (error) {
+      console.error('getMediaById', error);
+    }
+  };
   const postMedia = async (fileData, token) => {
     const options = {
       method: HTTP_METHOD.POST,
@@ -83,7 +90,17 @@ export const useMedia = (myFilesOnly) => {
       throw new Error('putMedia: ' + error.message);
     }
   };
-
+  const getAllFilesOfUserByAppId = async (userId, token) => {
+    try {
+      const allAppMedia = await useTag().getFilesByTag(appId);
+      const filteredMedia = allAppMedia.filter(
+        (item) => item.user_id === userId
+      );
+      return filteredMedia;
+    } catch (error) {
+      throw new Error('Error in getting files of a user: ' + error.message);
+    }
+  };
   const getAllFilesOfUser = async (userId, token) => {
     const options = {
       method: HTTP_METHOD.GET,
@@ -93,7 +110,12 @@ export const useMedia = (myFilesOnly) => {
     };
 
     try {
-      return await doFetch(baseUrl + mediaPath + userPath + userId, options);
+      const json = await doFetch(
+        baseUrl + mediaPath + userPath + userId,
+        options
+      );
+      // console.log('Json Result', json);
+      return json;
     } catch (error) {
       throw new Error('Error in getting files of a user: ' + error.message);
     }
@@ -127,7 +149,7 @@ export const useMedia = (myFilesOnly) => {
     const options = {
       method: HTTP_METHOD.PUT,
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
         'x-access-token': token,
       },
@@ -146,7 +168,10 @@ export const useMedia = (myFilesOnly) => {
     deleteMedia,
     putMedia,
     getAllFilesOfUser,
+    getAllFilesOfUserByAppId,
     searchMedia,
     updateMedia,
+    getMediaById,
   };
 };
+

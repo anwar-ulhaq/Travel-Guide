@@ -13,6 +13,7 @@ export const useAuthentication = () => {
     try {
       return await doFetch(baseUrl + 'login', options);
     } catch (error) {
+      alert('Username/Password Incorrect');
       throw new Error('postLogin: ' + error.message);
     }
   };
