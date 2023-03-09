@@ -7,12 +7,13 @@ import {
   doFetch,
   HTTP_METHOD,
   mediaPath,
-  searchPath,
   userPath,
 } from '../utils';
 import {useTag} from './useTag';
 
 export const useMedia = (myFilesOnly) => {
+  const {isNotification, setIsNotification, setNotification} =
+    useContext(MainContext);
   const [mediaArray, setMediaArray] = useState([]);
 
   const {update, user} = useContext(MainContext);

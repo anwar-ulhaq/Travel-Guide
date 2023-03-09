@@ -26,7 +26,13 @@ const NewPost = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
-  const {update, setUpdate} = useContext(MainContext);
+  const {
+    update,
+    setUpdate,
+    isNotification,
+    setIsNotification,
+    setNotification,
+  } = useContext(MainContext);
   const {
     control,
     handleSubmit,
@@ -41,7 +47,13 @@ const NewPost = ({navigation}) => {
   const getCameraPermission = async () => {
     const {status} = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Sorry, we need camera permission');
+      setNotification({
+        type: 'info',
+        title: 'Camera permission',
+        message: 'Sorry, we need camera permission',
+      });
+      setIsNotification(!isNotification);
+      // Alert.alert('Sorry, we need camera permission');
     }
   };
 
@@ -63,7 +75,12 @@ const NewPost = ({navigation}) => {
         trigger();
       }
     } catch (error) {
-      console.log('Error in taking picture', error);
+      setNotification({
+        type: 'error',
+        title: 'Could not take Picture',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     }
   };
   const uploadFile = async (data) => {
@@ -89,19 +106,34 @@ const NewPost = ({navigation}) => {
       const appTag = {file_id: result.file_id, tag: appId};
       const tagResult = await postTag(appTag, token);
       console.log('Tag result', tagResult);
-      Alert.alert('Uploaded', 'File id: ' + result.file_id, [
-        {
-          text: 'OK',
-          onPress: () => {
-            console.log('OK Pressed');
-            resetForm();
-            setUpdate(!update);
-            navigation.navigate('Home');
-          },
-        },
-      ]);
+      // Alert.alert('Uploaded', 'File id: ' + result.file_id, [
+      //   {
+      //     text: 'OK',
+      //     onPress: () => {
+      //       console.log('OK Pressed');
+      //       resetForm();
+      //       setUpdate(!update);
+      //       navigation.navigate('Home');
+      //     },
+      //   },
+      // ]);
+      setNotification({
+        type: 'success',
+        title: 'File uploaded successfully',
+        message: `Uploaded, File id: ${result.file_id} `,
+      });
+      setIsNotification(!isNotification);
+      resetForm();
+      setUpdate(!update);
+      navigation.navigate('Home');
     } catch (error) {
-      console.error('file upload failed', error);
+      // console.error('file upload failed', error);
+      setNotification({
+        type: 'error',
+        title: 'File upload failed',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     } finally {
       setLoading(false);
     }
@@ -124,7 +156,13 @@ const NewPost = ({navigation}) => {
         trigger();
       }
     } catch (error) {
-      console.log('Error in pick file', error);
+      // console.log('Error in pick file', error);
+      setNotification({
+        type: 'error',
+        title: 'Error while picking file',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     }
   };
   const resetForm = () => {

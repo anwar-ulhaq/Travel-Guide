@@ -14,6 +14,9 @@ const MainProvider = (props) => {
   const [isEditPost, setIsEditPost] = useState(false);
   const [isAvatarUpdated, setIsAvatarUpdated] = useState(false);
   const [isUserUpdate, setIsUserUpdate] = useState(false);
+  const [isNotification, setIsNotification] = useState(false);
+  const [notification, setNotification] = useState({
+  });
 
   return (
     <MainContext.Provider
@@ -38,6 +41,10 @@ const MainProvider = (props) => {
         setIsAvatarUpdated,
         isUserUpdate,
         setIsUserUpdate,
+        isNotification,
+        setIsNotification,
+        notification,
+        setNotification,
       }}
     >
       {props.children}
