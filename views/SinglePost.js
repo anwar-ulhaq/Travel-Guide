@@ -31,8 +31,16 @@ const SinglePost = ({route, navigation}) => {
   const {getFilesByTag} = useTag();
   const {deleteMedia} = useMedia();
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
-  const {user, commentUpdate, update, setUpdate, likeUpdate, setLikeUpdate} =
-    useContext(MainContext);
+  const {
+    user,
+    commentUpdate,
+    update,
+    setUpdate,
+    likeUpdate,
+    isUserUpdate,
+    setLikeUpdate,
+    isAvatarUpdated,
+  } = useContext(MainContext);
   const [owner, setOwner] = useState({username: 'fetching..'});
   const [avatar, setAvatar] = useState('https//:placekittens/180');
   const [likes, setLikes] = useState([]);
@@ -88,9 +96,9 @@ const SinglePost = ({route, navigation}) => {
     try {
       // console.log('Create favourite called');
       const token = await AsyncStorage.getItem('userToken');
-      await postFavourite(token, file.file_id);
-      setUserLike(true);
-      setLikeUpdate(likeUpdate + 1);
+      const response = await postFavourite(token, file.file_id);
+      // setUserLike(true);
+      response && setLikeUpdate(!likeUpdate);
     } catch (error) {
       console.error('createFavourite error', error);
     }
@@ -99,8 +107,8 @@ const SinglePost = ({route, navigation}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await deleteFavourite(token, file.file_id);
-      response && setUserLike(false);
-      setLikeUpdate(likeUpdate + 1);
+      response && setLikeUpdate(!likeUpdate);
+      // setLikeUpdate(likeUpdate + 1);
     } catch (error) {
       console.error('removeFavourite error', error);
     }
@@ -148,8 +156,10 @@ const SinglePost = ({route, navigation}) => {
 
   useEffect(() => {
     fetchOwner();
+  }, [isUserUpdate]);
+  useEffect(() => {
     loadAvatar();
-  }, []);
+  }, [isAvatarUpdated]);
   useEffect(() => {
     fetchLikes();
   }, [likeUpdate]);

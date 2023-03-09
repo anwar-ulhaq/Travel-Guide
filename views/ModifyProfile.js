@@ -14,8 +14,14 @@ import {SIZES} from '../theme';
 // TODO move styling to style sheet
 const ModifyProfile = ({navigation}) => {
   const {checkUsername, updateUser} = useUser();
-  const {user, isEditProfile, setIsEditProfile, setUser} =
-    React.useContext(MainContext);
+  const {
+    user,
+    isEditProfile,
+    setIsEditProfile,
+    setUser,
+    isUserUpdate,
+    setIsUserUpdate,
+  } = React.useContext(MainContext);
   const {username, email} = user;
   const {
     control,
@@ -64,6 +70,7 @@ const ModifyProfile = ({navigation}) => {
             const userData = await getUserByToken(userToken);
             setUser(userData);
             setIsEditProfile(!isEditProfile);
+            setIsUserUpdate(!isUserUpdate);
           });
         }
       });

@@ -7,7 +7,7 @@ import {uploadsUrl} from '../utils';
 import TopPost from './TopPost';
 
 const FeedHeader = () => {
-  const {user} = useContext(MainContext);
+  const {user, isAvatarUpdated} = useContext(MainContext);
   const {getFilesByTag} = useTag();
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
   const loadAvatar = async () => {
@@ -22,7 +22,7 @@ const FeedHeader = () => {
   };
   useEffect(() => {
     loadAvatar();
-  }, []);
+  }, [isAvatarUpdated]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();

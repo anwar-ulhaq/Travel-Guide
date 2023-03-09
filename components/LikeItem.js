@@ -8,6 +8,7 @@ import {Card} from '@rneui/themed';
 import {Pressable} from 'react-native';
 import PropTypes from 'prop-types';
 import UserAvatar from './UserAvatar';
+import {MainContext} from '../contexts/MainContext';
 
 const LikeItem = ({navigation, singleLike}) => {
   const {getFilesByTag} = useTag();
@@ -16,6 +17,9 @@ const LikeItem = ({navigation, singleLike}) => {
 
   const [likeOwner, setLikeOwner] = useState({username: 'fetching..'});
   const [avatar, setAvatar] = useState('https//:placekittens/180');
+
+  const {isAvatarUpdated} = useContext(MainContext);
+
 
   const loadAvatar = async () => {
     try {
@@ -38,8 +42,10 @@ const LikeItem = ({navigation, singleLike}) => {
   };
   useEffect(() => {
     fetchLikeOwner();
-    loadAvatar();
   }, []);
+  useEffect(() => {
+    loadAvatar();
+  }, [isAvatarUpdated]);
 
   return (
     <Card containerStyle={{height: 65, borderRadius: 10, margin: 2}}>
