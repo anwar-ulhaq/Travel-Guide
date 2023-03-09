@@ -23,7 +23,9 @@ const ViewProfile = ({myFilesOnly = true}) => {
   const {mediaArray} = useMedia(myFilesOnly);
   const {getFilesByTag} = useTag();
   const {isAvatarUpdated, likeUpdate} = useContext(MainContext);
-  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const [avatar, setAvatar] = useState(
+    'https://via.placeholder.com/180&text=loading'
+  );
   const [noOfFavorites, setNoOfFavorites] = useState(0);
   const {getUserFavorites} = useFavourite();
   const navigation = useNavigation();
@@ -45,7 +47,7 @@ const ViewProfile = ({myFilesOnly = true}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userFavorites = await getUserFavorites(token);
-      setNoOfFavorites(userFavorites.length)
+      setNoOfFavorites(userFavorites.length);
     } catch (error) {
       console.error('user favorites fetch failed', error.message);
     }

@@ -78,7 +78,7 @@ const FavItem = ({singleItem}) => {
                 <Icon
                   name="heart-circle-outline"
                   type="ionicon"
-                  size={40}
+                  size={SIZES.xxl}
                   color="red"
                   containerStyle={styles.iconImage}
                   onPress={() => {
@@ -96,7 +96,7 @@ const FavItem = ({singleItem}) => {
                 <Icon
                   name="heart-circle-outline"
                   type="ionicon"
-                  size={40}
+                  size={SIZES.xxl}
                   color="red"
                   containerStyle={styles.iconImage}
                   onPress={() => {
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
 
   iconImage: {
     position: 'absolute',
-    top: 15,
-    right: 15,
+    top: SIZES.medium,
+    right: SIZES.medium,
   },
 
   image: {

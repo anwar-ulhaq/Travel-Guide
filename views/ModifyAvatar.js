@@ -22,10 +22,13 @@ import {uploadsUrl} from '../utils';
 
 const ModifyAvatar = ({navigation}) => {
   const [mediafile, setMediafile] = useState({});
-  const [avatar, setAvatar] = useState('http://placekitten.com/640');
+  const [avatar, setAvatar] = useState(
+    'https://via.placeholder.com/180&text=loading'
+  );
   const {getFilesByTag} = useTag();
   const [loading, setLoading] = useState(false);
-  const {update, setUpdate, user, isAvatarUpdated, setIsAvatarUpdated} = useContext(MainContext);
+  const {update, setUpdate, user, isAvatarUpdated, setIsAvatarUpdated} =
+    useContext(MainContext);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
 
@@ -71,7 +74,7 @@ const ModifyAvatar = ({navigation}) => {
       const tagResult = await postTag(appTag, token);
       console.log('Tag result', tagResult);
       Alert.alert('Uploaded file successfully');
-      setUpdate(!update)
+      setUpdate(!update);
       navigation.navigate('Profile');
     } catch (error) {
       console.error('file upload failed', error);
@@ -140,6 +143,7 @@ const ModifyAvatar = ({navigation}) => {
           margin: SIZES.large,
           flexDirection: 'row',
           alignItems: 'center',
+          marginTop: 30,
         }}
       >
         <Avatar rounded source={{uri: avatar}} size="large" />

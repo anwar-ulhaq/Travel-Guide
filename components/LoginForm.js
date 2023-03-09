@@ -58,7 +58,7 @@ const LoginForm = ({navigation}) => {
               value={value}
               autoCapitalize="none"
               placeholder="Username"
-              style={{margin: 10}}
+              style={{margin: 5}}
               leftIcon={<Icon name="person-outline" type="ionicon" size={22} />}
             />
           )}
@@ -78,7 +78,7 @@ const LoginForm = ({navigation}) => {
             minLength: 5,
           }}
           render={({field: {onChange, onBlur, value}}) => (
-            <View>
+            <View style={{marginTop: -20}}>
               <Input
                 onBlur={onBlur}
                 onChangeText={onChange}
@@ -86,7 +86,12 @@ const LoginForm = ({navigation}) => {
                 autoCapitalize="none"
                 secureTextEntry={!showPassword}
                 leftIcon={
-                  <Icon name="lock-closed-outline" type="ionicon" size={22} />
+                  <Icon
+                    name="lock-closed-outline"
+                    type="ionicon"
+                    size={22}
+                    style={{marginRight: 10}}
+                  />
                 }
                 rightIcon={
                   <TouchableOpacity onPress={togglePasswordVisibility}>
@@ -112,7 +117,8 @@ const LoginForm = ({navigation}) => {
           buttonStyle={{
             width: 200,
             borderRadius: 36,
-            marginTop: 20,
+            marginTop: 0,
+            elevation: 5,
             marginLeft: Platform.OS === 'ios' ? 51 : 65,
           }}
         />
