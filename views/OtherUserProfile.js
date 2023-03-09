@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import {ProfileMediaCard} from '../components';
 import MasonryList from '@react-native-seoul/masonry-list';
 import {SIZES, COLORS} from '../theme';
+import EmptyListAnimation from '../components/ListEmptyAnimation';
 
 const OtherUserProfile = ({navigation, route}) => {
   const {file} = route.params;
@@ -146,6 +147,7 @@ const OtherUserProfile = ({navigation, route}) => {
         numColumns={2}
         data={userFiles}
         renderItem={renderItem}
+        ListEmptyComponent={<EmptyListAnimation title={'No Posts Yet'} />}
       />
     </SafeAreaView>
   );

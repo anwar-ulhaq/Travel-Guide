@@ -24,6 +24,9 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     likeUpdate,
     setLikeUpdate,
     isUserUpdate,
+    isNotification,
+    setIsNotification,
+    setNotification,
   } = useContext(MainContext);
 
   const {postFavourite, getFavouriteById, deleteFavourite} = useFavourite();
@@ -64,7 +67,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     console.log('getMediaLikes called');
     setUserLike(false);
     try {
-      await getFavouriteById(singleMedia.file_id).then(likes => {
+      await getFavouriteById(singleMedia.file_id).then((likes) => {
         setLikes(likes);
         for (const like of likes) {
           if (like.user_id === user.user_id) {
@@ -128,7 +131,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
   useEffect(() => {
     console.log('Use Effect - 03: Fetch Media Item Comments');
     fetchComments();
-
   }, [commentUpdate]);
   const doDelete = () => {
     try {
@@ -142,7 +144,12 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteMedia(singleMedia.file_id, token);
             response && setUpdate(!update);
-            Alert.alert('Post', 'deleted successfully');
+            setNotification({
+              type: 'success',
+              title: 'File deleted successfully',
+              message: `Deleted, File id: ${singleMedia.file_id} `,
+            });
+            setIsNotification(!isNotification);
           },
         },
       ]);
