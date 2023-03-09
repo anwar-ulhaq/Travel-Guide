@@ -61,7 +61,7 @@ const RegisterForm = () => {
     Alert.alert('Terms&Conditions', 'Are you Sure?', [
       {
         text: 'No',
-        onPress: () => navigation.navigate('FirstPage'),
+        onPress: () => navigation.navigate('Welcome'),
         style: 'cancel',
       },
       {
