@@ -90,7 +90,17 @@ export const useMedia = (myFilesOnly) => {
       throw new Error('putMedia: ' + error.message);
     }
   };
-
+  const getAllFilesOfUserByAppId = async (userId, token) => {
+    try {
+      const allAppMedia = await useTag().getFilesByTag(appId);
+      const filteredMedia = allAppMedia.filter(
+        (item) => item.user_id === userId
+      );
+      return filteredMedia;
+    } catch (error) {
+      throw new Error('Error in getting files of a user: ' + error.message);
+    }
+  };
   const getAllFilesOfUser = async (userId, token) => {
     const options = {
       method: HTTP_METHOD.GET,
@@ -100,7 +110,12 @@ export const useMedia = (myFilesOnly) => {
     };
 
     try {
-      return await doFetch(baseUrl + mediaPath + userPath + userId, options);
+      const json = await doFetch(
+        baseUrl + mediaPath + userPath + userId,
+        options
+      );
+      // console.log('Json Result', json);
+      return json;
     } catch (error) {
       throw new Error('Error in getting files of a user: ' + error.message);
     }
@@ -153,45 +168,10 @@ export const useMedia = (myFilesOnly) => {
     deleteMedia,
     putMedia,
     getAllFilesOfUser,
+    getAllFilesOfUserByAppId,
     searchMedia,
     updateMedia,
     getMediaById,
   };
 };
 
-/**
- * const getAllFilesOfUser = async (userId, token) => {
-    const tagResult = [];
-    const options = {
-      method: HTTP_METHOD.GET,
-      headers: {
-        'x-access-token': token,
-      },
-    };
-    try {
-      const json = await doFetch(
-        baseUrl + mediaPath + userPath + userId,
-        options
-      );
-      // console.log('Json', json);
-      await Promise.all(
-        json.map(async (item) => {
-          const tagArray = await useTag().getTagsOfFile(item.file_id);
-          // console.log('Tag array', tagArray);
-          const appTaggedArray = tagArray.filter((tag) => tag.tag === appId);
-          // console.log('Apptagged array', appTaggedArray);
-          if (appTaggedArray.length > 0) {
-            console.log('fileid', item.file_id);
-            const response = await getMediaById(item.file_id);
-            console.log('response', response);
-            tagResult.push(response);
-          }
-        })
-      );
-      console.log('Tag result', tagResult);
-      return tagResult;
-    } catch (error) {
-      throw new Error('Error in getting files of a user: ' + error.message);
-    }
-  };
- */

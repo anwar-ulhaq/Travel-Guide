@@ -24,7 +24,7 @@ const OtherUserProfile = ({navigation, route}) => {
   );
   const {getFilesByTag} = useTag();
   const {getUserById} = useUser();
-  const {getAllFilesOfUser} = useMedia();
+  const {getAllFilesOfUserByAppId} = useMedia();
   const {getOtherUserFavorites} = useFavourite();
   const [profileOwner, setProfileOwner] = useState({username: 'fetching...'});
   const [noOfFavorites, setNoOfFavorites] = useState(0);
@@ -54,7 +54,7 @@ const OtherUserProfile = ({navigation, route}) => {
   const fetchUserFiles = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const userFiles = await getAllFilesOfUser(file.user_id, token);
+      const userFiles = await getAllFilesOfUserByAppId(file.user_id, token);
       console.log('Files of the user', userFiles);
       setUserFiles(userFiles);
     } catch (error) {
