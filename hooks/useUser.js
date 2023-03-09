@@ -35,6 +35,7 @@ export const useUser = () => {
     try {
       return await doFetch(baseUrl + usersPath, options);
     } catch (error) {
+      alert('User not registered');
       throw new Error('postUser: ' + error.message);
     }
   };

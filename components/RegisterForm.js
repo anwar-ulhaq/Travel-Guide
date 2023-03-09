@@ -324,6 +324,14 @@ const RegisterForm = () => {
                   title={'I agree to T&Cs'}
                   onPress={createButtonAlert}
                 ></Button>
+                <Button
+                  type="outline"
+                  style={{marginTop: 5}}
+                  title={'Cancel'}
+                  onPress={() => {
+                    navigation.navigate('Welcome');
+                  }}
+                ></Button>
                 <Text style={{marginBottom: 100}}></Text>
               </ScrollView>
             </SafeAreaView>
