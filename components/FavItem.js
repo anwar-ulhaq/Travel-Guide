@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: SIZES.font,
     margin: 5,
+    marginBottom: -15,
   },
 
   iconButton: {

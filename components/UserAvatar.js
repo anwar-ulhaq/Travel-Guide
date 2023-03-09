@@ -23,7 +23,7 @@ const UserAvatar = ({userId}) => {
           );
         } else {
           setTag(tagArray[0]);
-          setAvatar(uploadsUrl + tagArray[0].filename);
+          setAvatar(uploadsUrl + tagArray.pop().filename);
         }
       });
     } catch (error) {
