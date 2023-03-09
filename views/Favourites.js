@@ -8,15 +8,14 @@ import FavItem from '../components/FavItem';
 import EmptyListAnimation from '../components/ListEmptyAnimation';
 
 const Favourites = ({myFilesOnly = false}) => {
-  const {getAllFavourite} = useFavourite();
+  const {getUserFavorites} = useFavourite();
   const [favArray, setFavArray] = useState([]);
-  const {update} = useContext(MainContext);
+  const {isFavouriteUpdated, user} = useContext(MainContext);
 
   const fetchFavoritesByUser = async () => {
     try {
-      const token = await AsyncStorage.getItem('userToken');
-      const favoritesData = await getAllFavourite(token);
-      setFavArray(favoritesData);
+      const favoritesData = await getUserFavorites(user.user_id);
+      favoritesData && setFavArray(favoritesData);
     } catch (error) {
       console.error('fetchFavoritesByUser error', error.message);
       Alert.alert('Error loading favorite posts');
@@ -25,7 +24,7 @@ const Favourites = ({myFilesOnly = false}) => {
 
   useEffect(() => {
     fetchFavoritesByUser();
-  }, [update]);
+  }, [isFavouriteUpdated]);
 
   const renderUsersItem = ({item}) => <FavItem singleItem={item} />;
   return (
@@ -34,7 +33,7 @@ const Favourites = ({myFilesOnly = false}) => {
         showsHorizontalScrollIndicator={false}
         data={favArray}
         renderItem={renderUsersItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.file_id}
         ListEmptyComponent={
           <EmptyListAnimation title={'Sorry!! No favourites Found'} />
         }

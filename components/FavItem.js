@@ -14,20 +14,15 @@ import UserAvatar from '../components/UserAvatar';
 const FavItem = ({singleItem}) => {
   const navigation = useNavigation();
   const {getUserById} = useUser();
-  const [likes, setLikes] = useState([]);
   const {
-    user,
-    update,
-    setUpdate,
     isUserUpdate,
     likeUpdate,
     setLikeUpdate,
-    isAvatarUpdated,
-    setIsAvatarUpdated,
+    isFavouriteUpdated,
+    setIsFavouriteUpdated,
   } = useContext(MainContext);
   const [owner, setOwner] = useState({username: 'fetching..'});
-  const [userLike, setUserLike] = useState(false);
-  const {deleteFavourite, getFavouriteById} = useFavourite();
+  const {deleteFavourite} = useFavourite();
 
   const removeFavourite = async () => {
     Alert.alert('Are you sure', 'to remove it from favourite?', [
@@ -38,9 +33,10 @@ const FavItem = ({singleItem}) => {
           try {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteFavourite(token, singleItem.file_id);
-            response && setUserLike(false);
-            setLikeUpdate(!likeUpdate);
-            setUpdate(!update);
+            response && setLikeUpdate(!likeUpdate);
+            response && setIsFavouriteUpdated(!isFavouriteUpdated);
+            // setLikeUpdate(!likeUpdate);
+            // setUpdate(!update);
           } catch (error) {
             console.error('removeFavourite error', error);
           }
