@@ -32,10 +32,15 @@ const OtherUserProfile = ({navigation, route}) => {
 
   const fetchAvatar = async () => {
     try {
-      const avatarArray = await getFilesByTag('avatar_' + file.user_id);
-      console.log('Avatar array: ', avatarArray);
-      const avatar = avatarArray.pop().filename;
-      setAvatar(uploadsUrl + avatar);
+      await getFilesByTag('avatar_' + file.user_id).then((tagArray) => {
+        if (tagArray.length === 0) {
+          setAvatar(
+            'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
+          );
+        } else {
+          setAvatar(uploadsUrl + tagArray.pop().filename);
+        }
+      });
     } catch (error) {
       console.log(error.message);
     }

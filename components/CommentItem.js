@@ -32,7 +32,6 @@ const CommentItem = ({navigation, singleComment}) => {
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
   const options = ['Edit', 'Delete'];
-  const [tag, setTag] = useState({});
   const [isEditComment, setIsEditComment] = useState(false);
 
   const onPopupEvent = (eventName, index) => {
@@ -42,18 +41,28 @@ const CommentItem = ({navigation, singleComment}) => {
     if (index === 0) setIsEditComment(!isEditComment);
     else if (index === 1) doDeleteComment();
   };
-  const loadAvatar = async () => {
+  /*   const loadAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag(
         'avatar_' + singleComment.user_id
       );
-      if (avatarArray.length === 0) {
-        setAvatar(
-          'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
-        );
-      }
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
+    } catch (error) {
+      console.error('user avatar fetch failed', error.message);
+    }
+  }; */
+  const loadAvatar = async () => {
+    try {
+      await getFilesByTag('avatar_' + singleComment.userId).then((tagArray) => {
+        if (tagArray.length === 0) {
+          setAvatar(
+            'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
+          );
+        } else {
+          setAvatar(uploadsUrl + tagArray.pop().filename);
+        }
+      });
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
