@@ -39,14 +39,17 @@ const ViewProfile = ({myFilesOnly = true}) => {
   const loadAvatar = async () => {
     try {
       const avatarArray = await getFilesByTag('avatar_' + user.user_id);
-      // console.log(avatarArray);
+      if (avatarArray.length === 0) {
+        setAvatar(
+          'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
+        );
+      }
       const avatar = avatarArray.pop().filename;
       setAvatar(uploadsUrl + avatar);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
   };
-
   const loadUserFavourites = async () => {
     try {
       const userFavorites = await getUserFavorites(user.user_id);
