@@ -19,8 +19,15 @@ const CommentItem = ({navigation, singleComment}) => {
   );
   const {getUserById} = useUser();
   const [commentOwner, setCommentOwner] = useState({username: 'loading..'});
-  const {user, commentUpdate, setCommentUpdate, isAvatarUpdated} =
-    useContext(MainContext);
+  const {
+    user,
+    commentUpdate,
+    setCommentUpdate,
+    isAvatarUpdated,
+    isNotification,
+    setIsNotification,
+    setNotification,
+  } = useContext(MainContext);
   const [index, setIndex] = useState('none');
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
@@ -35,17 +42,6 @@ const CommentItem = ({navigation, singleComment}) => {
     if (index === 0) setIsEditComment(!isEditComment);
     else if (index === 1) doDeleteComment();
   };
-  /*   const loadAvatar = async () => {
-    try {
-      const avatarArray = await getFilesByTag(
-        'avatar_' + singleComment.user_id
-      );
-      const avatar = avatarArray.pop().filename;
-      setAvatar(uploadsUrl + avatar);
-    } catch (error) {
-      console.error('user avatar fetch failed', error.message);
-    }
-  }; */
   const loadAvatar = async () => {
     try {
       await getFilesByTag('avatar_' + singleComment.userId).then((tagArray) => {
@@ -88,7 +84,12 @@ const CommentItem = ({navigation, singleComment}) => {
             );
             console.log('Response from delete comment', response);
             response && setCommentUpdate(commentUpdate + 1);
-            Alert.alert('Deleted comment successfully');
+            setNotification({
+              type: 'success',
+              title: 'Comment deleted successfully',
+              message: `Deleted comment, File id: ${singleComment.file_id} `,
+            });
+            setIsNotification(!isNotification);
           },
         },
       ]);

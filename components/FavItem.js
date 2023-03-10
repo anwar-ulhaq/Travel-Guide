@@ -20,6 +20,9 @@ const FavItem = ({singleItem}) => {
     setLikeUpdate,
     isFavouriteUpdated,
     setIsFavouriteUpdated,
+    isNotification,
+    setIsNotification,
+    setNotification,
   } = useContext(MainContext);
   const [owner, setOwner] = useState({username: 'fetching..'});
   const {deleteFavourite} = useFavourite();
@@ -35,6 +38,12 @@ const FavItem = ({singleItem}) => {
             const response = await deleteFavourite(token, singleItem.file_id);
             response && setLikeUpdate(!likeUpdate);
             response && setIsFavouriteUpdated(!isFavouriteUpdated);
+            setNotification({
+              type: 'success',
+              title: 'File removed from favourite',
+              message: `Removed, File id: ${singleItem.file_id} `,
+            });
+            setIsNotification(!isNotification);
             // setLikeUpdate(!likeUpdate);
             // setUpdate(!update);
           } catch (error) {

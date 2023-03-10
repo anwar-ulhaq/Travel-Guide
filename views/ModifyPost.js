@@ -14,7 +14,14 @@ import UserAvatar from '../components/UserAvatar';
 
 const ModifyPost = ({route, navigation}) => {
   const {updateMedia} = useMedia();
-  const {update, setUpdate, user} = useContext(MainContext);
+  const {
+    update,
+    setUpdate,
+    user,
+    isNotification,
+    setIsNotification,
+    setNotification,
+  } = useContext(MainContext);
   const [mediaObject, setMediaObject] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const {
@@ -44,6 +51,12 @@ const ModifyPost = ({route, navigation}) => {
     try {
       await updateMedia(fileId, data, userToken).then(() => {
         setUpdate(!update);
+        setNotification({
+          type: 'success',
+          title: 'Post Edited Successfully',
+          message: `Edited`,
+        });
+        setIsNotification(!isNotification);
         navigation.goBack();
       });
     } catch (error) {
@@ -179,7 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.xxl,
   },
   buttonTitleStyle: {
-    fontSize: SIZES.small,
+    fontSize: SIZES.medium,
   },
   btnContainer: {
     elevation: SIZES.large,
