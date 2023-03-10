@@ -25,7 +25,6 @@ const CommentItem = ({navigation, singleComment}) => {
   const [eventName, setEventName] = useState('none');
   const [selectedOption, setSelectedOption] = useState('none');
   const options = ['Edit', 'Delete'];
-  const [tag, setTag] = useState({});
   const [isEditComment, setIsEditComment] = useState(false);
 
   const onPopupEvent = (eventName, index) => {
@@ -54,7 +53,6 @@ const CommentItem = ({navigation, singleComment}) => {
             'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
           );
         } else {
-          setTag(tagArray[0]);
           setAvatar(uploadsUrl + tagArray.pop().filename);
         }
       });

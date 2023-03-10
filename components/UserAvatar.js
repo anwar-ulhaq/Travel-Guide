@@ -9,7 +9,6 @@ import {MainContext} from '../contexts/MainContext';
 const UserAvatar = ({userId}) => {
   const {isAvatarUpdated} = useContext(MainContext);
   const {getFilesByTag} = useTag();
-  const [tag, setTag] = useState({});
   const [avatar, setAvatar] = useState(
     'https://via.placeholder.com/180&text=loading'
   );
@@ -22,7 +21,6 @@ const UserAvatar = ({userId}) => {
             'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
           );
         } else {
-          setTag(tagArray[0]);
           setAvatar(uploadsUrl + tagArray.pop().filename);
         }
       });
