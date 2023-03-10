@@ -13,15 +13,18 @@ import {
   Platform,
 } from 'react-native';
 import {Svg, Path} from 'react-native-svg';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import LottieIcons from '../components/LottieIcons';
+import {MainContext} from '../contexts/MainContext';
 
 const RegisterForm = () => {
   const {postUser, checkUsername} = useUser();
   const [userAgreesTCs, checkUserAgreesTCs] = useState(true);
   const navigation = useNavigation();
+  const {isNotification, setIsNotification, setNotification} =
+    useContext(MainContext);
 
   const {
     control,
@@ -44,6 +47,12 @@ const RegisterForm = () => {
     try {
       const registerResult = await postUser(registerData);
       console.log('registeration result', registerResult);
+      setNotification({
+        type: 'success',
+        title: 'Registered successfully',
+        message: 'welcome to the family',
+      });
+      setIsNotification(!isNotification);
     } catch (error) {
       console.error('register', error);
     }

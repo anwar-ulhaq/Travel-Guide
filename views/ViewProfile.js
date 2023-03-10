@@ -51,7 +51,6 @@ const ViewProfile = ({myFilesOnly = true}) => {
       console.error('user avatar fetch failed', error.message);
     }
   };
-
   const loadUserFavourites = async () => {
     try {
       const userFavorites = await getUserFavorites(user.user_id);

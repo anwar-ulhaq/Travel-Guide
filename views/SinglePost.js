@@ -40,6 +40,9 @@ const SinglePost = ({route, navigation}) => {
     isUserUpdate,
     setLikeUpdate,
     isAvatarUpdated,
+    isNotification,
+    setIsNotification,
+    setNotification,
   } = useContext(MainContext);
   const [owner, setOwner] = useState({username: 'fetching..'});
   const [avatar, setAvatar] = useState(
@@ -132,7 +135,12 @@ const SinglePost = ({route, navigation}) => {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteMedia(file.file_id, token);
             response && setUpdate(!update);
-            Alert.alert('Post', 'deleted successfully');
+            setNotification({
+              type: 'success',
+              title: 'File deleted successfully',
+              message: `Deleted, File id: ${file.file_id} `,
+            });
+            setIsNotification(!isNotification);
             navigation.navigate('Home');
           },
         },

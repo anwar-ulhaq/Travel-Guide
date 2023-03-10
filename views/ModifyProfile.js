@@ -82,7 +82,7 @@ const ModifyProfile = ({navigation}) => {
   return (
     <SafeAreaView>
       <KeyboardAwareScrollView>
-        <Card containerStyle={{borderRadius: SIZES.base}}>
+        <Card containerStyle={{borderRadius: SIZES.base, marginTop: 30}}>
           <View
             style={{
               flexDirection: 'row',
@@ -98,6 +98,7 @@ const ModifyProfile = ({navigation}) => {
                 fontWeight: '100',
                 textAlign: 'center',
               }}
+              style={{marginLeft: 50}}
             >
               Edit Profile
             </Card.Title>
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.xxl,
   },
   buttonTitleStyle: {
-    fontSize: SIZES.small,
+    fontSize: SIZES.medium,
   },
   btnContainer: {
     elevation: SIZES.large,
