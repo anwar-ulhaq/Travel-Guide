@@ -64,7 +64,6 @@ export const useUser = () => {
       );
       return result.available;
     } catch (error) {
-      //throw new Error('checkUsername: ' + error.message);
       setNotification({
         type: 'error',
         title: 'Username error',
