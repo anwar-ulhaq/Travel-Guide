@@ -44,16 +44,18 @@ const CommentItem = ({navigation, singleComment}) => {
   };
   const loadAvatar = async () => {
     try {
-      const avatarArray = await getFilesByTag(
-        'avatar_' + singleComment.user_id
+      await getFilesByTag('avatar_' + singleComment.user_id).then(
+        (tagArray) => {
+          if (tagArray.length === 0) {
+            setAvatar(
+              'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
+            );
+          } else {
+            setTag(tagArray[0]);
+            setAvatar(uploadsUrl + tagArray.pop().filename);
+          }
+        }
       );
-      if (avatarArray.length === 0) {
-        setAvatar(
-          'https://cdn3.iconfinder.com/data/icons/web-design-and-development-2-6/512/87-1024.png'
-        );
-      }
-      const avatar = avatarArray.pop().filename;
-      setAvatar(uploadsUrl + avatar);
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }

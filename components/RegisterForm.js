@@ -18,6 +18,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import LottieIcons from '../components/LottieIcons';
 import {MainContext} from '../contexts/MainContext';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const RegisterForm = () => {
   const {postUser, checkUsername} = useUser();
@@ -87,136 +88,161 @@ const RegisterForm = () => {
         }}
         visible={!userAgreesTCs}
       >
-        <LottieIcons />
-        <Text style={styles.header}>Registration Form</Text>
-        <View style={styles.form}>
-          <Controller
-            control={control}
-            rules={{
-              required: {value: true, message: 'Username is required.'},
-              minLength: {
-                value: 3,
-                message: 'Username min length is 3 characters.',
-              },
-              validate: checkUser,
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                placeholder="Username"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                autoCapitalize="none"
-                leftIcon={
-                  <Icon name="person-outline" type="ionicon" size={20} />
-                }
-                errorMessage={errors.username && errors.username.message}
+        <View>
+          <KeyboardAwareScrollView>
+            <LottieIcons />
+            <Text style={styles.header}>Registration Form</Text>
+            <View style={styles.form}>
+              <Controller
+                control={control}
+                rules={{
+                  required: {value: true, message: 'Username is required.'},
+                  minLength: {
+                    value: 3,
+                    message: 'Username min length is 3 characters.',
+                  },
+                  validate: checkUser,
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <Input
+                    placeholder="Username"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    autoCapitalize="none"
+                    leftIcon={
+                      <Icon name="person-outline" type="ionicon" size={20} />
+                    }
+                    errorMessage={errors.username && errors.username.message}
+                  />
+                )}
+                name="username"
               />
-            )}
-            name="username"
-          />
+              <Controller
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: 'Password is required',
+                  },
+                  pattern: {
+                    value: /(?=.*\p{Lu})(?=.*[0-9]).{5,}/u,
+                    message:
+                      'min 5 characters, needs one number and one uppercase letter',
+                  },
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <View style={{marginTop: -20}}>
+                    <Input
+                      placeholder="3 characters, 1 number and 1 Uppercase letter."
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      secureTextEntry={true}
+                      leftIcon={
+                        <Icon
+                          name="lock-closed-outline"
+                          type="ionicon"
+                          size={20}
+                        />
+                      }
+                    />
+                  </View>
+                )}
+                name="password"
+              />
+              <Controller
+                control={control}
+                rules={{
+                  validate: (value) => {
+                    if (value === getValues('password')) {
+                      return true;
+                    } else {
+                      return 'passwords must match';
+                    }
+                  },
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <View style={{marginTop: -20}}>
+                    <Input
+                      placeholder="Confirm password"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      secureTextEntry={true}
+                      leftIcon={
+                        <Icon
+                          name="lock-closed-outline"
+                          type="ionicon"
+                          size={20}
+                        />
+                      }
+                      errorMessage={
+                        errors.confirmPassword && errors.confirmPassword.message
+                      }
+                    />
+                  </View>
+                )}
+                name="confirmPassword"
+              />
+              <Controller
+                control={control}
+                rules={{
+                  required: {value: true, message: 'E-mail is required'},
+                  pattern: {
+                    value: /^[a-z0-9.-]{1,64}@[a-z0-9.-]{3,64}/i,
+                    message: 'Must be a valid email',
+                  },
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <View style={{marginTop: -20}}>
+                    <Input
+                      placeholder="Email"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      leftIcon={
+                        <Icon name="mail-outline" type="ionicon" size={20} />
+                      }
+                      errorMessage={errors.email && errors.email.message}
+                    />
+                  </View>
+                )}
+                name="email"
+              />
 
-          <Controller
-            control={control}
-            rules={{
-              required: {
-                value: true,
-                message: 'Password is required',
-              },
-              pattern: {
-                value: /(?=.*\p{Lu})(?=.*[0-9]).{5,}/u,
-                message:
-                  'min 5 characters, needs one number and one uppercase letter',
-              },
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                placeholder="3 characters, 1 number and 1 Uppercase letter."
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry={true}
-                leftIcon={
-                  <Icon name="lock-closed-outline" type="ionicon" size={20} />
-                }
+              <Controller
+                control={control}
+                rules={{
+                  minLength: {value: 3, message: 'must be at least 3 chars'},
+                }}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <View style={{marginTop: -20}}>
+                    <Input
+                      placeholder="Full name"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      errorMessage={
+                        errors.full_name && errors.full_name.message
+                      }
+                    />
+                  </View>
+                )}
+                name="full_name"
               />
-            )}
-            name="password"
-          />
-          <Controller
-            control={control}
-            rules={{
-              validate: (value) => {
-                if (value === getValues('password')) {
-                  return true;
-                } else {
-                  return 'passwords must match';
-                }
-              },
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                placeholder="Confirm password"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry={true}
-                leftIcon={
-                  <Icon name="lock-closed-outline" type="ionicon" size={20} />
-                }
-                errorMessage={
-                  errors.confirmPassword && errors.confirmPassword.message
-                }
+              <Button
+                title="Sign up!"
+                value={userAgreesTCs}
+                onPress={handleSubmit(register)}
+                style={{
+                  width: Platform.OS === 'ios' ? 150 : -100,
+                  marginLeft: Platform.OS === 'ios' ? 100 : 0,
+                  marginTop: Platform.OS === 'ios' ? 20 : -10,
+                }}
               />
-            )}
-            name="confirmPassword"
-          />
-          <Controller
-            control={control}
-            rules={{
-              required: {value: true, message: 'E-mail is required'},
-              pattern: {
-                value: /^[a-z0-9.-]{1,64}@[a-z0-9.-]{3,64}/i,
-                message: 'Must be a valid email',
-              },
-            }}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                placeholder="Email"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                leftIcon={<Icon name="mail-outline" type="ionicon" size={20} />}
-                errorMessage={errors.email && errors.email.message}
-              />
-            )}
-            name="email"
-          />
-
-          <Controller
-            control={control}
-            rules={{minLength: {value: 3, message: 'must be at least 3 chars'}}}
-            render={({field: {onChange, onBlur, value}}) => (
-              <Input
-                placeholder="Full name"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                errorMessage={errors.full_name && errors.full_name.message}
-              />
-            )}
-            name="full_name"
-          />
-          <Button
-            title="Sign up!"
-            value={userAgreesTCs}
-            onPress={handleSubmit(register)}
-            style={{
-              width: Platform.OS === 'ios' ? 150 : -100,
-              marginLeft: Platform.OS === 'ios' ? 100 : 0,
-              marginTop: Platform.OS === 'ios' ? 20 : 0,
-            }}
-          />
+            </View>
+          </KeyboardAwareScrollView>
         </View>
         <View>
           <Modal

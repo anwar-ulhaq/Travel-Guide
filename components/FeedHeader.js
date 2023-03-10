@@ -29,7 +29,7 @@ const FeedHeader = () => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.logoContainer}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>
+        <Text style={{fontSize: 18, fontWeight: 'bold', color: 'black'}}>
           Travel Guide
         </Text>
 
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   leftMargin: {marginLeft: 20},
 
   headerContainer: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: '#a9d1f3',
     padding: SIZES.font,
   },
   logoContainer: {
@@ -92,13 +92,13 @@ const styles = StyleSheet.create({
   greetUsername: {
     fontFamily: FONTS.regular,
     fontSize: SIZES.large,
-    color: COLORS.white,
+    color: 'black',
     marginRight: SIZES.medium,
   },
   greet: {
     fontFamily: FONTS.bold,
     fontSize: SIZES.large,
-    color: COLORS.white,
+    color: 'black',
   },
   userChoice: {
     flexDirection: 'row',

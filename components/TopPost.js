@@ -37,9 +37,6 @@ const TopPost = ({myFilesOnly = false}) => {
         renderItem={renderUsersItem}
         keyExtractor={(item) => item.file_id}
       />
-      <View style={styles.feedView}>
-        <Text style={styles.feedText}>Feed</Text>
-      </View>
     </View>
   );
 };
@@ -52,7 +49,7 @@ export default TopPost;
 const styles = StyleSheet.create({
   postItemContainer: {
     flex: 1,
-    backgroundColor: '#91bdfa',
+    backgroundColor: '#E6EEFA',
     paddingVertical: 10,
     marginTop: 10,
     margin: -10,
@@ -63,7 +60,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'black',
     marginTop: -8,
   },
   feedView: {backgroundColor: COLORS.primary, padding: 5, marginBottom: -15},

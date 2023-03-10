@@ -10,6 +10,8 @@ import LottieIcons from '../components/LottieIcons';
 import PropTypes from 'prop-types';
 import {useAuthentication} from '../utils';
 import {View, StyleSheet, Platform, TouchableOpacity} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const LoginForm = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
@@ -44,6 +46,7 @@ const LoginForm = ({navigation}) => {
     <View>
       <LottieIcons />
       <Text style={styles.header}>TRAVEL GUIDE</Text>
+
       <View style={styles.form}>
         <Controller
           control={control}

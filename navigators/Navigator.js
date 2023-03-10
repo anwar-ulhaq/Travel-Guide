@@ -70,8 +70,6 @@ const TabScreen = () => {
           header: () => <AppHeader title={'Upload'} />,
           tabBarIcon: ({focused}) => (
             <>
-              <View style={{...styles.uploadDesign, ...styles.left}}></View>
-              <View style={{...styles.uploadDesign, ...styles.right}}></View>
               <View style={styles.uploadDesign}>
                 <Icon
                   name="add"
@@ -135,7 +133,7 @@ const StackScreen = () => {
               header: () => <AppHeader title={'Single Post'} />,
             }}
           />
-          <Stack.Screen name="MyFiles" component={MyFiles} />
+
           <Stack.Screen
             name="ModifyPost"
             component={ModifyPost}
@@ -198,13 +196,13 @@ const styles = StyleSheet.create({
   },
   uploadDesign: {
     backgroundColor: '#354455',
-    width: 60,
+    width: 70,
     paddingHorizontal: 10,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    height: 33,
+    height: 40,
     zIndex: 1,
   },
   left: {

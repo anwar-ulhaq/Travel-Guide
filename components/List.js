@@ -132,6 +132,6 @@ const styles = StyleSheet.create({
   // uppercard for background
   upperCard: {
     height: 300,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.white,
   },
 });
