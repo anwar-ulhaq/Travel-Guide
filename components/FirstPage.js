@@ -10,7 +10,13 @@ import {useUser} from '../hooks';
 
 const FirstPage = () => {
   const navigation = useNavigation();
-  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {
+    setIsLoggedIn,
+    setUser,
+    isNotification,
+    setIsNotification,
+    setNotification,
+  } = useContext(MainContext);
   const {getUserByToken} = useUser();
   const checkToken = async () => {
     try {
@@ -18,11 +24,24 @@ const FirstPage = () => {
 
       if (userToken === null) return;
       const userData = await getUserByToken(userToken);
-      console.log('checkToken First Page', userData);
-      userData && setUser(userData);
-      setIsLoggedIn(true);
+      if (userData) {
+        setUser(userData);
+        setIsLoggedIn(true);
+      } else {
+        setNotification({
+          type: 'info',
+          title: 'Login error',
+          message: 'Token expired, please login again',
+        });
+        setIsNotification(!isNotification);
+      }
     } catch (error) {
-      console.error('checkToken', error);
+      setNotification({
+        type: 'error',
+        title: 'Login error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
     }
   };
 
