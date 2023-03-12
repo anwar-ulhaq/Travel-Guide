@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {COLORS, SIZES, FONTS} from '../theme';
+import {SIZES, FONTS} from '../theme';
 import {MainContext} from '../contexts/MainContext';
 import TopPost from './TopPost';
 import UserAvatar from './UserAvatar';

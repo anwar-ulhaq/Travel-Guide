@@ -28,30 +28,40 @@ const FavItem = ({singleItem}) => {
   const {deleteFavourite} = useFavourite();
 
   const removeFavourite = async () => {
-    Alert.alert('Are you sure', 'to remove it from favourite?', [
-      {text: 'Cancel'},
-      {
-        text: 'Ok',
-        onPress: async () => {
+    try {
+      setNotification({
+        type: 'info',
+        title: 'Delete favourite?',
+        message: 'Are you sure?',
+        isOkButton: true,
+        isCancelButton: true,
+        onOkClick: async function () {
+          setIsNotification(false);
           try {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteFavourite(token, singleItem.file_id);
-            response && setLikeUpdate(!likeUpdate);
-            response && setIsFavouriteUpdated(!isFavouriteUpdated);
-            setNotification({
-              type: 'success',
-              title: 'File removed from favourite',
-              message: `Removed, File id: ${singleItem.file_id} `,
-            });
-            setIsNotification(!isNotification);
-            // setLikeUpdate(!likeUpdate);
-            // setUpdate(!update);
+            if (response) {
+              response && setLikeUpdate(!likeUpdate);
+              response && setIsFavouriteUpdated(!isFavouriteUpdated);
+              setNotification({
+                type: 'success',
+                title: 'Favourite removed successfully',
+                message: '',
+              });
+              setIsNotification(!isNotification);
+            }
           } catch (error) {
-            console.error('removeFavourite error', error);
+            console.error('Async Storage error: ' + error.message);
           }
         },
-      },
-    ]);
+        onCancelClick: async function () {
+          setIsNotification(false);
+        },
+      });
+      setIsNotification(!isNotification);
+    } catch (error) {
+      console.log('Error in deleting favourite ', error);
+    }
   };
 
   const fetchOwner = async () => {
@@ -60,7 +70,7 @@ const FavItem = ({singleItem}) => {
       const userData = await getUserById(singleItem.user_id, token);
       setOwner(userData);
     } catch (e) {
-      console.log('Error in fetching owner', e);
+      console.error('Error in fetching owner', e.message);
       setOwner({username: '[not available]'});
     }
   };

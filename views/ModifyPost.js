@@ -46,21 +46,20 @@ const ModifyPost = ({route, navigation}) => {
 
   const onSubmit = async (data) => {
     setIsAnimating(true);
-    const userToken = await AsyncStorage.getItem('userToken');
-
     try {
+      const userToken = await AsyncStorage.getItem('userToken');
       await updateMedia(fileId, data, userToken).then(() => {
         setUpdate(!update);
         setNotification({
           type: 'success',
-          title: 'Post Edited Successfully',
-          message: `Edited`,
+          title: 'Post modify Successfully',
+          message: '',
         });
         setIsNotification(!isNotification);
         navigation.goBack();
       });
     } catch (error) {
-      console.log('Error: ' + error);
+      console.error('Async Storage error: ' + error.message);
       setIsAnimating(false);
     }
   };
@@ -172,7 +171,7 @@ const ModifyPost = ({route, navigation}) => {
             ...styles.buttonTitleStyle,
             color: 'black',
           }}
-          onPress={handleSubmit(onSubmit)}
+          onPress={() => navigation.goBack()}
         />
       </Card>
     </KeyboardAwareScrollView>

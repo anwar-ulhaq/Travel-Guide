@@ -34,7 +34,6 @@ const PopupMenu = (props) => {
   };
 
   const showPopupMenu = () => {
-    console.log('showPopupMenu');
     const {options, onError, onPress} = props;
     const node = findNodeHandle(view);
     UIManager.showPopupMenu(node, options, onError, onPress);

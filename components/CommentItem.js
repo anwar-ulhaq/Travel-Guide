@@ -72,31 +72,42 @@ const CommentItem = ({navigation, singleComment}) => {
   };
 
   const doDeleteComment = async () => {
-    console.log('Delete button pressed');
     try {
-      Alert.alert('Delete', 'this comment', [
-        {text: 'Cancel'},
-        {
-          text: 'OK',
-          onPress: async () => {
+      setNotification({
+        type: 'info',
+        title: 'Delete comment?',
+        message: 'Are you sure?',
+        isOkButton: true,
+        isCancelButton: true,
+        onOkClick: async function () {
+          setIsNotification(false);
+          try {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteComment(
               token,
               singleComment.comment_id
             );
             console.log('Response from delete comment', response);
-            response && setCommentUpdate(commentUpdate + 1);
-            setNotification({
-              type: 'success',
-              title: 'Comment deleted successfully',
-              message: `Deleted comment, File id: ${singleComment.file_id} `,
-            });
-            setIsNotification(!isNotification);
-          },
+            if (response) {
+              setCommentUpdate(commentUpdate + 1);
+              setNotification({
+                type: 'success',
+                title: 'Comment deleted successfully',
+                message: '',
+              });
+              setIsNotification(!isNotification);
+            }
+          } catch (error) {
+            console.error('Async Storage error: ' + error.message);
+          }
         },
-      ]);
+        onCancelClick: async function () {
+          setIsNotification(false);
+        },
+      });
+      setIsNotification(!isNotification);
     } catch (error) {
-      console.log('Error in deleting comment ', error);
+      console.error('Error in deleting comment ', error);
     }
   };
   const formatTimeAgo = (dateTime) => {

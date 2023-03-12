@@ -24,5 +24,9 @@ NotificationWrapper.propTypes = {
   type: PropTypes.oneOf(['success', 'info', 'warning', 'error']),
   title: PropTypes.string,
   message: PropTypes.string,
+  isOkButton: PropTypes.bool,
+  isCancelButton: PropTypes.bool,
   onClosePress: PropTypes.func,
+  onOkClick: PropTypes.func,
+  onCancelClick: PropTypes.func,
 };

@@ -66,12 +66,9 @@ const NewPost = ({navigation}) => {
         aspect: [4, 3],
         quality: 0.5,
       });
-
-      console.log('Pick camera result', result);
-
       if (!result.canceled) {
         setMediafile(result.assets[0]);
-        trigger();
+        await trigger();
       }
     } catch (error) {
       setNotification({
@@ -97,42 +94,25 @@ const NewPost = ({navigation}) => {
       name: filename,
       type: mimeType,
     });
-    console.log('form data', formData);
     try {
       const token = await AsyncStorage.getItem('userToken');
       const result = await postMedia(formData, token);
       console.log('upload result', result);
       const appTag = {file_id: result.file_id, tag: appId};
       const tagResult = await postTag(appTag, token);
-      console.log('Tag result', tagResult);
-      // Alert.alert('Uploaded', 'File id: ' + result.file_id, [
-      //   {
-      //     text: 'OK',
-      //     onPress: () => {
-      //       console.log('OK Pressed');
-      //       resetForm();
-      //       setUpdate(!update);
-      //       navigation.navigate('Home');
-      //     },
-      //   },
-      // ]);
-      setNotification({
-        type: 'success',
-        title: 'File uploaded successfully',
-        message: `Uploaded, File id: ${result.file_id} `,
-      });
-      setIsNotification(!isNotification);
-      resetForm();
-      setUpdate(!update);
-      navigation.navigate('Home');
+      if (tagResult) {
+        setNotification({
+          type: 'success',
+          title: 'File uploaded successfully',
+          message: `Uploaded, File id: ${result.file_id} `,
+        });
+        setIsNotification(!isNotification);
+        resetForm();
+        setUpdate(!update);
+        navigation.navigate('Home');
+      }
     } catch (error) {
-      // console.error('file upload failed', error);
-      setNotification({
-        type: 'error',
-        title: 'File upload failed',
-        message: error.message,
-      });
-      setIsNotification(!isNotification);
+      console.error('Async Storage error: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -148,17 +128,15 @@ const NewPost = ({navigation}) => {
         quality: 0.5,
       });
 
-      console.log('Pick file result', result);
-
       if (!result.canceled) {
         setMediafile(result.assets[0]);
-        trigger();
+        await trigger();
       }
     } catch (error) {
       // console.log('Error in pick file', error);
       setNotification({
         type: 'error',
-        title: 'Error while picking file',
+        title: 'Error picking file',
         message: error.message,
       });
       setIsNotification(!isNotification);

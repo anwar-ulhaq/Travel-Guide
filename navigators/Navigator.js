@@ -6,7 +6,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../views/Home';
 import NewPost from '../views/NewPost';
-import MyFiles from '../views/MyFiles';
 import Search from '../views/Search';
 import LikedBy from '../views/LikedBy';
 import OtherUserProfile from '../views/OtherUserProfile';

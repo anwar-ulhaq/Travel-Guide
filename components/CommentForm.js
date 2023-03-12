@@ -1,4 +1,4 @@
-import {View, Alert, Text, Keyboard, StyleSheet} from 'react-native';
+import {View, Alert, Text, StyleSheet} from 'react-native';
 import {TextInput} from 'react-native';
 import {Button} from '@rneui/themed';
 import {Controller, useForm} from 'react-hook-form';
@@ -8,11 +8,16 @@ import {useContext, useCallback} from 'react';
 import {MainContext} from '../contexts/MainContext';
 import {useFocusEffect} from '@react-navigation/native';
 import PropTypes from 'prop-types';
-import {Platform} from 'react-native';
 
 const CommentForm = ({fileId}) => {
   const {postComment} = useComment(fileId);
-  const {commentUpdate, setCommentUpdate} = useContext(MainContext);
+  const {
+    commentUpdate,
+    setCommentUpdate,
+    isNotification,
+    setIsNotification,
+    setNotification,
+  } = useContext(MainContext);
   const {
     control,
     handleSubmit,
@@ -41,20 +46,18 @@ const CommentForm = ({fileId}) => {
         file_id: fileId,
         comment: comment.comment,
       });
-      response &&
-        Alert.alert('Comment', 'uploaded', [
-          {
-            text: 'OK',
-            onPress: () => {
-              Keyboard.dismiss();
-              reset();
-              setCommentUpdate(commentUpdate + 1);
-            },
-          },
-        ]);
+      if (response) {
+        setNotification({
+          type: 'success',
+          title: 'Success',
+          message: 'Comment uploaded',
+        });
+        setIsNotification(!isNotification);
+        reset();
+        setCommentUpdate(commentUpdate + 1);
+      }
     } catch (e) {
-      console.log('Error on uploading comment');
-      Alert.alert('Error', 'Uploading comment failed');
+      console.error('Error on uploading comment');
     }
   };
 

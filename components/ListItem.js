@@ -1,4 +1,4 @@
-import {Alert, Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {uploadsUrl} from '../utils';
 import {COLORS, SHADOWS, SIZES} from '../theme';
@@ -50,7 +50,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const userData = await getUserById(singleMedia.user_id, token);
       setOwner(userData);
     } catch (e) {
-      console.log('Error in fetching owner', e);
+      console.error('Error in fetching owner', e);
       setOwner({username: '[not available]'});
     }
   };
@@ -59,12 +59,11 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const commentsData = await getCommentById(singleMedia.file_id);
       setComments(commentsData);
     } catch (e) {
-      console.log('Error in fetching comments', e);
+      console.error('Error in fetching comments', e);
     }
   };
 
   const getMediaLikes = async () => {
-    console.log('getMediaLikes called');
     setUserLike(false);
     try {
       await getFavouriteById(singleMedia.file_id).then((likes) => {
@@ -85,11 +84,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const response = await postFavourite(token, singleMedia.file_id);
-      // console.log('Response from create fav LI', response);
       response && setLikeUpdate(!likeUpdate);
-      // setUserLikesIt(true);
-      // setLikeUpdate(likeUpdate + 1);
-      // setUpdate(!update);
     } catch (error) {
       console.error('createFavourite error', error);
     }
@@ -100,8 +95,6 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
       const token = await AsyncStorage.getItem('userToken');
       const response = await deleteFavourite(token, singleMedia.file_id);
       response && setLikeUpdate(!likeUpdate);
-      // setLikeUpdate(likeUpdate - 1);
-      // setUpdate(!update);
     } catch (error) {
       console.error('removeFavourite error', error);
     }
@@ -115,59 +108,60 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
     }
   };
 
-  // Use Effect - 01
   useEffect(() => {
     fetchOwner();
-    console.log('Use Effect - 01: Fetch Owner');
   }, [isUserUpdate]);
-  // Use Effect - 02
 
   useEffect(() => {
-    console.log('Use Effect - 02: Fetch Media Item Likes');
     getMediaLikes();
   }, [likeUpdate]);
 
-  // Use Effect - 03
   useEffect(() => {
-    console.log('Use Effect - 03: Fetch Media Item Comments');
     fetchComments();
   }, [commentUpdate]);
   const doDelete = () => {
     try {
-      Alert.alert('Delete', ' this file permanently', [
-        {
-          text: 'Cancel',
-        },
-        {
-          text: 'OK',
-          onPress: async () => {
+      setNotification({
+        type: 'info',
+        title: 'Delete file?',
+        message: 'Are you sure?',
+        isOkButton: true,
+        isCancelButton: true,
+        onOkClick: async function () {
+          setIsNotification(false);
+          try {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteMedia(singleMedia.file_id, token);
-            response && setUpdate(!update);
-            setNotification({
-              type: 'success',
-              title: 'File deleted successfully',
-              message: `Deleted, File id: ${singleMedia.file_id} `,
-            });
-            setIsNotification(!isNotification);
-          },
+            if (response) {
+              setUpdate(!update);
+              setNotification({
+                type: 'success',
+                title: 'File deleted successfully',
+                message: '',
+              });
+              setIsNotification(!isNotification);
+            }
+          } catch (error) {
+            console.error('Async Storage error: ' + error.message);
+          }
         },
-      ]);
+        onCancelClick: async function () {
+          setIsNotification(false);
+        },
+      });
+      setIsNotification(!isNotification);
     } catch (error) {
-      console.log('Error in deleting media', error);
+      console.error('Error in deleting media ', error);
     }
   };
 
   const goToEditPost = () => {
-    console.log('Edit pressed');
     navigation.navigate('ModifyPost', singleMedia);
   };
   const onPopupEvent = (eventName, index, style) => {
     if (index >= 0) setSelectedOption(options[index]);
     setIndex(index);
     setEventName(eventName);
-    console.log('Index: ' + index);
-
     if (index === 0) {
       setIsEditPost(!isEditPost);
       goToEditPost();
@@ -233,7 +227,7 @@ const ListItem = ({navigation, singleMedia, myFilesOnly}) => {
               resizeMode="cover"
               useNativeControls
               onError={(error) => {
-                console.log(error);
+                console.error(error);
               }}
               isLooping
             />

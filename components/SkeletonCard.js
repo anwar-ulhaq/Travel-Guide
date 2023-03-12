@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
-import PropTypes from 'prop-types';
 import {COLORS} from '../theme';
 
 const SkeletonCard = ({children}) => {

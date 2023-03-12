@@ -32,7 +32,7 @@ export const useUser = () => {
         message: error.message,
       });
       setIsNotification(!isNotification);
-      // throw new Error('checkUser: ' + error.message);
+      console.error('Get User by token: ' + error.message);
     }
   };
   const postUser = async (userData) => {
@@ -46,14 +46,13 @@ export const useUser = () => {
     try {
       return await doFetch(baseUrl + usersPath, options);
     } catch (error) {
-      // alert('User not registered');
-      // throw new Error('postUser: ' + error.message);
       setNotification({
         type: 'error',
         title: 'Post user error',
         message: error.message,
       });
       setIsNotification(!isNotification);
+      console.error('Post user: ' + error.message);
     }
   };
 
@@ -70,6 +69,8 @@ export const useUser = () => {
         message: error.message,
       });
       setIsNotification(!isNotification);
+      console.error('Check user name: ' + error.message);
+
     }
   };
 
@@ -82,10 +83,11 @@ export const useUser = () => {
       // throw new Error('getUserById, ' + error.message);
       setNotification({
         type: 'error',
-        title: 'User error',
+        title: 'Fetching User error',
         message: error.message,
       });
       setIsNotification(!isNotification);
+      console.error('Get user by Id: ' + error.message);
     }
   };
 
@@ -100,6 +102,7 @@ export const useUser = () => {
         message: error.message,
       });
       setIsNotification(!isNotification);
+      console.error('Get user avatar: ' + error.message);
     }
   };
 
@@ -119,13 +122,13 @@ export const useUser = () => {
       console.log('user update response: ' + JSON.stringify(response));
       return response;
     } catch (error) {
-      // throw new Error(error.message);
       setNotification({
         type: 'error',
         title: 'User update error',
         message: error.message,
       });
       setIsNotification(!isNotification);
+      console.error('User update: ' + error.message);
     }
   };
 

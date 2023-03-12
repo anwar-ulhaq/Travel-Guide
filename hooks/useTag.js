@@ -1,20 +1,34 @@
-// import {doFetch} from '../utils/apiUtils/doFetch';
-// import {baseUrl} from '../utils/variables';
 import {baseUrl, doFetch, filePath, HTTP_METHOD, tagPath} from '../utils';
+import {useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
 export const useTag = () => {
+  const {isNotification, setIsNotification, setNotification} = useContext(MainContext);
+
   const getFilesByTag = async (tag) => {
     try {
       return await doFetch(baseUrl + tagPath + tag);
     } catch (error) {
-      throw new Error('getFilesByTag, ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Fetching files tag error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Get Files by tags' + error.message);
     }
   };
   const getTagsOfFile = async (id) => {
     try {
       return await doFetch(baseUrl + tagPath + filePath + id);
     } catch (error) {
-      throw new Error('gerTagsOfFile, ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Fetching file tags error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Get File tags' + error.message);
     }
   };
   const postTag = async (data, token) => {
@@ -29,7 +43,13 @@ export const useTag = () => {
     try {
       return await doFetch(baseUrl + tagPath, options);
     } catch (error) {
-      throw new Error('postTag: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Posting Tag error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Post tag' + error.message);
     }
   };
   return {getFilesByTag, postTag, getTagsOfFile};

@@ -8,7 +8,7 @@ import {Svg, Path} from 'react-native-svg';
 import LottieIcons from '../components/LottieIcons';
 
 import PropTypes from 'prop-types';
-import {useAuthentication} from '../utils';
+import {useAuthentication} from '../hooks';
 import {View, StyleSheet, Platform, TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -34,11 +34,35 @@ const LoginForm = ({navigation}) => {
   const onSubmit = async (data) => {
     try {
       const userData = await postLogin(data);
-      await AsyncStorage.setItem('userToken', userData.token);
-      setUser(userData.user);
-      setIsLoggedIn(true);
+      if (userData?.token) {
+        await AsyncStorage.setItem('userToken', userData.token);
+        setUser(userData.user);
+        setIsLoggedIn(true);
+      }
     } catch (error) {
-      console.log('Error on onSubmit:', error);
+      console.error('Async Storage error: ' + error.message);
+
+      /*
+
+    await postLogin(data).then(async (userData) => {
+      console.log('userData: ' + JSON.stringify(userData));
+      try {
+        await AsyncStorage.setItem('userToken', userData.token);
+        setUser(userData.user);
+        setIsLoggedIn(true);
+      } catch (error) {
+        setNotification({
+          type: 'error',
+          title: 'Error while storing.',
+          message: error.message,
+        });
+        setIsNotification(!isNotification);
+      }
+    });
+
+
+      *
+      * */
     }
   };
 

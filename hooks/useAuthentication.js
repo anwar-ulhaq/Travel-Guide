@@ -1,7 +1,7 @@
-import {doFetch} from './doFetch';
-import {baseUrl} from '../constants';
+import {doFetch} from '../utils/apiUtils/doFetch';
+import {baseUrl} from '../utils/constants';
 import {useContext} from 'react';
-import {MainContext} from '../../contexts/MainContext';
+import {MainContext} from '../contexts/MainContext';
 
 export const useAuthentication = () => {
   const {isNotification, setIsNotification, setNotification} =

@@ -34,6 +34,9 @@ const ViewProfile = ({myFilesOnly = true}) => {
     likeUpdate,
     isEditProfile,
     setIsEditProfile,
+    isNotification,
+    setIsNotification,
+    setNotification,
   } = React.useContext(MainContext);
 
   const loadAvatar = async () => {
@@ -71,20 +74,23 @@ const ViewProfile = ({myFilesOnly = true}) => {
   };
 
   const logout = async () => {
-    Alert.alert('Are you sure of ', 'logging out?', [
-      {text: 'Cancel'},
-      {
-        text: 'OK',
-        onPress: async () => {
-          try {
-            await AsyncStorage.clear();
-            setIsLoggedIn(false);
-          } catch (error) {
-            console.log('Error while logging out: ' + error);
-          }
-        },
+    setNotification({
+      type: 'info',
+      title: 'Log out',
+      message: 'Are you sure?',
+      isOkButton: true,
+      isCancelButton: true,
+      onOkClick: async function () {
+        setIsNotification(false);
+        await AsyncStorage.clear();
+        setIsLoggedIn(false);
       },
-    ]);
+      onCancelClick: async function () {
+        setIsNotification(false);
+      },
+    });
+    setIsNotification(!isNotification);
+
   };
   useEffect(() => {
     loadAvatar();
@@ -220,7 +226,7 @@ const ViewProfile = ({myFilesOnly = true}) => {
         containerStyle={{
           marginTop: 16,
         }}
-        onEndReached={() => console.log('onEndReached')}
+        // onEndReached={() => console.log('onEndReached')}
         numColumns={2}
         data={mediaArray}
         renderItem={renderItem}

@@ -75,7 +75,7 @@ const ModifyProfile = ({navigation}) => {
         }
       });
     } catch (error) {
-      console.log('Error on submit: ' + error);
+      console.error('Error on submit: ' + error.message);
     }
   };
 

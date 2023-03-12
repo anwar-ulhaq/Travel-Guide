@@ -1,11 +1,10 @@
-import {View, Text, SafeAreaView, FlatList} from 'react-native';
-import {useState, useContext, useEffect} from 'react';
+import {FlatList, Text, View} from 'react-native';
+import {useContext, useEffect, useState} from 'react';
 import {useComment} from '../hooks';
 
 import {MainContext} from '../contexts/MainContext';
-import {Card} from '@rneui/themed';
 import CommentItem from './CommentItem';
-import {COLORS, SIZES, FONTS, SHADOWS} from '../theme';
+import {SIZES} from '../theme';
 import PropTypes from 'prop-types';
 import LottieView from 'lottie-react-native';
 
@@ -18,10 +17,9 @@ const ListComment = ({navigation, fileId}) => {
   const fetchComments = async () => {
     try {
       const commentsData = await getCommentById(fileId);
-      console.log('Data from comment', commentsData);
       setComments(commentsData);
     } catch (e) {
-      console.log('Error in fetching comments', e);
+      console.error('Error in fetching comments', e);
       setError(true);
     }
   };

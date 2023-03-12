@@ -1,5 +1,3 @@
-// import {doFetch} from './doFetch';
-// import {baseUrl} from '../utils/variables';
 import {
   appId,
   baseUrl,
@@ -8,10 +6,13 @@ import {
   filePath,
   HTTP_METHOD,
   mediaPath,
+  tagPath,
 } from '../utils';
-import {useTag} from './useTag';
+import {useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
 export const useFavourite = () => {
+  const {isNotification, setIsNotification, setNotification} = useContext(MainContext);
   const postFavourite = async (token, fileId) => {
     const options = {
       method: HTTP_METHOD.POST,
@@ -24,14 +25,26 @@ export const useFavourite = () => {
     try {
       return await doFetch(baseUrl + favouritesPath, options);
     } catch (error) {
-      throw new Error('Post Favourite: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Post Favourite error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Post Favourite: ' + error.message);
     }
   };
   const getFavouriteById = async (fileId) => {
     try {
       return await doFetch(baseUrl + favouritesPath + filePath + fileId);
     } catch (error) {
-      throw new Error('Get favourite by Id:  ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Fetch Favourite error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Get favourite by Id:  ' + error.message);
     }
   };
 
@@ -48,7 +61,13 @@ export const useFavourite = () => {
         options
       );
     } catch (error) {
-      throw new Error('Delete favourite:  ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Delete Favourite error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Delete favourite:  ' + error.message);
     }
   };
   const getAllFavourite = async (token) => {
@@ -71,13 +90,19 @@ export const useFavourite = () => {
       media.reverse();
       return media;
     } catch (error) {
-      console.error(error);
+      setNotification({
+        type: 'error',
+        title: 'Fetching all favourites error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Error fetching all favorites: ' + error.message);
     }
   };
 
   const getUserFavorites = async (userId) => {
     try {
-      const json = await useTag().getFilesByTag(appId);
+      const json = await doFetch(baseUrl + tagPath + appId);
       const listOfUserFavorites = [];
       const listOfUserFavoriteFiles = [];
       await Promise.all(
@@ -104,7 +129,13 @@ export const useFavourite = () => {
 
       return listOfUserFavoriteFiles;
     } catch (error) {
-      console.error(error);
+      setNotification({
+        type: 'error',
+        title: 'Fetching user favourites error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Error fetching user favorites: ' + error.message);
     }
   };
   /**
@@ -114,7 +145,7 @@ export const useFavourite = () => {
   const getOtherUserFavorites = async (otherUserId) => {
     let otherUserFavoriteCount = 0;
     try {
-      const json = await useTag().getFilesByTag(appId);
+      const json = await doFetch(baseUrl + tagPath + appId);
       await Promise.all(
         json.map(async (item) => {
           await getFavouriteById(item.file_id).then((fileFavorities) => {
@@ -128,7 +159,13 @@ export const useFavourite = () => {
       );
       return otherUserFavoriteCount;
     } catch (error) {
-      console.error(error);
+      setNotification({
+        type: 'error',
+        title: 'Other user favourites error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Error fetching other user favorites: ' + error.message);
     }
   };
 
