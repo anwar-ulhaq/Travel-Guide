@@ -1,10 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {useUser} from '../hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {COLORS, SIZES, SHADOWS} from '../theme';
 import {Card} from '@rneui/themed';
-import {Pressable} from 'react-native';
 import PropTypes from 'prop-types';
 import UserAvatar from './UserAvatar';
 

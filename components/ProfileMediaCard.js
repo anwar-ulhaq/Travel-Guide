@@ -9,7 +9,6 @@ const ProfileMediaCard = ({item, style}) => {
   const navigation = useNavigation();
   const randomBool = useMemo(() => Math.random() < 0.5, []);
   const videoRef = useRef(null);
-  // const {theme} = useTheme();
 
   return (
     <TouchableOpacity

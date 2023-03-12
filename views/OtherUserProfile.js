@@ -42,7 +42,7 @@ const OtherUserProfile = ({navigation, route}) => {
         }
       });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 
@@ -50,9 +50,9 @@ const OtherUserProfile = ({navigation, route}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userData = await getUserById(file.user_id, token);
-      setProfileOwner(userData);
-    } catch (e) {
-      console.log('Error in fetching like owner', e);
+      userData && setProfileOwner(userData);
+    } catch (error) {
+      console.error('Error in fetching like owner: ' + error.message);
       setProfileOwner({username: '[not available]'});
     }
   };
@@ -61,10 +61,9 @@ const OtherUserProfile = ({navigation, route}) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userFiles = await getAllFilesOfUserByAppId(file.user_id, token);
-      console.log('Files of the user', userFiles);
-      setUserFiles(userFiles);
+      userFiles && setUserFiles(userFiles);
     } catch (error) {
-      console.log('Error in fetching like owner', error);
+      console.error('Error in fetching like owner', error.message);
     }
   };
 
@@ -72,7 +71,7 @@ const OtherUserProfile = ({navigation, route}) => {
     try {
       setNoOfFavorites(await getOtherUserFavorites(file.user_id));
     } catch (error) {
-      console.log('Error in fetching other user favorites count', error);
+      console.error('Error in fetching other user favorites count', error);
     }
   };
 

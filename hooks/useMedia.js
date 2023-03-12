@@ -6,10 +6,9 @@ import {
   baseUrl,
   doFetch,
   HTTP_METHOD,
-  mediaPath,
+  mediaPath, tagPath,
   userPath,
 } from '../utils';
-import {useTag} from './useTag';
 
 export const useMedia = (myFilesOnly) => {
   const {isNotification, setIsNotification, setNotification} =
@@ -20,7 +19,7 @@ export const useMedia = (myFilesOnly) => {
 
   const loadMedia = async () => {
     try {
-      let json = await useTag().getFilesByTag(appId);
+      let json = await doFetch(baseUrl + tagPath + appId);
 
       if (myFilesOnly) {
         json = json.filter((file) => file.user_id === user.user_id);
@@ -35,7 +34,13 @@ export const useMedia = (myFilesOnly) => {
       );
       setMediaArray(media);
     } catch (error) {
-      console.error('List, loadMedia', error);
+      setNotification({
+        type: 'error',
+        title: 'Load media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Load media: ', error);
     }
   };
   useEffect(() => {
@@ -46,7 +51,13 @@ export const useMedia = (myFilesOnly) => {
     try {
       await doFetch(baseUrl + mediaPath + fileId);
     } catch (error) {
-      console.error('getMediaById', error);
+      setNotification({
+        type: 'error',
+        title: 'Load media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Load media by Id: ', error);
     }
   };
   const postMedia = async (fileData, token) => {
@@ -61,7 +72,13 @@ export const useMedia = (myFilesOnly) => {
     try {
       return await doFetch(baseUrl + mediaPath, options);
     } catch (error) {
-      throw new Error('postMedia: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Post media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Post media : ', error);
     }
   };
 
@@ -72,7 +89,13 @@ export const useMedia = (myFilesOnly) => {
         method: HTTP_METHOD.DELETE,
       });
     } catch (error) {
-      throw new Error('deleteMedia, ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Delete media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Delete media:  ' + error.message);
     }
   };
 
@@ -88,18 +111,27 @@ export const useMedia = (myFilesOnly) => {
     try {
       return await doFetch(baseUrl + mediaPath + id, options);
     } catch (error) {
-      throw new Error('putMedia: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Update media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Update media:  ' + error.message);
     }
   };
   const getAllFilesOfUserByAppId = async (userId, token) => {
     try {
-      const allAppMedia = await useTag().getFilesByTag(appId);
-      const filteredMedia = allAppMedia.filter(
-        (item) => item.user_id === userId
-      );
-      return filteredMedia;
+      const allAppMedia = await doFetch(baseUrl + tagPath + appId);
+      return allAppMedia.filter((item) => item.user_id === userId);
     } catch (error) {
-      throw new Error('Error in getting files of a user: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'User media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Error in getting files of a user: ' + error.message);
     }
   };
   const getAllFilesOfUser = async (userId, token) => {
@@ -111,38 +143,36 @@ export const useMedia = (myFilesOnly) => {
     };
 
     try {
-      const json = await doFetch(
-        baseUrl + mediaPath + userPath + userId,
-        options
-      );
-      // console.log('Json Result', json);
-      return json;
+      return await doFetch(baseUrl + mediaPath + userPath + userId, options);
     } catch (error) {
-      throw new Error('Error in getting files of a user: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'User all media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Error in getting files of a user: ' + error.message);
     }
   };
 
   const searchMedia = async (data, token) => {
-    const options = {
-      method: HTTP_METHOD.POST,
-      headers: {
-        'x-access-token': token,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    };
     try {
-      const allAppMedia = await useTag().getFilesByTag(appId);
-      const filteredMedia = allAppMedia.filter(
+      const allAppMedia = await doFetch(baseUrl + tagPath + appId);
+      return allAppMedia.filter(
         (media) =>
           media.title?.toLowerCase().includes(data.title?.toLowerCase()) ||
           media.description
             ?.toLowerCase()
             .includes(data.description?.toLowerCase())
       );
-      return filteredMedia;
     } catch (error) {
-      throw new Error('searchMedia: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Search media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Searching media: ' + error.message);
     }
   };
 
@@ -159,7 +189,13 @@ export const useMedia = (myFilesOnly) => {
     try {
       return await doFetch(baseUrl + mediaPath + fileId, options);
     } catch (error) {
-      throw new Error('updateMedia error, ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Update media error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Update media ' + error.message);
     }
   };
 
@@ -175,4 +211,3 @@ export const useMedia = (myFilesOnly) => {
     getMediaById,
   };
 };
-

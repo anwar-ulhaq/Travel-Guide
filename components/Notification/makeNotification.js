@@ -1,18 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, TouchableOpacity, Text, Animated} from 'react-native';
-import {FontAwesome} from '@expo/vector-icons';
+import {StyleSheet, TouchableOpacity, Text, Animated, View} from 'react-native';
 import {Icon} from '@rneui/themed';
 
 const ICON_SQUARE_SIZE = 100;
 const ANIMATION_DURATION_MS = 150;
 const NOTIFICATION_HEIGHT = 100;
 
-
-
-export const makeNotification = (iconLibrary, iconName, colorPrimary, colorAccent) => {
+export const makeNotification = (
+  iconLibrary,
+  iconName,
+  colorPrimary,
+  colorAccent
+) => {
   function NotificationBase(props) {
-    const {title, message, onClosePress} = props;
+    const {
+      title,
+      message,
+      onClosePress,
+      isOkButton,
+      isCancelButton,
+      onOkClick,
+      onCancelClick,
+    } = props;
     const [animated] = React.useState(new Animated.Value(0));
 
     React.useEffect(() => {
@@ -20,7 +30,6 @@ export const makeNotification = (iconLibrary, iconName, colorPrimary, colorAccen
         toValue: 1,
         duration: ANIMATION_DURATION_MS,
         useNativeDriver: false,
-
       }).start();
     }, []);
 
@@ -59,12 +68,6 @@ export const makeNotification = (iconLibrary, iconName, colorPrimary, colorAccen
             {backgroundColor: colorPrimary},
           ]}
         >
-          {/*<FontAwesome
-            style={styles.icon}
-            name={iconName}
-            size={ICON_SQUARE_SIZE}
-            color={colorAccent}
-          />*/}
           <Icon
             name={iconName}
             type={iconLibrary}
@@ -74,6 +77,31 @@ export const makeNotification = (iconLibrary, iconName, colorPrimary, colorAccen
           />
           <Text style={[styles.title, {color: colorAccent}]}>{title}</Text>
           <Text style={[styles.message, {color: colorAccent}]}>{message}</Text>
+          <View style={styles.buttonContainer}>
+            {isOkButton && (
+              <Icon
+                name="checkcircleo"
+                type="antdesign"
+                size={36}
+                onPress={() => onOkClick()}
+                color={colorAccent}
+                containerStyle={styles.buttonIconStyle}
+              />
+            )}
+            {isCancelButton && (
+              <Icon
+                name="closecircleo"
+                type="antdesign"
+                size={36}
+                color={colorAccent}
+                onPress={() => {
+                  console.log('isCanceled pressed')
+                  onCancelClick();
+                }}
+                containerStyle={styles.buttonIconStyle}
+              />
+            )}
+          </View>
         </Animated.View>
       </TouchableOpacity>
     );
@@ -82,7 +110,11 @@ export const makeNotification = (iconLibrary, iconName, colorPrimary, colorAccen
   NotificationBase.propTypes = {
     title: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
+    isOkButton: PropTypes.bool,
+    isCancelButton: PropTypes.bool,
     onClosePress: PropTypes.func,
+    onOkClick: PropTypes.func,
+    onCancelClick: PropTypes.func,
   };
 
   return NotificationBase;
@@ -115,5 +147,17 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 15,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: '40%',
+  },
+  buttonIconStyle: {
+    paddingRight: 8,
+    margin: 0,
+    padding: 0,
+    elevation: 16,
+    zIndex: -2,
   },
 });

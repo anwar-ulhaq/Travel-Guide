@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import AnimatedLottieView from 'lottie-react-native';
 
 const ListLike = ({navigation, fileId}) => {
-  // console.log('File id', fileId);
   const [likes, setLikes] = useState([]);
   const {getFavouriteById} = useFavourite();
   const {likeUpdate} = useContext(MainContext);
@@ -18,7 +17,6 @@ const ListLike = ({navigation, fileId}) => {
     try {
       const likesData = await getFavouriteById(fileId);
       setLikes(likesData);
-      // console.log(likesData);
     } catch (error) {
       console.error('fetchLikes() error', error);
     }

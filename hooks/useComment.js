@@ -2,8 +2,11 @@
 // import {baseUrl} from '../utils/variables';
 
 import {baseUrl, commentsPath, doFetch, filePath, HTTP_METHOD} from '../utils/';
+import {useContext} from 'react';
+import {MainContext} from '../contexts/MainContext';
 
 export const useComment = () => {
+  const {isNotification, setIsNotification, setNotification} = useContext(MainContext);
   const postComment = async (token, commentId) => {
     const options = {
       method: HTTP_METHOD.POST,
@@ -16,7 +19,13 @@ export const useComment = () => {
     try {
       return await doFetch(baseUrl + commentsPath, options);
     } catch (error) {
-      throw new Error('Post Comment: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Post Comment error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Post Comment: ' + error.message);
     }
   };
 
@@ -29,7 +38,13 @@ export const useComment = () => {
       comment.reverse();
       return comment;
     } catch (error) {
-      throw new Error('Get Comment By id: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Fetch comment error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Get Comment By id: ' + error.message);
     }
   };
   const deleteComment = async (token, fileId) => {
@@ -43,7 +58,13 @@ export const useComment = () => {
     try {
       return await doFetch(baseUrl + commentsPath + fileId, options);
     } catch (error) {
-      throw new Error('Error in deleting comments: ' + error.message);
+      setNotification({
+        type: 'error',
+        title: 'Delete comment error',
+        message: error.message,
+      });
+      setIsNotification(!isNotification);
+      console.error('Error in deleting comments: ' + error.message);
     }
   };
 

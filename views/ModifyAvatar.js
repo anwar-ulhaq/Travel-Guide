@@ -27,8 +27,16 @@ const ModifyAvatar = ({navigation}) => {
   );
   const {getFilesByTag} = useTag();
   const [loading, setLoading] = useState(false);
-  const {update, setUpdate, user, isAvatarUpdated, setIsAvatarUpdated} =
-    useContext(MainContext);
+  const {
+    update,
+    setUpdate,
+    user,
+    isAvatarUpdated,
+    setIsAvatarUpdated,
+    isNotification,
+    setIsNotification,
+    setNotification,
+  } = useContext(MainContext);
   const {postMedia} = useMedia();
   const {postTag} = useTag();
 
@@ -48,7 +56,6 @@ const ModifyAvatar = ({navigation}) => {
           setIsAvatarUpdated(!isAvatarUpdated);
         }
       });
-
     } catch (error) {
       console.error('user avatar fetch failed', error.message);
     }
@@ -69,20 +76,23 @@ const ModifyAvatar = ({navigation}) => {
       name: filename,
       type: mimeType,
     });
-    // console.log('form data', formData);
 
     try {
       const token = await AsyncStorage.getItem('userToken');
       const result = await postMedia(formData, token);
-      console.log('upload result', result);
       const appTag = {file_id: result.file_id, tag: 'avatar_' + user.user_id};
       const tagResult = await postTag(appTag, token);
-      console.log('Tag result', tagResult);
-      Alert.alert('Uploaded file successfully');
-      setUpdate(!update);
-      navigation.navigate('Profile');
+      tagResult &&
+        setNotification({
+          type: 'success',
+          title: 'Avatar upload successfully',
+          message: '',
+        }) &&
+        setIsNotification(!isNotification) &&
+        setUpdate(!update) &&
+        navigation.navigate('Profile');
     } catch (error) {
-      console.error('file upload failed', error);
+      console.error('Avatar upload failed', error.message);
     } finally {
       setLoading(false);
     }
@@ -111,7 +121,7 @@ const ModifyAvatar = ({navigation}) => {
         setMediafile(result.assets[0]);
       }
     } catch (error) {
-      console.log('Error in taking picture', error);
+      console.error('Error in taking picture', error);
     }
   };
 

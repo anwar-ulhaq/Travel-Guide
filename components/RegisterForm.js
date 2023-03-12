@@ -9,7 +9,6 @@ import {
   Modal,
   SafeAreaView,
   Dimensions,
-  Alert,
   Platform,
 } from 'react-native';
 import {Svg, Path} from 'react-native-svg';
@@ -44,16 +43,15 @@ const RegisterForm = () => {
   });
   const register = async (registerData) => {
     delete registerData.confirmPassword;
-    console.log('Registering: ', registerData);
     try {
       const registerResult = await postUser(registerData);
-      console.log('registeration result', registerResult);
-      setNotification({
-        type: 'success',
-        title: 'Registered successfully',
-        message: 'welcome to the family',
-      });
-      setIsNotification(!isNotification);
+      registerResult &&
+        setNotification({
+          type: 'success',
+          title: 'Registered successfully',
+          message: 'welcome to the family',
+        }) &&
+        setIsNotification(!isNotification);
     } catch (error) {
       console.error('register', error);
     }
@@ -61,24 +59,29 @@ const RegisterForm = () => {
   const checkUser = async (username) => {
     try {
       const userAvailable = await checkUsername(username);
-      console.log('checkUser: ', userAvailable);
       return userAvailable || 'Username is already taken';
     } catch (error) {
       console.error('checkUser: ', error.message);
     }
   };
-  const createButtonAlert = () =>
-    Alert.alert('Terms&Conditions', 'Are you Sure?', [
-      {
-        text: 'No',
-        onPress: () => navigation.navigate('Welcome'),
-        style: 'cancel',
+  const createButtonAlert = () => {
+    setNotification({
+      type: 'info',
+      title: 'Terms and Condition',
+      message: 'Do you accept?',
+      isOkButton: true,
+      isCancelButton: true,
+      onOkClick: async function () {
+        setIsNotification(false);
+        checkUserAgreesTCs(false);
       },
-      {
-        text: 'Yes',
-        onPress: () => checkUserAgreesTCs(false),
+      onCancelClick: async function () {
+        setIsNotification(false);
+        navigation.navigate('Welcome');
       },
-    ]);
+    });
+    setIsNotification(!isNotification);
+  };
 
   return (
     <>

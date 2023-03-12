@@ -31,7 +31,7 @@ const Search = ({navigation}) => {
           }
         });
       } catch (error) {
-        console.log('Error while searching media', error);
+        console.error('Error while searching media', error);
       }
     }
   };

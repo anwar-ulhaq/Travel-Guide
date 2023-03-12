@@ -1,7 +1,6 @@
-import {StyleSheet, View, FlatList, Alert} from 'react-native';
+import {StyleSheet, View, FlatList} from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
 import {useFavourite} from '../hooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {MainContext} from '../contexts/MainContext';
 import PropTypes from 'prop-types';
 import FavItem from '../components/FavItem';
@@ -19,7 +18,6 @@ const Favourites = ({myFilesOnly = false}) => {
       favoritesData && setFavArray(favoritesData);
     } catch (error) {
       console.error('fetchFavoritesByUser error', error.message);
-      Alert.alert('Error loading favorite posts');
     }
   };
 

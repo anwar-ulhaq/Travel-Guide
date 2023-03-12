@@ -63,7 +63,7 @@ const SinglePost = ({route, navigation}) => {
       const commentsData = await getCommentById(file.file_id);
       setComments(commentsData);
     } catch (e) {
-      console.log('Error in fetching comments', e);
+      console.error('Error in fetching comments', e);
     }
   };
   const fetchOwner = async () => {
@@ -72,7 +72,7 @@ const SinglePost = ({route, navigation}) => {
       const userData = await getUserById(file.user_id, token);
       setOwner(userData);
     } catch (e) {
-      console.log('Error in fetching owner', e);
+      console.error('Error in fetching owner', e);
       setOwner({username: '[not available]'});
     }
   };
@@ -104,10 +104,8 @@ const SinglePost = ({route, navigation}) => {
   };
   const createFavourite = async () => {
     try {
-      // console.log('Create favourite called');
       const token = await AsyncStorage.getItem('userToken');
       const response = await postFavourite(token, file.file_id);
-      // setUserLike(true);
       response && setLikeUpdate(!likeUpdate);
     } catch (error) {
       console.error('createFavourite error', error);
@@ -118,35 +116,44 @@ const SinglePost = ({route, navigation}) => {
       const token = await AsyncStorage.getItem('userToken');
       const response = await deleteFavourite(token, file.file_id);
       response && setLikeUpdate(!likeUpdate);
-      // setLikeUpdate(likeUpdate + 1);
     } catch (error) {
       console.error('removeFavourite error', error);
     }
   };
   const doDelete = () => {
     try {
-      Alert.alert('Delete', ' this file permanently', [
-        {
-          text: 'Cancel',
-        },
-        {
-          text: 'OK',
-          onPress: async () => {
+      setNotification({
+        type: 'info',
+        title: 'Delete file?',
+        message: 'Are you sure?',
+        isOkButton: true,
+        isCancelButton: true,
+        onOkClick: async function () {
+          setIsNotification(false);
+          try {
             const token = await AsyncStorage.getItem('userToken');
             const response = await deleteMedia(file.file_id, token);
-            response && setUpdate(!update);
-            setNotification({
-              type: 'success',
-              title: 'File deleted successfully',
-              message: `Deleted, File id: ${file.file_id} `,
-            });
-            setIsNotification(!isNotification);
-            navigation.navigate('Home');
-          },
+            if (response) {
+              setUpdate(!update);
+              setNotification({
+                type: 'success',
+                title: 'File deleted successfully',
+                message: '',
+              });
+              setIsNotification(!isNotification);
+              navigation.navigate('Home');
+            }
+          } catch (error) {
+            console.error('Async Storage error: ' + error.message);
+          }
         },
-      ]);
+        onCancelClick: async function () {
+          setIsNotification(false);
+        },
+      });
+      setIsNotification(!isNotification);
     } catch (error) {
-      console.log('Error in deleting media', error);
+      console.error('Error in deleting media ', error);
     }
   };
   const goToEditPost = () => {
@@ -157,10 +164,8 @@ const SinglePost = ({route, navigation}) => {
     if (index >= 0) setSelectedOption(options[index]);
     setIndex(index);
     setEventName(eventName);
-    console.log('Index: ' + index);
 
     if (index === 0) {
-      // setIsEditPost(!isEditPost);
       goToEditPost();
     } else if (index === 1) doDelete();
   };
